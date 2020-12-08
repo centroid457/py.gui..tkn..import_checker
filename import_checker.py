@@ -4,8 +4,8 @@ HOW TO USE:
 2. add this script to your project directory
 3. add lines in your main script in place before first import line:
 *********************
-import import_checker
-import_checker.main(file_as_path=__file__)
+#import import_checker
+#import_checker.main(file_as_path=__file__)
 *********************
 WHAT IT WILL DO
 Find all import lines in all files in the directory with recursion!
@@ -73,7 +73,8 @@ count_found_modules = 0
 # #################################################
 # FUNCTIONS
 # #################################################
-def main(file_as_path=filefullname_as_link_path):
+def execute(file_as_path=filefullname_as_link_path):
+    #print(file_as_path)
     update_system_modules_dict()
 
     path_find_wo_slash = os.path.dirname(file_as_path)
@@ -84,9 +85,9 @@ def main(file_as_path=filefullname_as_link_path):
     update_counters()
 
 
-def find_all_python_files_generate(path):
+def find_all_python_files_generate(path=None):
     # by default find all modules in one level up (from current directory) with all subdirectories
-    if __name__ == '__main__':
+    if os.path.dirname(__file__) == os.path.dirname(path + "/"):
         path = ".."
     for file_name in glob(path+"/**/*.py*", recursive=True):
         if file_name != os.path.basename(__file__) and os.path.splitext(file_name)[1] in (".py", ".pyw"):
@@ -151,11 +152,14 @@ def rank_modules_dict_generate(module_set=modules_found_infiles):
         can_import = False
         short_pathname = modules_in_system_dict.get(module, None)
         detected_installname = MODULES_CAN_INSTALL.get(module, None)
-        try :
-            exec(f'import {module}')
+        if pkgutil.find_loader(module) is not None:
             can_import = True
-        except :
-            pass
+        else:
+            try :
+                exec(f'import {module}')
+                can_import = True
+            except :
+                pass
 
         ranked_modules_dict.update({module: [can_import, short_pathname, detected_installname]})
     # print(modules_in_files_ranked_dict)
@@ -194,7 +198,7 @@ def update_counters():
 
 
 if __name__ == '__main__':
-    main()
+    execute()
     print(f"[{count_found_files}]FOUND FILES\t", python_files_found_in_directory_list)
     print(f"[{count_found_modules}]FOUND MODULES\t", ranked_modules_dict)
 
