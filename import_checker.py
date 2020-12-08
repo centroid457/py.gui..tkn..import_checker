@@ -4,8 +4,8 @@ HOW TO USE:
 2. add this script to your project directory
 3. add lines in your main script in place before first import line:
 *********************
-#import import_checker
-#import_checker.main(file_as_path=__file__)
+import import_checker
+import_checker.main(file_as_path=__file__)
 *********************
 WHAT IT WILL DO
 Find all import lines in all files in the directory with recursion!
