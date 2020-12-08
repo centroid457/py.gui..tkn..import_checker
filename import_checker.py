@@ -67,6 +67,8 @@ MODULES_CAN_INSTALL = {
 modules_found_infiles = set()
 modules_in_system_dict = {}
 
+count_found_files = 0
+count_found_modules = 0
 
 # #################################################
 # FUNCTIONS
@@ -79,10 +81,13 @@ def main(file_as_path=filefullname_as_link_path):
     find_all_importing_modules(python_files_found_in_directory_list)
     rank_modules_dict_generate()
     sort_ranked_modules_dict()
+    update_counters()
 
 
 def find_all_python_files_generate(path):
-    # by default find all modules in current directory with all subdirectories
+    # by default find all modules in one level up (from current directory) with all subdirectories
+    if __name__ == '__main__':
+        path = ".."
     for file_name in glob(path+"/**/*.py*", recursive=True):
         if file_name != os.path.basename(__file__) and os.path.splitext(file_name)[1] in (".py", ".pyw"):
             python_files_found_in_directory_list.append(file_name)
@@ -162,7 +167,7 @@ def sort_ranked_modules_dict():
     global ranked_modules_dict
     sorted_dict_keys_list = sorted(ranked_modules_dict, key=lambda key: key.lower())
     ranked_modules_dict = dict(zip(sorted_dict_keys_list, [ranked_modules_dict[value] for value in sorted_dict_keys_list]))
-    print(ranked_modules_dict)
+    #print(ranked_modules_dict)
     return
 
 
@@ -181,7 +186,15 @@ def update_system_modules_dict():
     return
 
 
+def update_counters():
+    global count_found_files, count_found_modules
+    count_found_files = len(python_files_found_in_directory_list)
+    count_found_modules = len(ranked_modules_dict)
+    return
+
+
 if __name__ == '__main__':
     main()
-    # print(python_files_found_in_directory_list)
-    print(ranked_modules_dict)
+    print(f"[{count_found_files}]FOUND FILES\t", python_files_found_in_directory_list)
+    print(f"[{count_found_modules}]FOUND MODULES\t", ranked_modules_dict)
+
