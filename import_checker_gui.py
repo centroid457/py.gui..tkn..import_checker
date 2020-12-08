@@ -2,8 +2,16 @@ import sys
 import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH
 
+import import_checker   #execute, python_files_found_in_directory_list, ranked_modules_dict
 from import_checker_gui_set import *
-from import_checker import *
+
+
+def main():
+    import_checker.execute()
+    root = Tk()
+    app = Gui(root=root)
+    app.mainloop()
+
 
 # #################################################
 # GUI
@@ -77,7 +85,8 @@ class Gui(Frame):
         self.frame_info.grid(row=2, sticky="ew", padx=pad_external, pady=0)
 
         lable = Label(self.frame_info, text="if button is green - it will definitly be installed", bg="#d0d0d0")
-        lable["text"] = "\n".join(["FOUND FILES:"] + python_files_found_in_directory_list)
+        print(import_checker.python_files_found_in_directory_list)
+        lable["text"] = "\n".join([f"FOUND FILES [{import_checker.count_found_files}]:"] + import_checker.python_files_found_in_directory_list)
         lable.pack(fill="x", expand=0)
 
 
@@ -100,16 +109,16 @@ class Gui(Frame):
 
     def fill_table(self):
         # fill modulenames in gui
-        for module in ranked_modules_dict:
+        for module in import_checker.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
-            can_import, short_pathname, detected_installname = ranked_modules_dict[module]
+            can_import, short_pathname, detected_installname = import_checker.ranked_modules_dict[module]
             if can_import:
                 Label(self.frame_modules_good, text="%-10s \t[%s]"%(module, short_pathname),
                       fg="black", bg="#55FF55", justify="left", width=20, anchor="w").pack(fill="x", expand=0)
             else:
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
-                btn["command"] = self.start_install_module(module, ranked_modules_dict[module])
+                btn["command"] = self.start_install_module(module, import_checker.ranked_modules_dict[module])
                 btn.pack()
 
     def start_install_module(self, modulename, module_data):
@@ -129,3 +138,6 @@ class Gui(Frame):
         # else programm will not actually restart (in PyCharm will not start after second Restart)
         os.execl(python_exe, python_exe, *sys.argv)
 
+
+if __name__ == '__main__':
+    main()
