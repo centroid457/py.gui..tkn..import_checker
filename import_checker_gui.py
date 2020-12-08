@@ -2,7 +2,7 @@ import sys
 import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH
 
-from gui_tree_import_checker import *
+from import_checker_gui_set import *
 from import_checker import *
 
 # #################################################
