@@ -33,7 +33,7 @@ from glob import glob
 # COMMON VARS & CONSTANTS
 # #################################################
 # INPUT
-filefullname_as_link_path = __file__
+filefullname_as_link_path = __file__    # default value
 
 # OUTPUT
 python_files_found_in_directory_list = []
@@ -73,7 +73,7 @@ count_found_modules = 0
 # #################################################
 # FUNCTIONS
 # #################################################
-def execute(file_as_path=filefullname_as_link_path):
+def main(file_as_path=filefullname_as_link_path):
     #print(file_as_path)
     update_system_modules_dict()
 
@@ -199,7 +199,8 @@ def update_counters():
 
 
 if __name__ == '__main__':
-    execute()
-    print(f"[{count_found_files}]FOUND FILES\t", python_files_found_in_directory_list)
-    print(f"[{count_found_modules}]FOUND MODULES\t", ranked_modules_dict)
+    main()
+    print(f"path=[{os.path.dirname(filefullname_as_link_path)}/]")
+    print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_list}")
+    print(f"[{count_found_modules}]FOUND MODULES={ranked_modules_dict}")
 

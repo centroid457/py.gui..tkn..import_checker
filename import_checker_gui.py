@@ -7,7 +7,7 @@ from import_checker_gui_set import *
 
 
 def main():
-    import_checker.execute()
+    import_checker.main()
     root = Tk()
     app = Gui(root=root)
     app.mainloop()
@@ -85,7 +85,6 @@ class Gui(Frame):
         self.frame_info.grid(row=2, sticky="ew", padx=pad_external, pady=0)
 
         lable = Label(self.frame_info, text="if button is green - it will definitly be installed", bg="#d0d0d0")
-        print(import_checker.python_files_found_in_directory_list)
         lable["text"] = "\n".join([f"FOUND FILES [{import_checker.count_found_files}]:"] + import_checker.python_files_found_in_directory_list)
         lable.pack(fill="x", expand=0)
 
