@@ -36,7 +36,7 @@ from pathlib import Path
 filefullname_as_link_path = __file__    # default value
 
 # OUTPUT
-python_files_found_in_directory_list = []
+python_files_found_in_directory_dict = {}
 ranked_modules_dict = {}        #{modulename: [CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]}
 
 # SETTINGS
@@ -87,7 +87,7 @@ def main(file_as_path=filefullname_as_link_path):
         path_find_wo_slash = Path(file_as_path).parent
 
     find_all_python_files_generate(path=path_find_wo_slash)
-    find_all_importing_modules(python_files_found_in_directory_list)
+    find_all_importing_modules(python_files_found_in_directory_dict)
     rank_modules_dict_generate()
     sort_ranked_modules_dict()
     update_counters()
@@ -96,7 +96,7 @@ def main(file_as_path=filefullname_as_link_path):
 def find_all_python_files_generate(path=path_find_wo_slash):
     for file_name in path.rglob(pattern="*.py*"):
         if file_name != os.path.basename(__file__) and os.path.splitext(file_name)[1] in (".py", ".pyw"):
-            python_files_found_in_directory_list.append(file_name)
+            python_files_found_in_directory_dict.update({file_name: set()})
     return
 
 
@@ -106,8 +106,11 @@ def find_all_importing_modules(file_list):
     openhook = fileinput.hook_encoded(encoding="utf8", errors=None)
     for line in fileinput.input(files=file_list, mode="r", openhook=openhook):
         # print(f"[descriptor={fileinput.fileno():2}]\tfile=[{fileinput.filename()}]\tline=[{fileinput.filelineno()}]\t[{line}]")
-        modules_found_infiles.update(_find_modulenames_set(line))
+        modules_found_inline = _find_modulenames_set(line)
+        python_files_found_in_directory_dict[fileinput.filename()].update(modules_found_inline)
 
+    for module_set in python_files_found_in_directory_dict.values():
+        modules_found_infiles.update(module_set)
     # print(modules_found_infiles)
     return
 
@@ -198,7 +201,7 @@ def update_system_modules_dict():
 
 def update_counters():
     global count_found_files, count_found_modules
-    count_found_files = len(python_files_found_in_directory_list)
+    count_found_files = len(python_files_found_in_directory_dict)
     count_found_modules = len(ranked_modules_dict)
     return
 
@@ -206,6 +209,6 @@ def update_counters():
 if __name__ == '__main__':
     main()
     print(f"path=[{path_find_wo_slash}]")
-    print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_list}")
+    print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_dict}")
     print(f"[{count_found_modules}]FOUND MODULES={ranked_modules_dict}")
 

@@ -86,10 +86,10 @@ class Gui(Frame):
 
 
         lable = Label(self.frame_files, bg="#d0d0d0")
-        lable["text"] = f"FOUND FILES [{import_checker.count_found_files}]:"
+        lable["text"] = f"FOUND [{import_checker.count_found_files}]FILES with [{import_checker.count_found_modules}]modules:"
         lable.pack(fill="x", expand=0)
 
-        for file in import_checker.python_files_found_in_directory_list:
+        for file in import_checker.python_files_found_in_directory_dict:
             lable = Label(self.frame_files, bg="#d0d0d0", justify="left", anchor="w")
             lable["text"] = file.resolve()
             lable.pack(fill="x", expand=0)
