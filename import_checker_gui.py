@@ -2,14 +2,14 @@ import sys
 import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH
 
-import import_checker   #execute, python_files_found_in_directory_list, ranked_modules_dict
+import import_checker   #main, python_files_found_in_directory_list, ranked_modules_dict
 from import_checker_gui_set import *
 
 
 def main():
     import_checker.main()
     root = Tk()
-    app = Gui(root=root)
+    app = Gui(root=root, parent=root)
     app.mainloop()
 
 
@@ -18,9 +18,10 @@ def main():
 # #################################################
 class Gui(Frame):
     """ main GUI window """
-    def __init__(self, root=None):
+    def __init__(self, root=None, parent=None):
         super().__init__(root)
         self.root = root
+        self.parent = parent
         self.gui_root_configure()
 
         self.create_gui_structure()
@@ -70,13 +71,13 @@ class Gui(Frame):
     # FRAMES
     # #################################################
     def create_gui_structure(self):
-        self.root.columnconfigure(0, weight=1)
-        self.root.rowconfigure([1, 2], weight=0)
-        self.root.rowconfigure(3, weight=1)
+        self.parent.columnconfigure(0, weight=1)
+        self.parent.rowconfigure([1, 2], weight=0)
+        self.parent.rowconfigure(3, weight=1)
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
-        self.frame_info = Frame(self.root, bg="#101010")
+        self.frame_info = Frame(self.parent, bg="#101010")
         self.frame_info.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
 
         lable = Label(self.frame_info, bg="#d0d0d0")
@@ -88,7 +89,7 @@ class Gui(Frame):
         lable.pack(fill="x", expand=0)
 
         # ======= FRAME-2 (FILES) ====================
-        self.frame_files = Frame(self.root, bg="#505050", height=30)
+        self.frame_files = Frame(self.parent, bg="#505050", height=30)
         self.frame_files.pack_propagate()  # hear it is necessary
         self.frame_files.grid(row=2, sticky="ew", padx=pad_external, pady=0)
 
@@ -106,7 +107,7 @@ class Gui(Frame):
 
 
         # ======= FRAME-3 (MODULES) ====================
-        self.frame_modules = Frame(self.root, bg="grey")
+        self.frame_modules = Frame(self.parent, bg="grey")
         self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=pad_external)
 
         # ------- FRAME-3 /1 GOOD -----------------
