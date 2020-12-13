@@ -79,14 +79,21 @@ class Gui(Frame):
         self.frame_info = Frame(self.root, bg="#101010")
         self.frame_info.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
 
-        # ======= FRAME-2 (INFO) ====================
+        lable = Label(self.frame_info, bg="#d0d0d0")
+        lable["font"] = ("", 15)
+        if import_checker.count_found_modules_bad > 0:
+            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{import_checker.count_found_modules_bad}] modules"
+        else:
+            lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
+        lable.pack(fill="x", expand=0)
+
+        # ======= FRAME-2 (FILES) ====================
         self.frame_files = Frame(self.root, bg="#505050", height=30)
         self.frame_files.pack_propagate()  # hear it is necessary
         self.frame_files.grid(row=2, sticky="ew", padx=pad_external, pady=0)
 
-
         lable = Label(self.frame_files, bg="#d0d0d0")
-        lable["text"] = f"FOUND [{import_checker.count_found_files}]FILES with [{import_checker.count_found_modules}]modules:"
+        lable["text"] = f"FOUND [{import_checker.count_found_files}]FILES with used [{import_checker.count_found_modules}]modules:"
         lable.pack(fill="x", expand=0)
 
         files_dict = import_checker.python_files_found_in_directory_dict
@@ -107,7 +114,7 @@ class Gui(Frame):
         self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
         self.frame_modules_good.pack_propagate(1)
 
-        # ------- FRAME-1 /2 TRY -----------------
+        # ------- FRAME-3 /2 TRY -----------------
         self.frame_modules_try_install = Frame(self.frame_modules, bg="#FF5555")
         self.frame_modules_try_install.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
         self.frame_modules_try_install.pack_propagate(1)
