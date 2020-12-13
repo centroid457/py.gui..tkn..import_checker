@@ -18,8 +18,8 @@ WHY DON'T USE MODULEFINDER???
 Because it work incorrect! can't find TIME and SYS modules!
 ---------------------
 TEST LINES
-import TEST_LINE1 #test comment
-#import TEST_LINE2
+import TEST_MODULE_1 #test comment
+#import TEST_MODULE_2
 """
 
 import re
