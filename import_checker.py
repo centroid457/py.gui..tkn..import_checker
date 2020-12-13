@@ -50,7 +50,7 @@ MODULES_CAN_INSTALL = {
     "contracts": "PyContracts",
 
     # similar names
-    "TEST_LINE1": "TEST_LINE1",
+    "TEST_MODULE_1": "TEST_MODULE_1",
     "plotly": "plotly",
     "pandas": "pandas",
     "pygame": "pygame",
