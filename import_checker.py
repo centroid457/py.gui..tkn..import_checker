@@ -47,6 +47,7 @@ MODULES_CAN_INSTALL = {
     # different names
     "wx": "wxPython",
     "PIL": "pillow",
+    "contracts": "PyContracts",
 
     # similar names
     "TEST_LINE1": "TEST_LINE1",
