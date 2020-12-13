@@ -28,7 +28,6 @@ class Gui(Frame):
         self.window_move_to_center()
         self.fill_table()
 
-
     def gui_root_configure(self):
         gui_dict_pointer = GUI_ROOT_CONFIGURE_DICT[WM_ATTRIBUTES]
         for k, v in gui_dict_pointer.items():
@@ -94,7 +93,7 @@ class Gui(Frame):
         self.frame_files.grid(row=2, sticky="ew", padx=pad_external, pady=0)
 
         lable = Label(self.frame_files, bg="#d0d0d0")
-        lable["text"] = f"FOUND [{import_checker.count_found_files}]FILES with used [{import_checker.count_found_modules}]modules:"
+        lable["text"] = f"FOUND python [{import_checker.count_found_files}]FILES:"
         lable.pack(fill="x", expand=0)
 
         files_dict = import_checker.python_files_found_in_directory_dict
@@ -109,6 +108,10 @@ class Gui(Frame):
         # ======= FRAME-3 (MODULES) ====================
         self.frame_modules = Frame(self.parent, bg="grey")
         self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=pad_external)
+
+        lable = Label(self.frame_modules, bg="#d0d0d0")
+        lable["text"] = f"FOUND importing [{import_checker.count_found_modules}]modules:"
+        lable.pack(fill="x", expand=0)
 
         # ------- FRAME-3 /1 GOOD -----------------
         self.frame_modules_good = Frame(self.frame_modules, bg="#55FF55", width=200, height=200)
