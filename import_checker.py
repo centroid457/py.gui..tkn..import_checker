@@ -67,10 +67,12 @@ MODULES_CAN_INSTALL = {
 # INTERNAL
 path_find_wo_slash = None
 modules_found_infiles = set()
+modules_found_infiles_bad = set()
 modules_in_system_dict = {}
 
 count_found_files = 0
 count_found_modules = 0
+count_found_modules_bad = 0
 
 # #################################################
 # FUNCTIONS
@@ -90,6 +92,7 @@ def main(file_as_path=filefullname_as_link_path):
     find_all_importing_modules(python_files_found_in_directory_dict)
     rank_modules_dict_generate()
     sort_ranked_modules_dict()
+    update_modules_found_infiles_bad()
     update_counters()
 
 
@@ -184,6 +187,12 @@ def sort_ranked_modules_dict():
     return
 
 
+def update_modules_found_infiles_bad():
+    for m in ranked_modules_dict:
+        if ranked_modules_dict[m][0] == False:
+            modules_found_infiles_bad.update({m})
+
+
 def update_system_modules_dict():
     # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
     # KEY=modulename:VALUE=location(CurDir|DLLs|lib|site-packages)
@@ -200,9 +209,10 @@ def update_system_modules_dict():
 
 
 def update_counters():
-    global count_found_files, count_found_modules
+    global count_found_files, count_found_modules, count_found_modules_bad
     count_found_files = len(python_files_found_in_directory_dict)
     count_found_modules = len(ranked_modules_dict)
+    count_found_modules_bad = len(modules_found_infiles_bad)
     return
 
 
@@ -211,4 +221,4 @@ if __name__ == '__main__':
     print(f"path=[{path_find_wo_slash}]")
     print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_dict}")
     print(f"[{count_found_modules}]FOUND MODULES={ranked_modules_dict}")
-
+    print(f"[{count_found_modules_bad}]FOUND BAD MODULES={modules_found_infiles_bad}")
