@@ -75,18 +75,24 @@ class Gui(Frame):
         self.root.rowconfigure(3, weight=1)
         pad_external = 10
 
-        # ======= FRAME-1 (WINDOW CONTROL) ====================
-        self.frame_control = Frame(self.root, bg="#101010")
-        self.frame_control.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
+        # ======= FRAME-1 (INFO) ====================
+        self.frame_info = Frame(self.root, bg="#101010")
+        self.frame_info.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
 
         # ======= FRAME-2 (INFO) ====================
-        self.frame_info = Frame(self.root, bg="#505050", height=30)
-        self.frame_info.pack_propagate()  # hear it is necessary
-        self.frame_info.grid(row=2, sticky="ew", padx=pad_external, pady=0)
+        self.frame_files = Frame(self.root, bg="#505050", height=30)
+        self.frame_files.pack_propagate()  # hear it is necessary
+        self.frame_files.grid(row=2, sticky="ew", padx=pad_external, pady=0)
 
-        lable = Label(self.frame_info, text="if button is green - it will definitly be installed", bg="#d0d0d0")
-        lable["text"] = "\n".join([f"FOUND FILES [{import_checker.count_found_files}]:"] + import_checker.python_files_found_in_directory_list)
+
+        lable = Label(self.frame_files, bg="#d0d0d0")
+        lable["text"] = f"FOUND FILES [{import_checker.count_found_files}]:"
         lable.pack(fill="x", expand=0)
+
+        for file in import_checker.python_files_found_in_directory_list:
+            lable = Label(self.frame_files, bg="#d0d0d0", justify="left", anchor="w")
+            lable["text"] = file.resolve()
+            lable.pack(fill="x", expand=0)
 
 
         # ======= FRAME-3 (MODULES) ====================
@@ -113,7 +119,7 @@ class Gui(Frame):
             can_import, short_pathname, detected_installname = import_checker.ranked_modules_dict[module]
             if can_import:
                 Label(self.frame_modules_good, text="%-10s \t[%s]"%(module, short_pathname),
-                      fg="black", bg="#55FF55", justify="left", width=20, anchor="w").pack(fill="x", expand=0)
+                      fg="black", bg="#55FF55", width=20, justify="left", anchor="w").pack(fill="x", expand=0)
             else:
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
