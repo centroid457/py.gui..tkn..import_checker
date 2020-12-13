@@ -104,7 +104,6 @@ class Gui(Frame):
                 else "#FF9999"
             lable.pack(fill="x", expand=0)
 
-
         # ======= FRAME-3 (MODULES) ====================
         self.frame_modules = Frame(self.parent, bg="grey")
         self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=pad_external)
