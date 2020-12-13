@@ -26,7 +26,7 @@ import re
 import os
 import pkgutil
 import fileinput
-from glob import glob
+from pathlib import Path
 
 
 # #################################################
@@ -65,6 +65,7 @@ MODULES_CAN_INSTALL = {
 }
 
 # INTERNAL
+path_find_wo_slash = None
 modules_found_infiles = set()
 modules_in_system_dict = {}
 
@@ -75,10 +76,16 @@ count_found_modules = 0
 # FUNCTIONS
 # #################################################
 def main(file_as_path=filefullname_as_link_path):
+    global path_find_wo_slash
     #print(file_as_path)
     update_system_modules_dict()
 
-    path_find_wo_slash = os.path.dirname(file_as_path)
+    # by default find all modules in one level up (from current directory) with all subdirectories
+    if file_as_path == __file__:
+        path_find_wo_slash = Path(file_as_path).parent.parent
+    else:
+        path_find_wo_slash = Path(file_as_path).parent
+
     find_all_python_files_generate(path=path_find_wo_slash)
     find_all_importing_modules(python_files_found_in_directory_list)
     rank_modules_dict_generate()
@@ -86,11 +93,8 @@ def main(file_as_path=filefullname_as_link_path):
     update_counters()
 
 
-def find_all_python_files_generate(path=None):
-    # by default find all modules in one level up (from current directory) with all subdirectories
-    if os.path.dirname(__file__) == os.path.dirname(path + "/"):
-        path = ".."
-    for file_name in glob(path+"/**/*.py*", recursive=True):
+def find_all_python_files_generate(path=path_find_wo_slash):
+    for file_name in path.rglob(pattern="*.py*"):
         if file_name != os.path.basename(__file__) and os.path.splitext(file_name)[1] in (".py", ".pyw"):
             python_files_found_in_directory_list.append(file_name)
     return
@@ -201,7 +205,7 @@ def update_counters():
 
 if __name__ == '__main__':
     main()
-    print(f"path=[{os.path.dirname(filefullname_as_link_path)}/]")
+    print(f"path=[{path_find_wo_slash}]")
     print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_list}")
     print(f"[{count_found_modules}]FOUND MODULES={ranked_modules_dict}")
 
