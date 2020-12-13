@@ -89,9 +89,12 @@ class Gui(Frame):
         lable["text"] = f"FOUND [{import_checker.count_found_files}]FILES with [{import_checker.count_found_modules}]modules:"
         lable.pack(fill="x", expand=0)
 
-        for file in import_checker.python_files_found_in_directory_dict:
-            lable = Label(self.frame_files, bg="#d0d0d0", justify="left", anchor="w")
+        files_dict = import_checker.python_files_found_in_directory_dict
+        for file in files_dict:
+            lable = Label(self.frame_files, justify="left", anchor="w")
             lable["text"] = file.resolve()
+            lable["bg"] = "#99FF99" if files_dict[file].isdisjoint(import_checker.modules_found_infiles_bad)\
+                else "#FF9999"
             lable.pack(fill="x", expand=0)
 
 
