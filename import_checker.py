@@ -83,7 +83,7 @@ def main(file_as_path=filefullname_as_link_path):
     update_system_modules_dict()
 
     # by default find all modules in one level up (from current directory) with all subdirectories
-    if file_as_path == __file__:
+    if Path(file_as_path).parent == Path(__file__).parent:
         path_find_wo_slash = Path(file_as_path).parent.parent
     else:
         path_find_wo_slash = Path(file_as_path).parent

@@ -3,11 +3,11 @@ import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH
 
 import import_checker   #main, python_files_found_in_directory_list, ranked_modules_dict
-from import_checker_gui_set import *
+# from import_checker_gui_set import *
 
 
-def main():
-    import_checker.main()
+def main(file_as_path=__file__):
+    import_checker.main(file_as_path)
     root = Tk()
     app = Gui(root=root, parent=root)
     app.mainloop()
@@ -29,6 +29,41 @@ class Gui(Frame):
         self.fill_table()
 
     def gui_root_configure(self):
+        # ROOT_METHODS
+        self.root.title("IMPORT CHECHER")
+        self.root.geometry("800x500+100+100")   #("WINXxWINY+ShiftX+ShiftY")
+        self.root.resizable(width=False, height=False)	# заблокировать возможность изменения размеров границ! В том числе на весь экран!!!
+        self.root.maxsize(1000, 1000)
+        self.root.minsize(100, 100)
+        self.root.overrideredirect(False)
+        self.root.state('normal')     # normal/zoomed/iconic/withdrawn
+        # self.root.iconbitmap(r'ERROR.ico')    =ONLY FILENAME! NO fileobject
+
+        # WM_ATTRIBUTES
+        self.root.wm_attributes("-topmost", False)
+        self.root.wm_attributes("-disabled", False)
+        self.root.wm_attributes("-fullscreen", False)
+        self.root.wm_attributes("-transparentcolor", None)
+
+        # WGT_PARAMETERS
+        '''
+        # COMMON
+        "text": "привет", "font": ("", 30),
+        "fg": None, "bg": "#000077",
+        "width": None, "height": None,
+        "bind": None,
+        # "image": "image",   # imgObj
+
+        # FOR FRAMES/Label/Root///
+        "relief": "raised",  # "flat"/"sunken"/"raised"/"groove"/"ridge"
+        "borderwidth": 5,  # ширина рамки!
+
+        # FOR BUTTONS
+        "activeforeground": None,  # color when pressed state
+        "command": "",
+
+
+
         gui_dict_pointer = GUI_ROOT_CONFIGURE_DICT[WM_ATTRIBUTES]
         for k, v in gui_dict_pointer.items():
             eval(f"self.root.{WM_ATTRIBUTES}{k, v}")
@@ -45,6 +80,7 @@ class Gui(Frame):
                 eval(f"self.root.{key}{gui_dict_pointer[key]}")
             else:
                 eval(f"self.root.{key}('{gui_dict_pointer[key]}')")
+        '''
 
     def wgt_parameters_apply(self, wgt, dict_pointer):
         for key in dict_pointer:
