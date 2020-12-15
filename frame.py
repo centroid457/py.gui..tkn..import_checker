@@ -6,8 +6,7 @@ import import_checker   #main, python_files_found_in_directory_list, ranked_modu
 # from import_checker_gui_set import *
 
 
-def main(file_as_path=__file__):
-    import_checker.main(file_as_path)
+def main():
     root = Tk()
     app = Gui(root=root, parent=root)
     app.mainloop()
@@ -18,7 +17,8 @@ def main(file_as_path=__file__):
 # #################################################
 class Gui(Frame):
     """ main GUI window """
-    def __init__(self, root=None, parent=None):
+    def __init__(self, root=None, parent=None,file_as_path=__file__):
+        import_checker.main(file_as_path)
         super().__init__(root)
         self.root = root
         self.parent = parent
@@ -32,9 +32,9 @@ class Gui(Frame):
         # ROOT_METHODS
         self.root.title("IMPORT CHECHER")
         self.root.geometry("800x500+100+100")   #("WINXxWINY+ShiftX+ShiftY")
-        self.root.resizable(width=False, height=False)	# заблокировать возможность изменения размеров границ! В том числе на весь экран!!!
+        self.root.resizable(width=True, height=True)	# заблокировать возможность изменения размеров границ! В том числе на весь экран!!!
         self.root.maxsize(1000, 1000)
-        self.root.minsize(100, 100)
+        self.root.minsize(300, 300)
         self.root.overrideredirect(False)
         self.root.state('normal')     # normal/zoomed/iconic/withdrawn
         # self.root.iconbitmap(r'ERROR.ico')    =ONLY FILENAME! NO fileobject
@@ -122,7 +122,7 @@ class Gui(Frame):
         lable.pack(fill="x", expand=0)
 
         # ------- FRAME-3 /1 GOOD -----------------
-        self.frame_modules_good = Frame(self.frame_modules, bg="#55FF55", width=200, height=200)
+        self.frame_modules_good = Frame(self.frame_modules, bg="#55FF55")
         self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
         self.frame_modules_good.pack_propagate(1)
 
