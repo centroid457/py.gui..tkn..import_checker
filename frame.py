@@ -1,5 +1,4 @@
 # print("file frame.py")
-import sys
 import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
 from tkinter import ttk
