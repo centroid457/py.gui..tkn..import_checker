@@ -1,4 +1,4 @@
-print("frame.py")
+# print("file frame.py")
 import sys
 import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH
