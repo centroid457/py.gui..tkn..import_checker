@@ -71,6 +71,7 @@ modules_found_infiles = set()
 modules_found_infiles_bad = set()
 modules_in_system_dict = {}
 
+# COUNTERS
 count_found_files = 0
 count_found_modules = 0
 count_found_modules_bad = 0
