@@ -46,41 +46,14 @@ class Gui(Frame):
         self.root.wm_attributes("-transparentcolor", None)
 
         # WGT_PARAMETERS
-        '''
-        # COMMON
-        "text": "привет", "font": ("", 30),
-        "fg": None, "bg": "#000077",
-        "width": None, "height": None,
-        "bind": None,
-        # "image": "image",   # imgObj
+        self.root["bg"] = "#000077"
+        self.root["fg"] = None
+        self.root["width"] = None
+        self.root["height"] = None
+        self.root["bind"] = None
+        self.root["relief"] = "raised"  # "flat"/"sunken"/"raised"/"groove"/"ridge"
+        self.root["borderwidth"] = 5
 
-        # FOR FRAMES/Label/Root///
-        "relief": "raised",  # "flat"/"sunken"/"raised"/"groove"/"ridge"
-        "borderwidth": 5,  # ширина рамки!
-
-        # FOR BUTTONS
-        "activeforeground": None,  # color when pressed state
-        "command": "",
-
-
-
-        gui_dict_pointer = GUI_ROOT_CONFIGURE_DICT[WM_ATTRIBUTES]
-        for k, v in gui_dict_pointer.items():
-            eval(f"self.root.{WM_ATTRIBUTES}{k, v}")
-
-        gui_dict_pointer = GUI_ROOT_CONFIGURE_DICT[WGT_PARAMETERS]
-        self.wgt_parameters_apply(wgt=self.root, dict_pointer=gui_dict_pointer)
-
-        gui_dict_pointer = GUI_ROOT_CONFIGURE_DICT[ROOT_METHODS]
-        for key in gui_dict_pointer:
-            if isinstance(gui_dict_pointer[key], (dict)):
-                my_func_link = eval(f"self.root.{key}")
-                my_func_link(**gui_dict_pointer[key])
-            elif isinstance(gui_dict_pointer[key], (tuple)):
-                eval(f"self.root.{key}{gui_dict_pointer[key]}")
-            else:
-                eval(f"self.root.{key}('{gui_dict_pointer[key]}')")
-        '''
 
     def wgt_parameters_apply(self, wgt, dict_pointer):
         for key in dict_pointer:
