@@ -80,8 +80,6 @@ count_found_modules_bad = 0
 # #################################################
 def main(file_as_path=filefullname_as_link_path):
     global path_find_wo_slash
-    #print(file_as_path)
-    update_system_modules_dict()
 
     # by default find all modules in one level up (from current directory) with all subdirectories
     if Path(file_as_path).parent == Path(__file__).parent:
@@ -89,6 +87,8 @@ def main(file_as_path=filefullname_as_link_path):
     else:
         path_find_wo_slash = Path(file_as_path).parent
 
+    os.chdir(path_find_wo_slash)
+    update_system_modules_dict()
     find_all_python_files_generate(path=path_find_wo_slash)
     find_all_importing_modules(python_files_found_in_directory_dict)
     rank_modules_dict_generate()
