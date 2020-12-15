@@ -1,12 +1,16 @@
 # print("file frame.py")
 import sys
 import subprocess
+from threading import Timer
 from tkinter import Tk, Frame, Button, Label, BOTH
 
 
-def main():
+def main(file_as_path=__file__):
+    get_data.main(file_as_path)
     root = Tk()
     app = Gui(root=root, parent=root)
+    if close_after_pause_if_ok and get_data.count_found_modules_bad == 0:
+        Timer(2, lambda r: r.destroy(), args=(root, )).start()
     app.mainloop()
 
 
@@ -15,8 +19,7 @@ def main():
 # #################################################
 class Gui(Frame):
     """ main GUI window """
-    def __init__(self, root=None, parent=None,file_as_path=__file__):
-        get_data.main(file_as_path)
+    def __init__(self, root=None, parent=None):
         super().__init__(root)
         self.root = root
         self.parent = parent
@@ -167,8 +170,9 @@ class Gui(Frame):
 
 
 if __name__ == '__main__':
+    close_after_pause_if_ok = False
     import get_data
     main()
 else:
     from . import get_data  # main, python_files_found_in_directory_list, ranked_modules_dict
-
+    close_after_pause_if_ok = True
