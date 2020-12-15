@@ -1,9 +1,7 @@
+print("frame.py")
 import sys
 import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH
-
-import import_checker   #main, python_files_found_in_directory_list, ranked_modules_dict
-# from import_checker_gui_set import *
 
 
 def main():
@@ -18,7 +16,7 @@ def main():
 class Gui(Frame):
     """ main GUI window """
     def __init__(self, root=None, parent=None,file_as_path=__file__):
-        import_checker.main(file_as_path)
+        get_data.main(file_as_path)
         super().__init__(root)
         self.root = root
         self.parent = parent
@@ -90,8 +88,8 @@ class Gui(Frame):
 
         lable = Label(self.frame_info, bg="#d0d0d0")
         lable["font"] = ("", 15)
-        if import_checker.count_found_modules_bad > 0:
-            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{import_checker.count_found_modules_bad}] modules"
+        if get_data.count_found_modules_bad > 0:
+            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
         else:
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
         lable.pack(fill="x", expand=0)
@@ -102,14 +100,14 @@ class Gui(Frame):
         self.frame_files.grid(row=2, sticky="ew", padx=pad_external, pady=0)
 
         lable = Label(self.frame_files, bg="#d0d0d0")
-        lable["text"] = f"FOUND python [{import_checker.count_found_files}]FILES:"
+        lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
         lable.pack(fill="x", expand=0)
 
-        files_dict = import_checker.python_files_found_in_directory_dict
+        files_dict = get_data.python_files_found_in_directory_dict
         for file in files_dict:
             lable = Label(self.frame_files, justify="left", anchor="w")
             lable["text"] = file.resolve()
-            lable["bg"] = "#99FF99" if files_dict[file].isdisjoint(import_checker.modules_found_infiles_bad)\
+            lable["bg"] = "#99FF99" if files_dict[file].isdisjoint(get_data.modules_found_infiles_bad)\
                 else "#FF9999"
             lable.pack(fill="x", expand=0)
 
@@ -118,7 +116,7 @@ class Gui(Frame):
         self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=pad_external)
 
         lable = Label(self.frame_modules, bg="#d0d0d0")
-        lable["text"] = f"FOUND importing [{import_checker.count_found_modules}]modules:"
+        lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
         lable.pack(fill="x", expand=0)
 
         # ------- FRAME-3 /1 GOOD -----------------
@@ -138,16 +136,16 @@ class Gui(Frame):
 
     def fill_table(self):
         # fill modulenames in gui
-        for module in import_checker.ranked_modules_dict:
+        for module in get_data.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
-            can_import, short_pathname, detected_installname = import_checker.ranked_modules_dict[module]
+            can_import, short_pathname, detected_installname = get_data.ranked_modules_dict[module]
             if can_import:
                 Label(self.frame_modules_good, text="%-10s \t[%s]"%(module, short_pathname),
                       fg="black", bg="#55FF55", width=20, justify="left", anchor="w").pack(fill="x", expand=0)
             else:
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
-                btn["command"] = self.start_install_module(module, import_checker.ranked_modules_dict[module])
+                btn["command"] = self.start_install_module(module, get_data.ranked_modules_dict[module])
                 btn.pack()
 
     def start_install_module(self, modulename, module_data):
@@ -169,4 +167,8 @@ class Gui(Frame):
 
 
 if __name__ == '__main__':
+    import get_data
     main()
+else:
+    from . import get_data  # main, python_files_found_in_directory_list, ranked_modules_dict
+
