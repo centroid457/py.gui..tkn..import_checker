@@ -10,7 +10,7 @@ def main(file_as_path=__file__):
     root = Tk()
     app = Gui(root=root, parent=root)
     if close_after_pause_if_ok and get_data.count_found_modules_bad == 0:
-        Timer(2, lambda r: r.destroy(), args=(root, )).start()
+        root.after(1000, root.destroy)
     app.mainloop()
 
 
