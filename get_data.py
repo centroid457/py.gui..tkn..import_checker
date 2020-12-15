@@ -27,6 +27,7 @@ import re
 import os
 import pkgutil
 import fileinput
+from time import sleep
 from pathlib import Path
 
 
@@ -228,3 +229,4 @@ if __name__ == '__main__':
     print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_dict}")
     print(f"[{count_found_modules}]FOUND MODULES={ranked_modules_dict}")
     print(f"[{count_found_modules_bad}]FOUND BAD MODULES={modules_found_infiles_bad}")
+    sleep(2)
