@@ -1,7 +1,6 @@
 # print("file frame.py")
 import sys
 import subprocess
-from threading import Timer
 from tkinter import Tk, Frame, Button, Label, BOTH
 
 
