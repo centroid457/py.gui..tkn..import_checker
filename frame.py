@@ -1,7 +1,8 @@
 # print("file frame.py")
 import sys
 import subprocess
-from tkinter import Tk, Frame, Button, Label, BOTH
+from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
+from tkinter import ttk
 
 
 def main(file_as_path=__file__):
@@ -126,6 +127,18 @@ class Gui(Frame):
         self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
         self.frame_modules_good.pack_propagate(1)
 
+        self.listbox_good = Listbox(self.frame_modules_good, height=10, bg="#55FF55", font=('Courier', 9))
+        self.listbox_good.grid(column=0, row=0, sticky="snew")
+
+        self.scrollbar = ttk.Scrollbar(self.frame_modules_good, orient="vertical", command=self.listbox_good.yview)
+        self.scrollbar.grid(column=1, row=0, sticky="sn")
+
+        self.listbox_good['yscrollcommand'] = self.scrollbar.set
+
+        ttk.Label(self.frame_modules_good, text="Status message here", anchor="w").grid(column=0, columnspan=2, row=1, sticky="ew")
+        self.frame_modules_good.grid_columnconfigure(0, weight=1)
+        self.frame_modules_good.grid_rowconfigure(0, weight=1)
+
         # ------- FRAME-3 /2 TRY -----------------
         if get_data.count_found_modules_bad > 0:
             self.frame_modules_try_install = Frame(self.frame_modules, bg="#FF5555")
@@ -143,8 +156,7 @@ class Gui(Frame):
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
             can_import, short_pathname, detected_installname = get_data.ranked_modules_dict[module]
             if can_import:
-                Label(self.frame_modules_good, text="%-10s \t[%s]"%(module, short_pathname),
-                      fg="black", bg="#55FF55", justify="left", anchor="w", font=('Courier', 9)).pack(fill="x")
+                self.listbox_good.insert('end', "%-20s \t[%s]"%(module, short_pathname))
             else:
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
