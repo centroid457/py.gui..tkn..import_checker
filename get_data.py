@@ -168,6 +168,8 @@ def rank_modules_dict_generate(module_set=modules_found_infiles):
         detected_installname = MODULES_CAN_INSTALL.get(module, None)
         if pkgutil.find_loader(module) is not None:
             can_import = True
+        elif list(Path.cwd().rglob(pattern=f"{module}*")) != []:
+            can_import = True
         else:   # if first IF-expression will be False - real Import command will not help!)
             pass
             #try :
