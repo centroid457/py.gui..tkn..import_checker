@@ -1,4 +1,4 @@
-print("import_checker.py")
+print("file get_data.py")
 """
 HOW TO USE:
 1. add in .gitignore line "__pycache__"
@@ -100,7 +100,8 @@ def main(file_as_path=filefullname_as_link_path):
 def find_all_python_files_generate(path=path_find_wo_slash):
     for file_name in path.rglob(pattern="*.py*"):
         if file_name != os.path.basename(__file__) and os.path.splitext(file_name)[1] in (".py", ".pyw"):
-            python_files_found_in_directory_dict.update({file_name: set()})
+            if file_name.name != "__init__.py":
+                python_files_found_in_directory_dict.update({file_name: set()})
     return
 
 
@@ -161,6 +162,8 @@ def rank_modules_dict_generate(module_set=modules_found_infiles):
     # generate dict like
     #       {modulename: [CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]}
     for module in module_set:
+        if module in [".", ".."]:
+            continue
         can_import = False
         short_pathname = modules_in_system_dict.get(module, None)
         detected_installname = MODULES_CAN_INSTALL.get(module, None)
