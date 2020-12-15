@@ -128,13 +128,14 @@ class Gui(Frame):
         self.frame_modules_good.pack_propagate(1)
 
         # ------- FRAME-3 /2 TRY -----------------
-        self.frame_modules_try_install = Frame(self.frame_modules, bg="#FF5555")
-        self.frame_modules_try_install.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
-        self.frame_modules_try_install.pack_propagate(1)
+        if get_data.count_found_modules_bad > 0:
+            self.frame_modules_try_install = Frame(self.frame_modules, bg="#FF5555")
+            self.frame_modules_try_install.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
+            self.frame_modules_try_install.pack_propagate(1)
 
-        Label(self.frame_modules_try_install,
-              text="if button is green - it will definitly be installed (with internet connection)",
-              bg="#FF5555").pack(fill="x", expand=0)
+            Label(self.frame_modules_try_install,
+                  text="if button is green - it will definitly be installed (with internet connection)",
+                  bg="#FF5555").pack(fill="x", expand=0)
 
 
     def fill_table(self):
