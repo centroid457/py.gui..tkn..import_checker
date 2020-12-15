@@ -81,8 +81,8 @@ class Gui(Frame):
     # #################################################
     def create_gui_structure(self):
         self.parent.columnconfigure(0, weight=1)
-        self.parent.rowconfigure([1, 2], weight=0)
-        self.parent.rowconfigure(3, weight=1)
+        self.parent.rowconfigure([1, 2], weight=0)  # INFO, FILES
+        self.parent.rowconfigure(3, weight=1)       # MODULES
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
@@ -98,21 +98,11 @@ class Gui(Frame):
         lable.pack(fill="x", expand=0)
 
         # ======= FRAME-2 (FILES) ====================
-        self.frame_files = Frame(self.parent, bg="#505050", height=30)
-        self.frame_files.pack_propagate()  # hear it is necessary
-        self.frame_files.grid(row=2, sticky="ew", padx=pad_external, pady=0)
+        self.frame_files = Frame(self.parent, bg="#505050")
+        #self.frame_files.pack_propagate(0)
+        self.frame_files.grid(row=2, sticky="snew", padx=pad_external, pady=0)
 
-        lable = Label(self.frame_files, bg="#d0d0d0")
-        lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
-        lable.pack(fill="x", expand=0)
-
-        files_dict = get_data.python_files_found_in_directory_dict
-        for file in files_dict:
-            lable = Label(self.frame_files, justify="left", anchor="w")
-            lable["text"] = file.resolve()
-            lable["bg"] = "#99FF99" if files_dict[file].isdisjoint(get_data.modules_found_infiles_bad)\
-                else "#FF9999"
-            lable.pack(fill="x", expand=0)
+        self.fill_frame_files()
 
         # ======= FRAME-3 (MODULES) ====================
         self.frame_modules = Frame(self.parent, bg="grey")
@@ -125,7 +115,7 @@ class Gui(Frame):
         # ------- FRAME-3 /1 GOOD -----------------
         self.frame_modules_good = Frame(self.frame_modules, bg="#55FF55")
         self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
-        self.frame_modules_good.pack_propagate(1)
+        #self.frame_modules_good.pack_propagate(1)
 
         self.listbox_good = Listbox(self.frame_modules_good, height=10, bg="#55FF55", font=('Courier', 9))
         self.listbox_good.grid(column=0, row=0, sticky="snew")
@@ -135,7 +125,8 @@ class Gui(Frame):
 
         self.listbox_good['yscrollcommand'] = self.scrollbar.set
 
-        ttk.Label(self.frame_modules_good, text="Status message here", anchor="w").grid(column=0, columnspan=2, row=1, sticky="ew")
+
+        ttk.Label(self.frame_modules_good, text="Status message", anchor="w").grid(column=0, columnspan=2, row=1, sticky="ew")
         self.frame_modules_good.grid_columnconfigure(0, weight=1)
         self.frame_modules_good.grid_rowconfigure(0, weight=1)
 
@@ -150,6 +141,30 @@ class Gui(Frame):
                   bg="#FF5555").pack(fill="x", expand=0)
 
 
+    def fill_frame_files(self):
+        lable = Label(self.frame_files, bg="#d0d0d0")
+        lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
+        lable.grid(column=0, row=0, columnspan=2, sticky="snew")
+
+        self.listbox_files = Listbox(self.frame_files, height=7, bg="#55FF55", font=('Courier', 9))
+        self.listbox_files.grid(column=0, row=1, sticky="snew")
+
+        self.scrollbar = ttk.Scrollbar(self.frame_files, orient="vertical", command=self.listbox_files.yview)
+        self.scrollbar.grid(column=1, row=1, sticky="sn")
+
+        self.listbox_files['yscrollcommand'] = self.scrollbar.set
+
+        ttk.Label(self.frame_files, text="Status message", anchor="w").grid(column=0, columnspan=2, row=2, sticky="ew")
+        self.frame_files.grid_columnconfigure(0, weight=1)
+        self.frame_files.grid_rowconfigure(0, weight=1)
+
+        files_dict = get_data.python_files_found_in_directory_dict
+        for file in files_dict:
+            self.listbox_files.insert('end', file.resolve())
+            if not files_dict[file].isdisjoint(get_data.modules_found_infiles_bad):
+                self.listbox_files.itemconfig('end', bg = "#FF9999")
+
+
     def fill_table(self):
         # fill modulenames in gui
         for module in get_data.ranked_modules_dict:
@@ -157,6 +172,7 @@ class Gui(Frame):
             can_import, short_pathname, detected_installname = get_data.ranked_modules_dict[module]
             if can_import:
                 self.listbox_good.insert('end', "%-20s \t[%s]"%(module, short_pathname))
+                #self.listbox_good.itemconfig(0, bg = "red")
             else:
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
