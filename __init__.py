@@ -2,8 +2,9 @@
 =============
 GENERAL USAGE
 1. place module directory to your project
-2. just import it
-3. that's all!
+2. add code in your project
+import import_checker
+import_checker.frame.main(__file__)
 ===============
 WHAT IT WILL DO
 By importing it will execute all processes.
@@ -15,4 +16,4 @@ if not - stay red gui, offer installations.
 """
 
 from . import frame
-frame.main()
+#frame.main()
