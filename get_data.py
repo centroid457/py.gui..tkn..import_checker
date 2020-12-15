@@ -1,3 +1,4 @@
+print("import_checker.py")
 """
 HOW TO USE:
 1. add in .gitignore line "__pycache__"
