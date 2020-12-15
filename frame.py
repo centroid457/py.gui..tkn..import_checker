@@ -34,7 +34,7 @@ class Gui(Frame):
         self.root.title("IMPORT CHECHER")
         self.root.geometry("800x500+100+100")   #("WINXxWINY+ShiftX+ShiftY")
         self.root.resizable(width=True, height=True)	# заблокировать возможность изменения размеров границ! В том числе на весь экран!!!
-        self.root.maxsize(1000, 1000)
+        #self.root.maxsize(1000, 1000)
         self.root.minsize(300, 300)
         self.root.overrideredirect(False)
         self.root.state('normal')     # normal/zoomed/iconic/withdrawn
