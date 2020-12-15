@@ -144,7 +144,7 @@ class Gui(Frame):
             can_import, short_pathname, detected_installname = get_data.ranked_modules_dict[module]
             if can_import:
                 Label(self.frame_modules_good, text="%-10s \t[%s]"%(module, short_pathname),
-                      fg="black", bg="#55FF55", width=20, justify="left", anchor="w").pack(fill="x", expand=0)
+                      fg="black", bg="#55FF55", justify="left", anchor="w", font=('Courier', 9)).pack(fill="x")
             else:
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
