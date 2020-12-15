@@ -47,7 +47,7 @@ class Gui(Frame):
         self.root.wm_attributes("-transparentcolor", None)
 
         # WGT_PARAMETERS
-        self.root["bg"] = "#000077"
+        self.root["bg"] = "#005500" if get_data.count_found_modules_bad == 0 else "#FF0000"
         self.root["fg"] = None
         self.root["width"] = None
         self.root["height"] = None
