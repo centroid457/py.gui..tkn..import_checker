@@ -139,7 +139,7 @@ def _find_modulenames_set(line):
     match2 = re.fullmatch(mask_from_import, line_wo_comments)
 
     found_modulenames_group = match1[1] if match1 else match2[1] if match2 else None
-    if found_modulenames_group not in [None, ".", ".."]:
+    if found_modulenames_group not in [None, ]:
         modules_found_inline = _split_module_names_set(found_modulenames_group)
 
     return modules_found_inline
