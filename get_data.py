@@ -144,8 +144,13 @@ def _find_modulenames_set(line):
 def _split_module_names_set(raw_modulenames_data):
     # split text like "m1,m2" into {"m1", "m2"}
     raw_modules_data_wo_spaces = re.sub(r'\s', '', raw_modulenames_data)
-    modules_names_list = raw_modules_data_wo_spaces.split(sep=",")
-    return set(modules_names_list)
+    module_names_list_with_relative = raw_modules_data_wo_spaces.split(sep=",")
+    module_names_list_wo_relative = []
+    for module in module_names_list_with_relative:
+        module_name_wo_relative = module.split(sep=".")[0]
+        if module_name_wo_relative != "":
+            module_names_list_wo_relative.append(module_name_wo_relative)
+    return set(module_names_list_wo_relative)
 
 
 # test correct parsing
@@ -157,12 +162,12 @@ assert _find_modulenames_set(" import\t m1 as m2") == {"m1"}
 assert _find_modulenames_set(" from m1 import m2 as m3") == {"m1"}
 assert _find_modulenames_set("#from m1 import m2 as m3") == set()
 assert _find_modulenames_set("import m1 #comment import m2") == {"m1"}
-assert _find_modulenames_set("from . import m1 #comment import m2") == set()
+# relative import (in packages)
 assert _find_modulenames_set(" from .. import m1 #comment import m2") == set()
-
 assert _find_modulenames_set(" from ..m1 import m2 #comment import m3") == set()
+assert _find_modulenames_set(" from . import m1 #comment import m2") == set()
 assert _find_modulenames_set(" from .m1 import m2 #comment import m3") == set()
-assert _find_modulenames_set(" from m1.m2 import m3 #comment import m4") == set()
+assert _find_modulenames_set(" from m1.m2 import m3 #comment import m4") == {"m1"}
 
 
 def rank_modules_dict_generate(module_set=modules_found_infiles):
