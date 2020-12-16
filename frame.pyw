@@ -34,7 +34,7 @@ class Gui(Frame):
 
         self.create_gui_structure()
         self.window_move_to_center()
-        self.fill_table()
+        self.fill_frame_modules()
 
     def gui_root_configure(self):
         # ROOT_METHODS
@@ -172,7 +172,7 @@ class Gui(Frame):
                 self.listbox_files.itemconfig('end', bg = "#FF9999")
 
 
-    def fill_table(self):
+    def fill_frame_modules(self):
         # fill modulenames in gui
         for module in get_data.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
