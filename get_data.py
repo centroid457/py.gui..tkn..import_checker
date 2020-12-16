@@ -160,6 +160,11 @@ assert _find_modulenames_set("import m1 #comment import m2") == {"m1"}
 assert _find_modulenames_set("from . import m1 #comment import m2") == set()
 assert _find_modulenames_set(" from .. import m1 #comment import m2") == set()
 
+assert _find_modulenames_set(" from ..m1 import m2 #comment import m3") == set()
+assert _find_modulenames_set(" from .m1 import m2 #comment import m3") == set()
+assert _find_modulenames_set(" from m1.m2 import m3 #comment import m4") == set()
+
+
 def rank_modules_dict_generate(module_set=modules_found_infiles):
     # detect module location if exist in system
     # generate dict like
