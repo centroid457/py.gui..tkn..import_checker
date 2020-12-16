@@ -34,7 +34,7 @@ class Gui(Frame):
 
         self.create_gui_structure()
         self.window_move_to_center()
-        self.fill_frame_modules()
+
 
     def gui_root_configure(self):
         # ROOT_METHODS
@@ -96,13 +96,7 @@ class Gui(Frame):
         self.frame_info = Frame(self.parent, bg="#101010")
         self.frame_info.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
 
-        lable = Label(self.frame_info, bg="#d0d0d0")
-        lable["font"] = ("", 15)
-        if get_data.count_found_modules_bad > 0:
-            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
-        else:
-            lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
-        lable.pack(fill="x", expand=0)
+        self.fill_frame_info()
 
         # ======= FRAME-2 (FILES) ====================
         self.frame_files = Frame(self.parent, bg="#505050")
@@ -115,38 +109,16 @@ class Gui(Frame):
         self.frame_modules = Frame(self.parent, bg="grey")
         self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=pad_external)
 
-        lable = Label(self.frame_modules, bg="#d0d0d0")
-        lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
-        lable.pack(fill="x", expand=0)
+        self.fill_frame_modules()
 
-        # ------- FRAME-3 /1 GOOD -----------------
-        self.frame_modules_good = Frame(self.frame_modules, bg="#55FF55")
-        self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
-        #self.frame_modules_good.pack_propagate(1)
-
-        self.listbox_good = Listbox(self.frame_modules_good, height=10, bg="#55FF55", font=('Courier', 9))
-        self.listbox_good.grid(column=0, row=0, sticky="snew")
-
-        self.scrollbar = ttk.Scrollbar(self.frame_modules_good, orient="vertical", command=self.listbox_good.yview)
-        self.scrollbar.grid(column=1, row=0, sticky="sn")
-
-        self.listbox_good['yscrollcommand'] = self.scrollbar.set
-
-
-        ttk.Label(self.frame_modules_good, text="Status message", anchor="w").grid(column=0, columnspan=2, row=1, sticky="ew")
-        self.frame_modules_good.grid_columnconfigure(0, weight=1)
-        self.frame_modules_good.grid_rowconfigure(0, weight=1)
-
-        # ------- FRAME-3 /2 TRY -----------------
+    def fill_frame_info(self):
+        lable = Label(self.frame_info, bg="#d0d0d0")
+        lable["font"] = ("", 15)
         if get_data.count_found_modules_bad > 0:
-            self.frame_modules_try_install = Frame(self.frame_modules, bg="#FF5555")
-            self.frame_modules_try_install.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
-            self.frame_modules_try_install.pack_propagate(1)
-
-            Label(self.frame_modules_try_install,
-                  text="if button is green - it will definitly be installed (with internet connection)",
-                  bg="#FF5555").pack(fill="x", expand=0)
-
+            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
+        else:
+            lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
+        lable.pack(fill="x", expand=0)
 
     def fill_frame_files(self):
         lable = Label(self.frame_files, bg="#d0d0d0")
@@ -173,6 +145,38 @@ class Gui(Frame):
 
 
     def fill_frame_modules(self):
+        lable = Label(self.frame_modules, bg="#d0d0d0")
+        lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
+        lable.pack(fill="x", expand=0)
+
+        # ------- FRAME-3/1 GOOD -----------------
+        self.frame_modules_good = Frame(self.frame_modules, bg="#55FF55")
+        self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
+        #self.frame_modules_good.pack_propagate(1)
+
+        self.listbox_good = Listbox(self.frame_modules_good, height=10, bg="#55FF55", font=('Courier', 9))
+        self.listbox_good.grid(column=0, row=0, sticky="snew")
+
+        self.scrollbar = ttk.Scrollbar(self.frame_modules_good, orient="vertical", command=self.listbox_good.yview)
+        self.scrollbar.grid(column=1, row=0, sticky="sn")
+
+        self.listbox_good['yscrollcommand'] = self.scrollbar.set
+
+        ttk.Label(self.frame_modules_good, text="Status message", anchor="w").grid(column=0, columnspan=2, row=1, sticky="ew")
+        self.frame_modules_good.grid_columnconfigure(0, weight=1)
+        self.frame_modules_good.grid_rowconfigure(0, weight=1)
+
+        # ------- FRAME-3/2 TRY -----------------
+        if get_data.count_found_modules_bad > 0:
+            self.frame_modules_try_install = Frame(self.frame_modules, bg="#FF5555")
+            self.frame_modules_try_install.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
+            self.frame_modules_try_install.pack_propagate(1)
+
+            Label(self.frame_modules_try_install,
+                  text="if button is green - it will definitly be installed (with internet connection)",
+                  bg="#FF5555").pack(fill="x", expand=0)
+
+
         # fill modulenames in gui
         for module in get_data.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
@@ -185,6 +189,7 @@ class Gui(Frame):
                 btn["bg"] = "#55FF55" if detected_installname else None
                 btn["command"] = self.start_install_module(module, get_data.ranked_modules_dict[module])
                 btn.pack()
+
 
     def start_install_module(self, modulename, module_data):
         modulename_cmd = modulename if module_data[2] is None else module_data[2]
