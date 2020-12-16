@@ -1,5 +1,6 @@
 # print("file frame.py")
 import subprocess
+from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
 from tkinter import ttk
 
@@ -133,7 +134,10 @@ class Gui(Frame):
 
         self.listbox_files['yscrollcommand'] = self.scrollbar.set
 
-        ttk.Label(self.frame_files, text="Status message", anchor="w").grid(column=0, columnspan=2, row=2, sticky="ew")
+        self.status_files = ttk.Label(self.frame_files, text="Status message", anchor="w")
+        self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
+        self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
+
         self.frame_files.grid_columnconfigure(0, weight=1)
         self.frame_files.grid_rowconfigure(0, weight=1)
 
@@ -142,6 +146,10 @@ class Gui(Frame):
             self.listbox_files.insert('end', file.resolve())
             if not files_dict[file].isdisjoint(get_data.modules_found_infiles_bad):
                 self.listbox_files.itemconfig('end', bg = "#FF9999")
+
+    def change_status_files(self, event):
+        selected_filename = self.listbox_files.get(*self.listbox_files.curselection())
+        self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
 
 
     def fill_frame_modules(self):
@@ -162,7 +170,8 @@ class Gui(Frame):
 
         self.listbox_good['yscrollcommand'] = self.scrollbar.set
 
-        ttk.Label(self.frame_modules_good, text="Status message", anchor="w").grid(column=0, columnspan=2, row=1, sticky="ew")
+        status_modules_good = ttk.Label(self.frame_modules_good, text="Status message", anchor="w")
+        status_modules_good.grid(column=0, columnspan=2, row=1, sticky="ew")
         self.frame_modules_good.grid_columnconfigure(0, weight=1)
         self.frame_modules_good.grid_rowconfigure(0, weight=1)
 
@@ -175,7 +184,6 @@ class Gui(Frame):
             Label(self.frame_modules_try_install,
                   text="if button is green - it will definitly be installed (with internet connection)",
                   bg="#FF5555").pack(fill="x", expand=0)
-
 
         # fill modulenames in gui
         for module in get_data.ranked_modules_dict:
