@@ -92,16 +92,18 @@ def main(file_as_path=filefullname_as_link_path):
 
     os.chdir(path_find_wo_slash)
     update_system_modules_dict()
+    if not access_as_import: print("*"*80)
     find_all_python_files_generate(path=path_find_wo_slash)
+    if not access_as_import: print("*"*80)
     find_all_importing_modules(python_files_found_in_directory_dict)
     rank_modules_dict_generate()
     sort_ranked_modules_dict()
     update_modules_found_infiles_bad()
     update_counters()
+    if not access_as_import: print("*"*80)
 
 
 def find_all_python_files_generate(path=path_find_wo_slash):
-    if not access_as_import: print("*"*80)
     for file_name in path.rglob(pattern="*.py*"):
         if (file_name != os.path.basename(__file__)
             and os.path.splitext(file_name)[1] in (".py", ".pyw")
@@ -113,7 +115,6 @@ def find_all_python_files_generate(path=path_find_wo_slash):
 
 
 def find_all_importing_modules(file_list):
-    if not access_as_import: print("*"*80)
     # 1. find all import strings in all files
     # 2. parse all module names in them
     openhook = fileinput.hook_encoded(encoding="utf8", errors=None)
@@ -221,14 +222,9 @@ def update_system_modules_dict():
     # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
     # KEY=modulename:VALUE=location(CurDir|DLLs|lib|site-packages)
     for module_in_system in pkgutil.iter_modules():
-        print("name", module_in_system.name)
-        print(module_in_system)
         my_string = str(module_in_system.module_finder)
-        print(my_string)
-        print(Path(str(module_in_system.module_finder)))
         mask = r".*\('(.+)'\)$"
         match = re.fullmatch(mask, my_string)[1]
-        print(match)
         path_name = Path(match).name
         modules_in_system_dict.update({module_in_system.name:path_name})
 
