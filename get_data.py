@@ -221,12 +221,17 @@ def update_system_modules_dict():
     # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
     # KEY=modulename:VALUE=location(CurDir|DLLs|lib|site-packages)
     for module_in_system in pkgutil.iter_modules():
-        #print(module_in_system.name)
+        print("name", module_in_system.name)
+        print(module_in_system)
         my_string = str(module_in_system.module_finder)
-        # print(my_string)
-        mask = r".*[\\/]+([^\\/']+)['\)]+$"
-        match = re.fullmatch(mask, my_string)
-        modules_in_system_dict.update({module_in_system.name:match[1]})
+        print(my_string)
+        print(Path(str(module_in_system.module_finder)))
+        mask = r".*\('(.+)'\)$"
+        match = re.fullmatch(mask, my_string)[1]
+        print(match)
+        path_name = Path(match).name
+        modules_in_system_dict.update({module_in_system.name:path_name})
+
 
     #print(modules_in_system_dict)
     return
