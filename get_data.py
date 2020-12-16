@@ -103,10 +103,12 @@ def main(file_as_path=filefullname_as_link_path):
 def find_all_python_files_generate(path=path_find_wo_slash):
     if not access_as_import: print("*"*80)
     for file_name in path.rglob(pattern="*.py*"):
-        if file_name != os.path.basename(__file__) and os.path.splitext(file_name)[1] in (".py", ".pyw"):
-            if file_name.name != "__init__.py":
-                python_files_found_in_directory_dict.update({file_name: set()})
-                if not access_as_import: print(file_name)
+        if (file_name != os.path.basename(__file__)
+            and os.path.splitext(file_name)[1] in (".py", ".pyw")
+            and file_name.name != "__init__.py"
+        ):
+            python_files_found_in_directory_dict.update({file_name: set()})
+            if not access_as_import: print(file_name)
     return
 
 
