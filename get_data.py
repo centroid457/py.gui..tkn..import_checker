@@ -67,6 +67,7 @@ MODULES_CAN_INSTALL = {
 }
 
 # INTERNAL
+access_as_import = True      # at first need true to correct assertions!
 path_find_wo_slash = None
 modules_found_infiles = set()
 modules_found_infiles_bad = set()
@@ -100,14 +101,17 @@ def main(file_as_path=filefullname_as_link_path):
 
 
 def find_all_python_files_generate(path=path_find_wo_slash):
+    if not access_as_import: print("*"*80)
     for file_name in path.rglob(pattern="*.py*"):
         if file_name != os.path.basename(__file__) and os.path.splitext(file_name)[1] in (".py", ".pyw"):
             if file_name.name != "__init__.py":
                 python_files_found_in_directory_dict.update({file_name: set()})
+                if not access_as_import: print(file_name)
     return
 
 
 def find_all_importing_modules(file_list):
+    if not access_as_import: print("*"*80)
     # 1. find all import strings in all files
     # 2. parse all module names in them
     openhook = fileinput.hook_encoded(encoding="utf8", errors=None)
@@ -150,6 +154,7 @@ def _split_module_names_set(raw_modulenames_data):
         module_name_wo_relative = module.split(sep=".")[0]
         if module_name_wo_relative != "":
             module_names_list_wo_relative.append(module_name_wo_relative)
+            if not access_as_import: print(module_name_wo_relative)
     return set(module_names_list_wo_relative)
 
 
@@ -234,9 +239,12 @@ def update_counters():
 
 
 if __name__ == '__main__':
+    access_as_import = False
     main()
     print(f"path=[{path_find_wo_slash}]")
     print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_dict}")
     print(f"[{count_found_modules}]FOUND MODULES={ranked_modules_dict}")
     print(f"[{count_found_modules_bad}]FOUND BAD MODULES={modules_found_infiles_bad}")
     sleep(2)
+else:
+    access_as_import = True
