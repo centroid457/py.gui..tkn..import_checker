@@ -3,14 +3,21 @@ import subprocess
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
 from tkinter import ttk
 
+filefullname_as_link_path = __file__
 
-def main(file_as_path=__file__):
-    get_data.main(file_as_path)
+
+def main(file_as_path=filefullname_as_link_path):
+    update_data(file_as_path)
     root = Tk()
-    app = Gui(root=root, parent=root)
-    if close_after_pause_if_ok and get_data.count_found_modules_bad == 0:
+    app = Gui(root=root, parent=root, file_as_path=file_as_path)
+    if access_as_import and get_data.count_found_modules_bad == 0:
         root.after(1000, root.destroy)
     app.mainloop()
+
+
+def update_data(file_as_path=filefullname_as_link_path):
+    if get_data.count_found_modules == 0:
+        get_data.main(file_as_path)
 
 
 # #################################################
@@ -18,7 +25,8 @@ def main(file_as_path=__file__):
 # #################################################
 class Gui(Frame):
     """ main GUI window """
-    def __init__(self, root=None, parent=None):
+    def __init__(self, root=None, parent=None, file_as_path=filefullname_as_link_path):
+        update_data(file_as_path)
         super().__init__(root)
         self.root = root
         self.parent = parent
@@ -197,9 +205,9 @@ class Gui(Frame):
 
 
 if __name__ == '__main__':
-    close_after_pause_if_ok = False
+    access_as_import = False
     import get_data
     main()
 else:
     from . import get_data  # main, python_files_found_in_directory_list, ranked_modules_dict
-    close_after_pause_if_ok = True
+    access_as_import = True
