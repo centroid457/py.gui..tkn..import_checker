@@ -47,23 +47,24 @@ MODULES_CAN_INSTALL = {
     # in not installed modules set you can see which of then can be definitely installed
     # "IMPORT_NAME_IN_PROJECT": "PIP_INSTALL_NAME"
     # different names
-    "wx": "wxPython",
-    "PIL": "pillow",
     "contracts": "PyContracts",
+    "PIL": "pillow",
+    "wx": "wxPython",
 
     # similar names
     "TEST_MODULE_1": "TEST_MODULE_1",
-    "plotly": "plotly",
+    "matplotlib": "matplotlib",
+    "numpy": "numpy",
+    "openpyxl": "openpyxl",
     "pandas": "pandas",
-    "pygame": "pygame",
+    "playsound": "playsound",
+    "plotly": "plotly",
     "psutil": "psutil",
+    "pygame": "pygame",
+    "pyscreenshot": "pyscreenshot",
     "pystray": "pystray",
     "requests": "requests",
     "tabulate": "tabulate",
-    "openpyxl": "openpyxl",
-    "playsound": "playsound",
-    "matplotlib": "matplotlib",
-    "pyscreenshot": "pyscreenshot",
 }
 
 # INTERNAL
