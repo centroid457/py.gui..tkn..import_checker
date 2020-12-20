@@ -5,10 +5,10 @@ from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
 from tkinter import ttk
 
-filefullname_as_link_path = __file__
+filefullname_as_link_path_default = __file__
 
 
-def main(file_as_path=filefullname_as_link_path):
+def main(file_as_path=filefullname_as_link_path_default):
     update_data(file_as_path)
     root = Tk()
     app = Gui(root=root, parent=root, file_as_path=file_as_path)
@@ -17,7 +17,7 @@ def main(file_as_path=filefullname_as_link_path):
     app.mainloop()
 
 
-def update_data(file_as_path=filefullname_as_link_path):
+def update_data(file_as_path=filefullname_as_link_path_default):
     if get_data.count_found_modules == 0:
         get_data.main(file_as_path)
 
@@ -27,7 +27,7 @@ def update_data(file_as_path=filefullname_as_link_path):
 # #################################################
 class Gui(Frame):
     """ main GUI window """
-    def __init__(self, root=None, parent=None, file_as_path=filefullname_as_link_path):
+    def __init__(self, root=None, parent=None, file_as_path=filefullname_as_link_path_default):
         update_data(file_as_path)
         super().__init__(root)
         self.root = root
