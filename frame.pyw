@@ -94,26 +94,27 @@ class Gui(Frame):
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
-        self.frame_info = Frame(self.parent, bg="#101010")
+        self.frame_info = Frame(self.parent)
         self.frame_info.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
 
         self.fill_frame_info(self.frame_info)
 
         # ======= FRAME-2 (VERSIONS) ====================
-        self.frame_versions = Frame(self.parent, bg="#505050")
+        self.frame_versions = Frame(self.parent)
+        self.frame_versions.pack_propagate(0)
         self.frame_versions.grid(row=2, sticky="snew", padx=pad_external, pady=0)
 
         self.fill_frame_versions(self.frame_versions)
 
         # ======= FRAME-3 (FILES) ====================
-        self.frame_files = Frame(self.parent, bg="#505050")
-        #self.frame_files.pack_propagate(0)
+        self.frame_files = Frame(self.parent)
+        self.frame_files.pack_propagate(1)
         self.frame_files.grid(row=3, sticky="snew", padx=pad_external, pady=0)
 
         self.fill_frame_files(self.frame_files)
 
         # ======= FRAME-4 (MODULES) ====================
-        self.frame_modules = Frame(self.parent, bg="grey")
+        self.frame_modules = Frame(self.parent)
         self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=pad_external)
 
         self.fill_frame_modules(self.frame_modules)
@@ -133,7 +134,7 @@ class Gui(Frame):
         lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
-        self.listbox_versions = Listbox(parent, height=4, bg="#55FF55", font=('Courier', 9))
+        self.listbox_versions = Listbox(parent, height=4, bg=None, font=('Courier', 9))
         self.listbox_versions.grid(column=0, row=1, sticky="snew")
 
         self.scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.listbox_versions.yview)
@@ -143,7 +144,7 @@ class Gui(Frame):
 
         self.status_versions = ttk.Label(parent, text="Status message", anchor="w")
         self.status_versions.grid(column=0, columnspan=2, row=2, sticky="ew")
-        self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_files)
+        self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
 
         parent.grid_columnconfigure(0, weight=1)
         parent.grid_rowconfigure(0, weight=1)
@@ -151,13 +152,18 @@ class Gui(Frame):
         versions_dict = get_data.python_versions_found
         for ver in versions_dict:
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver])
-            #if not files_dict[file].isdisjoint(get_data.modules_found_infiles_bad):
-            #    self.listbox_versions.itemconfig('end', bg = "#FF9999")
+            if ver.endswith("*"):
+                if get_data.count_found_modules_bad == 0:
+                    self.listbox_versions.itemconfig('end', bg="#99FF99")
+                else:
+                    self.listbox_versions.itemconfig('end', bg="#FF9999")
         return
 
     def change_status_versions(self, event):
-        selected_filename = self.listbox_files.get(*self.listbox_files.curselection())
-        self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
+        selected_version = self.listbox_versions.get(*self.listbox_versions.curselection())
+        for ver in get_data.python_versions_found:
+            if selected_version.startswith(ver):
+                self.status_versions["text"] = get_data.python_versions_found[ver]
         return
 
 
