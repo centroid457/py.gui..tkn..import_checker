@@ -91,7 +91,7 @@ class Gui(Frame):
     def create_gui_structure(self):
         self.parent_main.columnconfigure(0, weight=1)
         self.parent_main.rowconfigure([1, 2, 3], weight=0)  # VERSIONS, INFO, FILES
-        self.parent_main.rowconfigure(4, weight=1)       # MODULES
+        self.parent_main.rowconfigure([4], weight=1)       # MODULES
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
