@@ -86,13 +86,14 @@ class Gui(Frame):
         y = (screen_height - window_height) / 2
         self.root.geometry('+%d+%d' % (x, y))
 
+
     # #################################################
     # FRAMES
     # #################################################
     def create_gui_structure(self):
         self.parent_main.columnconfigure(0, weight=1)
-        self.parent_main.rowconfigure([1, 2, 3], weight=0)  # VERSIONS, INFO, FILES
-        self.parent_main.rowconfigure([4], weight=1)       # MODULES
+        self.parent_main.rowconfigure([0, 1], weight=0)          # INFO
+        self.parent_main.rowconfigure([2, 3, 4], weight=1)       # VERSIONS, FILES, MODULES
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
@@ -121,6 +122,7 @@ class Gui(Frame):
 
         self.fill_frame_modules(self.frame_modules)
 
+
     def fill_frame_info(self, parent):
         lable = Label(parent, bg="#d0d0d0")
         lable["font"] = ("", 15)
@@ -131,8 +133,11 @@ class Gui(Frame):
         lable.pack(fill="x", expand=0)
         return
 
+
     def fill_frame_versions(self, parent):
-        parent.rowconfigure([0, 2], weight=0)
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure([1], weight=1)
+        parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:"
@@ -149,9 +154,6 @@ class Gui(Frame):
         self.status_versions = ttk.Label(parent, text="...SELECT item...", anchor="w")
         self.status_versions.grid(column=0, columnspan=2, row=2, sticky="ew")
         self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
-
-        parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure(0, weight=1)
 
         versions_dict = get_data.python_versions_found
         for ver in versions_dict:
@@ -174,7 +176,9 @@ class Gui(Frame):
 
 
     def fill_frame_files(self, parent):
-        parent.rowconfigure([0, 2], weight=0)
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure([1], weight=1)
+        parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
@@ -192,9 +196,6 @@ class Gui(Frame):
         self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
-        parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure(0, weight=1)
-
         files_dict = get_data.python_files_found_in_directory_dict
         for file in files_dict:
             self.listbox_files.insert('end', file.resolve())
@@ -211,7 +212,6 @@ class Gui(Frame):
 
 
     def fill_frame_modules(self, parent):
-        parent.rowconfigure([0, 2], weight=0)
 
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
@@ -232,6 +232,7 @@ class Gui(Frame):
 
         status_modules_good = ttk.Label(self.frame_modules_good, text="...will not show anything...", anchor="w")
         status_modules_good.grid(column=0, columnspan=2, row=1, sticky="ew")
+
         self.frame_modules_good.grid_columnconfigure(0, weight=1)
         self.frame_modules_good.grid_rowconfigure(0, weight=1)
 
