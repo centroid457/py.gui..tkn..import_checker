@@ -157,7 +157,7 @@ class Gui(Frame):
         frame_start_version.grid(column=0, columnspan=2, row=2, sticky="ew")
 
         btn = Button(frame_start_version, text=f"RESTART by selected")
-        btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"])
+        btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
         btn.pack(side="left")
 
         self.status_versions = ttk.Label(frame_start_version, text="...SELECT item...", anchor="w")
