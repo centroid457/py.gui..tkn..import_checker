@@ -97,79 +97,110 @@ class Gui(Frame):
         self.frame_info = Frame(self.parent, bg="#101010")
         self.frame_info.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
 
-        self.fill_frame_info()
+        self.fill_frame_info(self.frame_info)
 
         # ======= FRAME-2 (VERSIONS) ====================
         self.frame_versions = Frame(self.parent, bg="#505050")
         self.frame_versions.grid(row=2, sticky="snew", padx=pad_external, pady=0)
 
-        self.fill_frame_versions()
+        self.fill_frame_versions(self.frame_versions)
 
         # ======= FRAME-3 (FILES) ====================
         self.frame_files = Frame(self.parent, bg="#505050")
         #self.frame_files.pack_propagate(0)
         self.frame_files.grid(row=3, sticky="snew", padx=pad_external, pady=0)
 
-        self.fill_frame_files()
+        self.fill_frame_files(self.frame_files)
 
         # ======= FRAME-4 (MODULES) ====================
         self.frame_modules = Frame(self.parent, bg="grey")
         self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=pad_external)
 
-        self.fill_frame_modules()
+        self.fill_frame_modules(self.frame_modules)
 
-    def fill_frame_info(self):
-        lable = Label(self.frame_info, bg="#d0d0d0")
+    def fill_frame_info(self, parent):
+        lable = Label(parent, bg="#d0d0d0")
         lable["font"] = ("", 15)
         if get_data.count_found_modules_bad > 0:
             lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
         else:
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
         lable.pack(fill="x", expand=0)
+        return
 
-    def fill_frame_versions(self):
-        pass
+    def fill_frame_versions(self, parent):
+        lable = Label(parent, bg="#d0d0d0")
+        lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:"
+        lable.grid(column=0, row=0, columnspan=2, sticky="snew")
+
+        self.listbox_versions = Listbox(parent, height=4, bg="#55FF55", font=('Courier', 9))
+        self.listbox_versions.grid(column=0, row=1, sticky="snew")
+
+        self.scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.listbox_versions.yview)
+        self.scrollbar.grid(column=1, row=1, sticky="sn")
+
+        self.listbox_versions['yscrollcommand'] = self.scrollbar.set
+
+        self.status_versions = ttk.Label(parent, text="Status message", anchor="w")
+        self.status_versions.grid(column=0, columnspan=2, row=2, sticky="ew")
+        self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_files)
+
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure(0, weight=1)
+
+        versions_dict = get_data.python_versions_found
+        for ver in versions_dict:
+            self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver])
+            #if not files_dict[file].isdisjoint(get_data.modules_found_infiles_bad):
+            #    self.listbox_versions.itemconfig('end', bg = "#FF9999")
+        return
+
+    def change_status_versions(self, event):
+        selected_filename = self.listbox_files.get(*self.listbox_files.curselection())
+        self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
+        return
 
 
-    def fill_frame_files(self):
-        lable = Label(self.frame_files, bg="#d0d0d0")
+    def fill_frame_files(self, parent):
+        lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
-        self.listbox_files = Listbox(self.frame_files, height=6, bg="#55FF55", font=('Courier', 9))
+        self.listbox_files = Listbox(parent, height=6, bg="#55FF55", font=('Courier', 9))
         self.listbox_files.grid(column=0, row=1, sticky="snew")
 
-        self.scrollbar = ttk.Scrollbar(self.frame_files, orient="vertical", command=self.listbox_files.yview)
+        self.scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.listbox_files.yview)
         self.scrollbar.grid(column=1, row=1, sticky="sn")
 
         self.listbox_files['yscrollcommand'] = self.scrollbar.set
 
-        self.status_files = ttk.Label(self.frame_files, text="Status message", anchor="w")
+        self.status_files = ttk.Label(parent, text="Status message", anchor="w")
         self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
-        self.frame_files.grid_columnconfigure(0, weight=1)
-        self.frame_files.grid_rowconfigure(0, weight=1)
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure(0, weight=1)
 
         files_dict = get_data.python_files_found_in_directory_dict
         for file in files_dict:
             self.listbox_files.insert('end', file.resolve())
             if not files_dict[file].isdisjoint(get_data.modules_found_infiles_bad):
                 self.listbox_files.itemconfig('end', bg = "#FF9999")
-
+        return
 
     def change_status_files(self, event):
         selected_filename = self.listbox_files.get(*self.listbox_files.curselection())
         self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
+        return
 
 
-    def fill_frame_modules(self):
-        lable = Label(self.frame_modules, bg="#d0d0d0")
+    def fill_frame_modules(self, parent):
+        lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
         lable.pack(fill="x", expand=0)
 
         # ------- FRAME-3/1 GOOD -----------------
-        self.frame_modules_good = Frame(self.frame_modules, bg="#55FF55")
+        self.frame_modules_good = Frame(parent, bg="#55FF55")
         self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
         #self.frame_modules_good.pack_propagate(1)
 
@@ -188,7 +219,7 @@ class Gui(Frame):
 
         # ------- FRAME-3/2 TRY -----------------
         if get_data.count_found_modules_bad > 0:
-            self.frame_modules_try_install = Frame(self.frame_modules, bg="#FF5555")
+            self.frame_modules_try_install = Frame(parent, bg="#FF5555")
             self.frame_modules_try_install.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
             self.frame_modules_try_install.pack_propagate(1)
 
@@ -208,7 +239,7 @@ class Gui(Frame):
                 btn["bg"] = "#55FF55" if detected_installname else None
                 btn["command"] = self.start_install_module(module, get_data.ranked_modules_dict[module])
                 btn.pack()
-
+        return
 
     def start_install_module(self, modulename, module_data):
         modulename_cmd = modulename if module_data[2] is None else module_data[2]
