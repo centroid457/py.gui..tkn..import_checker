@@ -28,6 +28,7 @@ def update_data(file_as_path=filefullname_as_link_path_default):
 class Gui(Frame):
     """ main GUI window """
     def __init__(self, root=None, parent=None, file_as_path=filefullname_as_link_path_default):
+        self.file_as_path = file_as_path
         update_data(file_as_path)
         super().__init__(root)
         self.root = root
