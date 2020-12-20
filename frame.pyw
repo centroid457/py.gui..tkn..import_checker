@@ -160,7 +160,9 @@ class Gui(Frame):
         return
 
     def change_status_versions(self, event):
-        selected_version = self.listbox_versions.get(*self.listbox_versions.curselection())
+        #print(self.listbox_versions.curselection())
+        selected_list = (1,) if self.listbox_versions.curselection() == () else self.listbox_versions.curselection()
+        selected_version = self.listbox_versions.get(selected_list)
         for ver in get_data.python_versions_found:
             if selected_version.startswith(ver):
                 self.status_versions["text"] = get_data.python_versions_found[ver]
@@ -195,7 +197,9 @@ class Gui(Frame):
         return
 
     def change_status_files(self, event):
-        selected_filename = self.listbox_files.get(*self.listbox_files.curselection())
+        #print(self.listbox_files.curselection())
+        selected_list = (1,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
+        selected_filename = self.listbox_files.get(*selected_list)
         self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
         return
 
