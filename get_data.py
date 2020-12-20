@@ -27,6 +27,7 @@ import re
 import os
 import pkgutil
 import fileinput
+import subprocess
 from time import sleep
 from pathlib import Path
 
@@ -68,13 +69,15 @@ MODULES_CAN_INSTALL = {
 }
 
 # INTERNAL
-access_as_import = True      # at first need true to correct assertions!
+access_this_module_as_import = True     # at first need true to correct assertions!
+python_versions_found = {}              # in system
 path_find_wo_slash = None
 modules_found_infiles = set()
 modules_found_infiles_bad = set()
 modules_in_system_dict = {}
 
 # COUNTERS
+count_python_versions = 0
 count_found_files = 0
 count_found_modules = 0
 count_found_modules_bad = 0
@@ -84,6 +87,7 @@ count_found_modules_bad = 0
 # #################################################
 def main(file_as_path=filefullname_as_link_path):
     global path_find_wo_slash
+    find_python_interpreters()
 
     # by default find all modules in one level up (from current directory) with all subdirectories
     if Path(file_as_path).parent == Path(__file__).parent:
@@ -93,15 +97,30 @@ def main(file_as_path=filefullname_as_link_path):
 
     os.chdir(path_find_wo_slash)
     update_system_modules_dict()
-    if not access_as_import: print("*"*80)
+    if not access_this_module_as_import: print("*"*80)
     find_all_python_files_generate(path=path_find_wo_slash)
-    if not access_as_import: print("*"*80)
+    if not access_this_module_as_import: print("*"*80)
     find_all_importing_modules(python_files_found_in_directory_dict)
     rank_modules_dict_generate()
     sort_ranked_modules_dict()
     update_modules_found_infiles_bad()
     update_counters()
-    if not access_as_import: print("*"*80)
+    if not access_this_module_as_import: print("*"*80)
+
+
+def find_python_interpreters():
+    py_versions_cmd = subprocess.run("py -0p", text=True, capture_output=True)
+    py_versions_raw = py_versions_cmd.stdout
+    py_versions_lines_list = py_versions_raw.splitlines()
+
+    for line in py_versions_lines_list:
+        mask = r'\s(\S+)\s+(\S.+)'
+        match = re.fullmatch(mask, line)
+        if match:
+            found_py_version = match[1]
+            found_py_exe_path = match[2]
+            python_versions_found.update({found_py_version: found_py_exe_path})
+    return
 
 
 def find_all_python_files_generate(path=path_find_wo_slash):
@@ -111,7 +130,7 @@ def find_all_python_files_generate(path=path_find_wo_slash):
             and file_name.name != "__init__.py"
         ):
             python_files_found_in_directory_dict.update({file_name: set()})
-            if not access_as_import: print(file_name)
+            if not access_this_module_as_import: print(file_name)
     return
 
 
@@ -158,7 +177,7 @@ def _split_module_names_set(raw_modulenames_data):
         module_name_wo_relative = module.split(sep=".")[0]
         if module_name_wo_relative != "":
             module_names_list_wo_relative.append(module_name_wo_relative)
-            if not access_as_import: print(module_name_wo_relative)
+            if not access_this_module_as_import: print(module_name_wo_relative)
     return set(module_names_list_wo_relative)
 
 
@@ -235,7 +254,8 @@ def update_system_modules_dict():
 
 
 def update_counters():
-    global count_found_files, count_found_modules, count_found_modules_bad
+    global count_python_versions, count_found_files, count_found_modules, count_found_modules_bad
+    count_python_versions = len(python_versions_found)
     count_found_files = len(python_files_found_in_directory_dict)
     count_found_modules = len(ranked_modules_dict)
     count_found_modules_bad = len(modules_found_infiles_bad)
@@ -243,12 +263,17 @@ def update_counters():
 
 
 if __name__ == '__main__':
-    access_as_import = False
+    access_this_module_as_import = False
     main()
+    print(f"[{count_python_versions}]FOUND VERSIONS={python_versions_found}")
+    print()
     print(f"path=[{path_find_wo_slash}]")
+    print()
     print(f"[{count_found_files}]FOUND FILES={python_files_found_in_directory_dict}")
+    print()
     print(f"[{count_found_modules}]FOUND MODULES={ranked_modules_dict}")
+    print()
     print(f"[{count_found_modules_bad}]FOUND BAD MODULES={modules_found_infiles_bad}")
-    sleep(2)
+    sleep(200)
 else:
-    access_as_import = True
+    access_this_module_as_import = True
