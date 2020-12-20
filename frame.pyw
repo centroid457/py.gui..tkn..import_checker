@@ -106,26 +106,26 @@ class Gui(Frame):
         # ======= FRAME-2 (VERSIONS) ====================
         self.frame_versions = Frame(self.parent_main)
         self.frame_versions.pack_propagate(0)
-        self.frame_versions.grid(row=1, sticky="snew", padx=pad_external, pady=0)
+        self.frame_versions.grid(row=1, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_versions(self.frame_versions)
 
         # ======= FRAME-3 (FILES) ====================
         self.frame_files = Frame(self.parent_main)
         self.frame_files.pack_propagate(1)
-        self.frame_files.grid(row=2, sticky="snew", padx=pad_external, pady=0)
+        self.frame_files.grid(row=2, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_files(self.frame_files)
 
         # ======= FRAME-4 (MODULES) ====================
         self.frame_modules = Frame(self.parent_main)
-        self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=pad_external)
+        self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_modules(self.frame_modules)
 
 
     def fill_frame_info(self, parent):
-        lable = Label(parent, bg="#d0d0d0")
+        lable = Label(parent)
         lable["font"] = ("", 15)
         if get_data.count_found_modules_bad > 0:
             lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
