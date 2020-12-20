@@ -142,7 +142,7 @@ class Gui(Frame):
 
         self.listbox_versions['yscrollcommand'] = self.scrollbar.set
 
-        self.status_versions = ttk.Label(parent, text="Status message", anchor="w")
+        self.status_versions = ttk.Label(parent, text="...SELECT item...", anchor="w")
         self.status_versions.grid(column=0, columnspan=2, row=2, sticky="ew")
         self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
 
@@ -180,7 +180,7 @@ class Gui(Frame):
 
         self.listbox_files['yscrollcommand'] = self.scrollbar.set
 
-        self.status_files = ttk.Label(parent, text="Status message", anchor="w")
+        self.status_files = ttk.Label(parent, text="...SELECT item...", anchor="w")
         self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
@@ -218,7 +218,7 @@ class Gui(Frame):
 
         self.listbox_good['yscrollcommand'] = self.scrollbar.set
 
-        status_modules_good = ttk.Label(self.frame_modules_good, text="Status message", anchor="w")
+        status_modules_good = ttk.Label(self.frame_modules_good, text="...will not show anything...", anchor="w")
         status_modules_good.grid(column=0, columnspan=2, row=1, sticky="ew")
         self.frame_modules_good.grid_columnconfigure(0, weight=1)
         self.frame_modules_good.grid_rowconfigure(0, weight=1)
