@@ -31,7 +31,7 @@ class Gui(Frame):
         update_data(file_as_path)
         super().__init__(root)
         self.root = root
-        self.parent = parent
+        self.parent_main = parent
         self.gui_root_configure()
 
         self.create_gui_structure()
@@ -89,33 +89,33 @@ class Gui(Frame):
     # FRAMES
     # #################################################
     def create_gui_structure(self):
-        self.parent.columnconfigure(0, weight=1)
-        self.parent.rowconfigure([1, 2, 3], weight=0)  # VERSIONS, INFO, FILES
-        self.parent.rowconfigure(4, weight=1)       # MODULES
+        self.parent_main.columnconfigure(0, weight=1)
+        self.parent_main.rowconfigure([1, 2, 3], weight=0)  # VERSIONS, INFO, FILES
+        self.parent_main.rowconfigure(4, weight=1)       # MODULES
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
-        self.frame_info = Frame(self.parent)
+        self.frame_info = Frame(self.parent_main)
         self.frame_info.grid(row=1, sticky="nsew", padx=pad_external, pady=pad_external)
 
         self.fill_frame_info(self.frame_info)
 
         # ======= FRAME-2 (VERSIONS) ====================
-        self.frame_versions = Frame(self.parent)
+        self.frame_versions = Frame(self.parent_main)
         self.frame_versions.pack_propagate(0)
         self.frame_versions.grid(row=2, sticky="snew", padx=pad_external, pady=0)
 
         self.fill_frame_versions(self.frame_versions)
 
         # ======= FRAME-3 (FILES) ====================
-        self.frame_files = Frame(self.parent)
+        self.frame_files = Frame(self.parent_main)
         self.frame_files.pack_propagate(1)
         self.frame_files.grid(row=3, sticky="snew", padx=pad_external, pady=0)
 
         self.fill_frame_files(self.frame_files)
 
         # ======= FRAME-4 (MODULES) ====================
-        self.frame_modules = Frame(self.parent)
+        self.frame_modules = Frame(self.parent_main)
         self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=pad_external)
 
         self.fill_frame_modules(self.frame_modules)
@@ -131,6 +131,8 @@ class Gui(Frame):
         return
 
     def fill_frame_versions(self, parent):
+        parent.rowconfigure([0, 2], weight=0)
+
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
@@ -171,6 +173,8 @@ class Gui(Frame):
 
 
     def fill_frame_files(self, parent):
+        parent.rowconfigure([0, 2], weight=0)
+
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
@@ -206,6 +210,8 @@ class Gui(Frame):
 
 
     def fill_frame_modules(self, parent):
+        parent.rowconfigure([0, 2], weight=0)
+
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
         lable.pack(fill="x", expand=0)
