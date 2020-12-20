@@ -25,6 +25,7 @@ TEST LINES
 
 import re
 import os
+import sys
 import pkgutil
 import fileinput
 import subprocess
@@ -109,6 +110,7 @@ def main(file_as_path=filefullname_as_link_path):
 
 
 def find_python_interpreters():
+    python_exe = sys.executable
     py_versions_cmd = subprocess.run("py -0p", text=True, capture_output=True)
     py_versions_raw = py_versions_cmd.stdout
     py_versions_lines_list = py_versions_raw.splitlines()
@@ -117,7 +119,7 @@ def find_python_interpreters():
         mask = r'\s(\S+)\s+(\S.+)'
         match = re.fullmatch(mask, line)
         if match:
-            found_py_version = match[1]
+            found_py_version = match[1] + (" *" if match[2] == python_exe else "")
             found_py_exe_path = match[2]
             python_versions_found.update({found_py_version: found_py_exe_path})
     return
@@ -247,7 +249,6 @@ def update_system_modules_dict():
         match = re.fullmatch(mask, my_string)[1]
         path_name = Path(match).name
         modules_in_system_dict.update({module_in_system.name:path_name})
-
 
     #print(modules_in_system_dict)
     return
