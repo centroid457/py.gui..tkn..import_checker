@@ -1,6 +1,7 @@
 # print("file frame.py")
 import subprocess
 import sys
+import os
 from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
 from tkinter import ttk
@@ -151,8 +152,16 @@ class Gui(Frame):
 
         self.listbox_versions['yscrollcommand'] = self.scrollbar.set
 
-        self.status_versions = ttk.Label(parent, text="...SELECT item...", anchor="w")
-        self.status_versions.grid(column=0, columnspan=2, row=2, sticky="ew")
+        # FRAME
+        frame_start_version = Frame(parent)
+        frame_start_version.grid(column=0, columnspan=2, row=2, sticky="ew")
+
+        btn = Button(frame_start_version, text=f"RESTART by selected")
+        btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"])
+        btn.pack(side="left")
+
+        self.status_versions = ttk.Label(frame_start_version, text="...SELECT item...", anchor="w")
+        self.status_versions.pack(side="left")
         self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
 
         versions_dict = get_data.python_versions_found
