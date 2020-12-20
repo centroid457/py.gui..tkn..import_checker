@@ -1,5 +1,6 @@
 # print("file frame.py")
 import subprocess
+import sys
 from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
 from tkinter import ttk
@@ -259,11 +260,12 @@ class Gui(Frame):
         )
 
 
-    def program_restart(self):
+    def program_restart(self, python_exe=sys.executable):
         """Restarts the current program.
         Note: this function does not return. Any cleanup action (like
         saving data) must be done before calling this function."""
-        python_exe = sys.executable
+        #python_exe = sys.executable
+
         # If you want to work with correct restart button DO NOT USE ANY PRINT-function befor!!!!
         # else programm will not actually restart (in PyCharm will not start after second Restart)
         os.execl(python_exe, python_exe, *sys.argv)
