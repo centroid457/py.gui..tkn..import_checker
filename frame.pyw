@@ -89,8 +89,8 @@ class Gui(Frame):
     # #################################################
     def create_gui_structure(self):
         self.parent.columnconfigure(0, weight=1)
-        self.parent.rowconfigure([1, 2], weight=0)  # INFO, FILES
-        self.parent.rowconfigure(3, weight=1)       # MODULES
+        self.parent.rowconfigure([1, 2, 3], weight=0)  # VERSIONS, INFO, FILES
+        self.parent.rowconfigure(4, weight=1)       # MODULES
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
@@ -99,16 +99,22 @@ class Gui(Frame):
 
         self.fill_frame_info()
 
-        # ======= FRAME-2 (FILES) ====================
+        # ======= FRAME-2 (VERSIONS) ====================
+        self.frame_versions = Frame(self.parent, bg="#505050")
+        self.frame_versions.grid(row=2, sticky="snew", padx=pad_external, pady=0)
+
+        self.fill_frame_versions()
+
+        # ======= FRAME-3 (FILES) ====================
         self.frame_files = Frame(self.parent, bg="#505050")
         #self.frame_files.pack_propagate(0)
-        self.frame_files.grid(row=2, sticky="snew", padx=pad_external, pady=0)
+        self.frame_files.grid(row=3, sticky="snew", padx=pad_external, pady=0)
 
         self.fill_frame_files()
 
-        # ======= FRAME-3 (MODULES) ====================
+        # ======= FRAME-4 (MODULES) ====================
         self.frame_modules = Frame(self.parent, bg="grey")
-        self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=pad_external)
+        self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=pad_external)
 
         self.fill_frame_modules()
 
@@ -121,12 +127,16 @@ class Gui(Frame):
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
         lable.pack(fill="x", expand=0)
 
+    def fill_frame_versions(self):
+        pass
+
+
     def fill_frame_files(self):
         lable = Label(self.frame_files, bg="#d0d0d0")
         lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
-        self.listbox_files = Listbox(self.frame_files, height=7, bg="#55FF55", font=('Courier', 9))
+        self.listbox_files = Listbox(self.frame_files, height=6, bg="#55FF55", font=('Courier', 9))
         self.listbox_files.grid(column=0, row=1, sticky="snew")
 
         self.scrollbar = ttk.Scrollbar(self.frame_files, orient="vertical", command=self.listbox_files.yview)
@@ -147,6 +157,7 @@ class Gui(Frame):
             if not files_dict[file].isdisjoint(get_data.modules_found_infiles_bad):
                 self.listbox_files.itemconfig('end', bg = "#FF9999")
 
+
     def change_status_files(self, event):
         selected_filename = self.listbox_files.get(*self.listbox_files.curselection())
         self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
@@ -162,7 +173,7 @@ class Gui(Frame):
         self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
         #self.frame_modules_good.pack_propagate(1)
 
-        self.listbox_good = Listbox(self.frame_modules_good, height=10, bg="#55FF55", font=('Courier', 9))
+        self.listbox_good = Listbox(self.frame_modules_good, height=8, bg="#55FF55", font=('Courier', 9))
         self.listbox_good.grid(column=0, row=0, sticky="snew")
 
         self.scrollbar = ttk.Scrollbar(self.frame_modules_good, orient="vertical", command=self.listbox_good.yview)
