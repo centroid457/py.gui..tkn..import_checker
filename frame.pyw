@@ -150,7 +150,8 @@ class Gui(Frame):
         parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent, bg="#d0d0d0")
-        lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:"
+        lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:\n" \
+                        f"(Active .exe: [{sys.executable}])"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
         self.listbox_versions = Listbox(parent, height=4, bg=None, font=('Courier', 9))
@@ -271,7 +272,6 @@ class Gui(Frame):
         btn_module_delete["bg"] = "#aaaaFF"
         btn_module_delete["command"] = lambda: self.btn_module_action("delete")
         btn_module_delete.pack(side="left")
-
 
         self.status_modules = ttk.Label(frame_status_modules, text="...SELECT item...", anchor="w")
         self.status_modules.pack(side="left")
