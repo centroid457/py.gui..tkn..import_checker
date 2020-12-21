@@ -128,9 +128,9 @@ def find_python_interpreters():
 
 def find_all_python_files_generate(path=path_find_wo_slash):
     for file_name in path.rglob(pattern="*.py*"):
-        if (file_name != os.path.basename(__file__)
-            and os.path.splitext(file_name)[1] in (".py", ".pyw")
-            and file_name.name != "__init__.py"
+        if (#file_name != os.path.basename(__file__) and
+            os.path.splitext(file_name)[1] in (".py", ".pyw")
+            #and file_name.name != "__init__.py"
         ):
             python_files_found_in_directory_dict.update({file_name: set()})
             if not access_this_module_as_import: print(file_name)
