@@ -19,7 +19,8 @@ WHY DON'T USE MODULEFINDER???
 Because it work incorrect! can't find TIME and SYS modules!
 ---------------------
 TEST LINES
-#import TEST_MODULE_1 #test comment
+import pystray
+import TEST_MODULE_1 #test comment
 #import TEST_MODULE_2
 """
 
@@ -119,7 +120,7 @@ def find_python_interpreters():
         mask = r'\s(\S+)\s+(\S.+)'
         match = re.fullmatch(mask, line)
         if match:
-            found_py_version = match[1] + (" *" if match[2] == python_exe else "")
+            found_py_version = match[1] + (" *" if Path(match[2]).parent == Path(python_exe).parent else "")
             found_py_exe_path = match[2]
             python_versions_found.update({found_py_version: found_py_exe_path})
     return
