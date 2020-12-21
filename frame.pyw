@@ -309,12 +309,16 @@ class Gui(Frame):
             mode_cmd = "install --upgrade"
         elif mode == "delete":
             mode_cmd = "uninstall"
+
         modulename = self.selected_module
         module_data = get_data.ranked_modules_dict[self.selected_module]
         modulename_cmd = modulename if module_data[2] is None else module_data[2]
 
-        subprocess.run(f"py -m pip {mode_cmd} {modulename_cmd}")
-        self.program_restart()
+        python_exe = sys.executable
+
+        process = subprocess.run(f"{python_exe} -m pip {mode_cmd} {modulename_cmd}")
+        print(process.returncode)
+        #self.program_restart()
         return
 
 
