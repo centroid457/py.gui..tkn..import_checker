@@ -253,15 +253,14 @@ class Gui(Frame):
         frame_status_modules = Frame(parent)
         frame_status_modules.grid(column=0, columnspan=2, row=2, sticky="ew")
 
-        btn_install = Button(frame_status_modules, text=f"INSTALL")
-        btn_install["bg"] = "#aaaaFF"
-        #btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
-        btn_install.pack(side="left")
+        btn_module_install = Button(frame_status_modules, text=f"INSTALL")
+        btn_module_install["bg"] = "#aaaaFF"
+        btn_module_install["command"] = self.btn_module_install
+        btn_module_install.pack(side="left")
 
         self.status_modules = ttk.Label(frame_status_modules, text="...SELECT item...", anchor="w")
         self.status_modules.pack(side="left")
         self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
-
 
         # fill listbox
         for module in get_data.ranked_modules_dict:
@@ -276,7 +275,6 @@ class Gui(Frame):
                 bad_module_index += 1
 
         self.change_status_modules(None)
-        btn_install["command"] = self.start_install_module(self.selected_module, get_data.ranked_modules_dict[self.selected_module])
         return
 
 
@@ -290,12 +288,14 @@ class Gui(Frame):
         return
 
 
-    def start_install_module(self, modulename, module_data):
+    def btn_module_install(self):
+        modulename = self.selected_module
+        module_data = get_data.ranked_modules_dict[self.selected_module]
         modulename_cmd = modulename if module_data[2] is None else module_data[2]
-        return lambda: (
-            subprocess.run(f"py -m pip install {modulename_cmd}"),
-            self.program_restart()
-        )
+
+        subprocess.run(f"py -m pip install {modulename_cmd}")
+        self.program_restart()
+        return
 
 
     def program_restart(self, python_exe=sys.executable):
