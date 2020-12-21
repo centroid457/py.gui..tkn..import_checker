@@ -155,19 +155,20 @@ class Gui(Frame):
 
         self.listbox_versions['yscrollcommand'] = self.scrollbar.set
 
-        # FRAME
-        frame_start_version = Frame(parent)
-        frame_start_version.grid(column=0, columnspan=2, row=2, sticky="ew")
+        # STATUS FRAME
+        frame_status_version = Frame(parent)
+        frame_status_version.grid(column=0, columnspan=2, row=2, sticky="ew")
 
-        btn = Button(frame_start_version, text=f"RESTART by selected")
+        btn = Button(frame_status_version, text=f"RESTART by selected")
         btn["bg"] = "#aaaaFF"
         btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
         btn.pack(side="left")
 
-        self.status_versions = ttk.Label(frame_start_version, text="...SELECT item...", anchor="w")
+        self.status_versions = ttk.Label(frame_status_version, text="...SELECT item...", anchor="w")
         self.status_versions.pack(side="left")
         self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
 
+        # fill listbox
         versions_dict = get_data.python_versions_found
         for ver in versions_dict:
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver])
@@ -209,6 +210,7 @@ class Gui(Frame):
         self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
+        # fill listbox
         files_dict = get_data.python_files_found_in_directory_dict
         for file in files_dict:
             self.listbox_files.insert('end', file.resolve())
@@ -241,11 +243,20 @@ class Gui(Frame):
 
         self.listbox_modules['yscrollcommand'] = self.scrollbar.set
 
-        self.status_modules = ttk.Label(parent, text="...SELECT item...", anchor="w")
-        self.status_modules.grid(column=0, columnspan=2, row=2, sticky="ew")
+        # STATUS FRAME
+        frame_status_modules = Frame(parent)
+        frame_status_modules.grid(column=0, columnspan=2, row=2, sticky="ew")
+
+        btn = Button(frame_status_modules, text=f"RESTART by selected")
+        btn["bg"] = "#aaaaFF"
+        #btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
+        btn.pack(side="left")
+
+        self.status_modules = ttk.Label(frame_status_modules, text="...SELECT item...", anchor="w")
+        self.status_modules.pack(side="left")
         self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
 
-        # fill modulenames
+        # fill listbox
         for module in get_data.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
             can_import, short_pathname, detected_installname = get_data.ranked_modules_dict[module]
@@ -256,6 +267,7 @@ class Gui(Frame):
                 self.listbox_modules.insert(bad_module_index, "%-20s \t[%s]"%(module, short_pathname))
                 self.listbox_modules.itemconfig(bad_module_index, bg = "#FF9999")
                 bad_module_index += 1
+
 
         '''
         # ------- FRAME-3/2 TRY -----------------
