@@ -272,16 +272,6 @@ class Gui(Frame):
 
         self.change_status_modules(None)
         btn_install["command"] = self.start_install_module(self.selected_module, get_data.ranked_modules_dict[self.selected_module])
-
-        '''
-        # ------- FRAME-3/2 TRY -----------------
-        if get_data.count_found_modules_bad > 0:
-            Label(self.frame_modules_try_install,
-                  text="if button is green - it will definitly be installed (with internet connection)",
-
-                btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
-                btn["bg"] = "#55FF55" if detected_installname else None
-        '''
         return
 
 
