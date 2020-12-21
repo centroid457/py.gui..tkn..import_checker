@@ -94,7 +94,8 @@ class Gui(Frame):
     def create_gui_structure(self):
         self.parent_main.columnconfigure(0, weight=1)
         self.parent_main.rowconfigure([0, ], weight=0)          # INFO
-        self.parent_main.rowconfigure([1, 2, 3, ], weight=1)       # VERSIONS, FILES, MODULES
+        self.parent_main.rowconfigure([1, 2,], weight=1)        # VERSIONS, FILES
+        self.parent_main.rowconfigure([3, ], weight=10)         # MODULES
         pad_external = 10
 
         # ======= FRAME-1 (INFO) ====================
@@ -225,7 +226,7 @@ class Gui(Frame):
 
     def fill_frame_modules(self, parent):
         parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure([1], weight=1)
+        parent.grid_rowconfigure([1], weight=10)
         parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent, bg="#d0d0d0")
