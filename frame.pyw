@@ -129,8 +129,10 @@ class Gui(Frame):
         lable["font"] = ("", 15)
         if get_data.count_found_modules_bad > 0:
             lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
+            lable["bg"] = "#FF5555"
         else:
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
+            lable["bg"] = "#55FF55"
         lable.pack(fill="x", expand=0)
         return
 
@@ -170,9 +172,9 @@ class Gui(Frame):
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver])
             if ver.endswith("*"):
                 if get_data.count_found_modules_bad == 0:
-                    self.listbox_versions.itemconfig('end', bg="#99FF99")
+                    self.listbox_versions.itemconfig('end', bg="#55FF55")
                 else:
-                    self.listbox_versions.itemconfig('end', bg="#FF9999")
+                    self.listbox_versions.itemconfig('end', bg="#FF5555")
         return
 
     def change_status_versions(self, event):
