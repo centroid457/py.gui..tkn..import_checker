@@ -247,10 +247,11 @@ class Gui(Frame):
         return
 
     def change_path(self):
-        path_new = filedialog.askdirectory(self.root, filetypes=[('*.py* files', '.py*')]).show()
-        if fn == '':
+        path_new = filedialog.Open(self.root, filetypes=[('*.py* files', '.py*')]).show()
+        if path_new == '':
             return
-        self.file_as_path = path_new
+        self.program_restart(file=[__file__, path_new])
+        return
 
 
     def fill_frame_modules(self, parent):
@@ -346,7 +347,7 @@ class Gui(Frame):
         return
 
 
-    def program_restart(self, python_exe=sys.executable):
+    def program_restart(self, python_exe=sys.executable, file=None):
         """Restarts the current program.
         Note: this function does not return. Any cleanup action (like
         saving data) must be done before calling this function."""
@@ -354,7 +355,12 @@ class Gui(Frame):
 
         # If you want to work with correct restart button DO NOT USE ANY PRINT-function befor!!!!
         # else programm will not actually restart (in PyCharm will not start after second Restart)
-        os.execl(python_exe, python_exe, *sys.argv)
+        print(f"os.execl({python_exe}, {python_exe}, {sys.argv})", *sys.argv)
+        print(f"os.execl({python_exe}, {python_exe}, {file})", file)
+        if file is None:
+            os.execl(python_exe, python_exe, *sys.argv)
+        else:
+            os.execl(python_exe, python_exe, *file)
 
 
 if __name__ == '__main__':
