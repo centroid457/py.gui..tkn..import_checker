@@ -214,10 +214,6 @@ class Gui(Frame):
 
         self.listbox_files['yscrollcommand'] = self.scrollbar.set
 
-        #self.status_files = ttk.Label(parent, text="...SELECT item...", anchor="w")
-        #self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
-        #self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
-
         # STATUS FRAME
         frame_status_files = Frame(parent)
         frame_status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
@@ -229,7 +225,6 @@ class Gui(Frame):
 
         self.status_files = ttk.Label(frame_status_files, text="...SELECT item...", anchor="w")
         self.status_files.pack(side="left")
-
 
         # fill listbox
         files_dict = get_data.python_files_found_in_directory_dict
@@ -250,7 +245,7 @@ class Gui(Frame):
         path_new = filedialog.Open(self.root, filetypes=[('*.py* files', '.py*')]).show()
         if path_new == '':
             return
-        self.program_restart(file=[__file__, path_new])
+        self.program_restart(file=[path_new])
         return
 
 
@@ -355,12 +350,10 @@ class Gui(Frame):
 
         # If you want to work with correct restart button DO NOT USE ANY PRINT-function befor!!!!
         # else programm will not actually restart (in PyCharm will not start after second Restart)
-        print(f"os.execl({python_exe}, {python_exe}, {sys.argv})", *sys.argv)
-        print(f"os.execl({python_exe}, {python_exe}, {file})", file)
         if file is None:
             os.execl(python_exe, python_exe, *sys.argv)
         else:
-            os.execl(python_exe, python_exe, *file)
+            os.execl(python_exe, python_exe, __file__, *file)
 
 
 if __name__ == '__main__':
