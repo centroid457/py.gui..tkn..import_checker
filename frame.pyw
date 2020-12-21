@@ -253,6 +253,10 @@ class Gui(Frame):
         frame_status_modules = Frame(parent)
         frame_status_modules.grid(column=0, columnspan=2, row=2, sticky="ew")
 
+        lbl = Label(frame_status_modules)
+        lbl["text"] = f"In ACTIVE python version"
+        lbl.pack(side="left")
+
         btn_module_install = Button(frame_status_modules, text=f"INSTALL")
         btn_module_install["bg"] = "#aaaaFF"
         btn_module_install["command"] = lambda: self.btn_module_action("install")
