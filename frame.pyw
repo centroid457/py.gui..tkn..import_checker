@@ -4,7 +4,7 @@ import sys
 import os
 import re
 from pathlib import Path
-from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
+from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog
 from tkinter import ttk
 
 filefullname_as_link_path_default = __file__
@@ -214,9 +214,22 @@ class Gui(Frame):
 
         self.listbox_files['yscrollcommand'] = self.scrollbar.set
 
-        self.status_files = ttk.Label(parent, text="...SELECT item...", anchor="w")
-        self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
-        self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
+        #self.status_files = ttk.Label(parent, text="...SELECT item...", anchor="w")
+        #self.status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
+        #self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
+
+        # STATUS FRAME
+        frame_status_files = Frame(parent)
+        frame_status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
+
+        btn = Button(frame_status_files, text=f"SECECT NEW PATH")
+        btn["bg"] = "#aaaaFF"
+        btn["command"] = self.change_path
+        btn.pack(side="left")
+
+        self.status_files = ttk.Label(frame_status_files, text="...SELECT item...", anchor="w")
+        self.status_files.pack(side="left")
+
 
         # fill listbox
         files_dict = get_data.python_files_found_in_directory_dict
@@ -232,6 +245,12 @@ class Gui(Frame):
         selected_filename = self.listbox_files.get(*selected_list)
         self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
         return
+
+    def change_path(self):
+        path_new = filedialog.askdirectory(self.root, filetypes=[('*.py* files', '.py*')]).show()
+        if fn == '':
+            return
+        self.file_as_path = path_new
 
 
     def fill_frame_modules(self, parent):
