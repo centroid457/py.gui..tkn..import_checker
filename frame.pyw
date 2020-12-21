@@ -258,6 +258,17 @@ class Gui(Frame):
         btn_module_install["command"] = lambda: self.btn_module_action("install")
         btn_module_install.pack(side="left")
 
+        btn_module_update = Button(frame_status_modules, text=f"upgrade")
+        btn_module_update["bg"] = "#aaaaFF"
+        btn_module_update["command"] = lambda: self.btn_module_action("upgrade")
+        btn_module_update.pack(side="left")
+
+        btn_module_delete = Button(frame_status_modules, text=f"DELETE")
+        btn_module_delete["bg"] = "#aaaaFF"
+        btn_module_delete["command"] = lambda: self.btn_module_action("delete")
+        btn_module_delete.pack(side="left")
+
+
         self.status_modules = ttk.Label(frame_status_modules, text="...SELECT item...", anchor="w")
         self.status_modules.pack(side="left")
         self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
@@ -289,15 +300,15 @@ class Gui(Frame):
 
 
     def btn_module_action(self, mode):
-        if mode not in ("install", "delete", "update"):
+        if mode not in ("install", "delete", "upgrade"):
             sys.stderr.write("WRONG PARAMETER MODE")
             return
         elif mode == "install":
             mode_cmd = "install"
+        elif mode == "upgrade":
+            mode_cmd = "install --upgrade"
         elif mode == "delete":
             mode_cmd = "uninstall"
-        elif mode == "update":
-            mode_cmd = "install --update"
         modulename = self.selected_module
         module_data = get_data.ranked_modules_dict[self.selected_module]
         modulename_cmd = modulename if module_data[2] is None else module_data[2]
