@@ -92,7 +92,9 @@ def main(file_as_path=filefullname_as_link_path):
     find_python_interpreters()
 
     # by default find all modules in one level up (from current directory) with all subdirectories
-    if Path(file_as_path).parent == Path(__file__).parent:
+    if Path(file_as_path).is_dir():                             # if link was a directory
+        path_find_wo_slash = Path(file_as_path)
+    elif Path(file_as_path).parent == Path(__file__).parent:    # if link is this file (direct start)
         path_find_wo_slash = Path(file_as_path).parent.parent
     else:
         path_find_wo_slash = Path(file_as_path).parent
