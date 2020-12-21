@@ -14,7 +14,7 @@ def main(file_as_path=filefullname_as_link_path_default):
     update_data(file_as_path)
     root = Tk()
     app = Gui(root=root, parent=root, file_as_path=file_as_path)
-    if access_as_import and get_data.count_found_modules_bad == 0:
+    if access_this_module_as_import and get_data.count_found_modules_bad == 0:
         root.after(1000, root.destroy)
     app.mainloop()
 
@@ -305,9 +305,9 @@ class Gui(Frame):
 
 
 if __name__ == '__main__':
-    access_as_import = False
+    access_this_module_as_import = False
     import get_data
     main()
 else:
     from . import get_data  # main, python_files_found_in_directory_list, ranked_modules_dict
-    access_as_import = True
+    access_this_module_as_import = True
