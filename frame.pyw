@@ -2,6 +2,7 @@
 import subprocess
 import sys
 import os
+import re
 from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar
 from tkinter import ttk
@@ -181,7 +182,7 @@ class Gui(Frame):
 
     def change_status_versions(self, event):
         #print(self.listbox_versions.curselection())
-        selected_list = (1,) if self.listbox_versions.curselection() == () else self.listbox_versions.curselection()
+        selected_list = (0,) if self.listbox_versions.curselection() == () else self.listbox_versions.curselection()
         selected_version = self.listbox_versions.get(selected_list)
         for ver in get_data.python_versions_found:
             if selected_version.startswith(ver):
@@ -220,7 +221,7 @@ class Gui(Frame):
 
     def change_status_files(self, event):
         #print(self.listbox_files.curselection())
-        selected_list = (1,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
+        selected_list = (0,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
         selected_filename = self.listbox_files.get(*selected_list)
         self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
         return
@@ -247,14 +248,15 @@ class Gui(Frame):
         frame_status_modules = Frame(parent)
         frame_status_modules.grid(column=0, columnspan=2, row=2, sticky="ew")
 
-        btn = Button(frame_status_modules, text=f"RESTART by selected")
-        btn["bg"] = "#aaaaFF"
+        btn_install = Button(frame_status_modules, text=f"INSTALL")
+        btn_install["bg"] = "#aaaaFF"
         #btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
-        btn.pack(side="left")
+        btn_install.pack(side="left")
 
         self.status_modules = ttk.Label(frame_status_modules, text="...SELECT item...", anchor="w")
         self.status_modules.pack(side="left")
         self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
+
 
         # fill listbox
         for module in get_data.ranked_modules_dict:
@@ -268,6 +270,8 @@ class Gui(Frame):
                 self.listbox_modules.itemconfig(bad_module_index, bg = "#FF9999")
                 bad_module_index += 1
 
+        self.change_status_modules(None)
+        btn_install["command"] = self.start_install_module(self.selected_module, get_data.ranked_modules_dict[self.selected_module])
 
         '''
         # ------- FRAME-3/2 TRY -----------------
@@ -275,21 +279,19 @@ class Gui(Frame):
             Label(self.frame_modules_try_install,
                   text="if button is green - it will definitly be installed (with internet connection)",
 
-
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
-                btn["command"] = self.start_install_module(module, get_data.ranked_modules_dict[module])
-                btn.pack()
         '''
         return
 
 
     def change_status_modules(self, event):
         #print(self.listbox_modules.curselection())
-        selected_list = (1,) if self.listbox_modules.curselection() == () else self.listbox_modules.curselection()
+        selected_list = (0,) if self.listbox_modules.curselection() == () else self.listbox_modules.curselection()
         selected_data = self.listbox_modules.get(*selected_list)
-        selected_module = selected_data.split("\t")[0]
-        self.status_modules["text"] = selected_module
+        selected_module_w_spaces = selected_data.split("\t")[0]
+        self.selected_module = re.sub(r"\s", "", selected_module_w_spaces)
+        self.status_modules["text"] = self.selected_module
         return
 
 
