@@ -127,15 +127,20 @@ class Gui(Frame):
 
 
     def fill_frame_info(self, parent):
+        btn = Button(parent, text=f"miss\n checking\n modules")
+        btn["bg"] = "#aaaaFF"
+        btn["command"] = self.root.destroy
+        btn.pack(side="left")
+
         lable = Label(parent)
         lable["font"] = ("", 15)
+        lable.pack(side="left", fill="x", expand=1)
         if get_data.count_found_modules_bad > 0:
             lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
             lable["bg"] = "#FF9999"
         else:
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
             lable["bg"] = "#99FF99"
-        lable.pack(fill="x", expand=0)
         return
 
 
