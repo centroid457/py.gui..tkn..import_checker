@@ -151,7 +151,7 @@ class Gui(Frame):
 
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:\n" \
-                        f"(Active .exe: [{sys.executable}])"
+                        f"Active .exe=[{sys.executable}]"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
         self.listbox_versions = Listbox(parent, height=4, bg=None, font=('Courier', 9))
@@ -202,7 +202,8 @@ class Gui(Frame):
         parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent, bg="#d0d0d0")
-        lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:"
+        lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:\n"\
+                        f"Active link path=[{self.file_as_path}]"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
         self.listbox_files = Listbox(parent, height=6, bg="#55FF55", font=('Courier', 9))
