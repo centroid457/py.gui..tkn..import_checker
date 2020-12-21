@@ -254,21 +254,14 @@ class Gui(Frame):
                 self.listbox_modules.insert('end', "%-20s \t[%s]"%(module, short_pathname))
             else:
                 self.listbox_modules.insert(bad_module_index, "%-20s \t[%s]"%(module, short_pathname))
-                self.listbox_modules.itemconfig(bad_module_index, bg = "#FF5555")
+                self.listbox_modules.itemconfig(bad_module_index, bg = "#FF9999")
                 bad_module_index += 1
 
         '''
         # ------- FRAME-3/2 TRY -----------------
         if get_data.count_found_modules_bad > 0:
-            self.frame_modules_try_install = Frame(parent, bg="#FF5555")
-            self.frame_modules_try_install.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
-            self.frame_modules_try_install.pack_propagate(1)
-
             Label(self.frame_modules_try_install,
                   text="if button is green - it will definitly be installed (with internet connection)",
-                  bg="#FF5555").pack(fill="x", expand=0)
-
-
 
 
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
@@ -280,11 +273,11 @@ class Gui(Frame):
 
 
     def change_status_modules(self, event):
-        return
-        #print(self.listbox_files.curselection())
-        selected_list = (1,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
-        selected_filename = self.listbox_files.get(*selected_list)
-        self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
+        #print(self.listbox_modules.curselection())
+        selected_list = (1,) if self.listbox_modules.curselection() == () else self.listbox_modules.curselection()
+        selected_data = self.listbox_modules.get(*selected_list)
+        selected_module = selected_data.split("\t")[0]
+        self.status_modules["text"] = selected_module
         return
 
 
