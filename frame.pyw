@@ -129,10 +129,10 @@ class Gui(Frame):
         lable["font"] = ("", 15)
         if get_data.count_found_modules_bad > 0:
             lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{get_data.count_found_modules_bad}] modules"
-            lable["bg"] = "#FF5555"
+            lable["bg"] = "#FF9999"
         else:
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
-            lable["bg"] = "#55FF55"
+            lable["bg"] = "#99FF99"
         lable.pack(fill="x", expand=0)
         return
 
@@ -172,9 +172,9 @@ class Gui(Frame):
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver])
             if ver.endswith("*"):
                 if get_data.count_found_modules_bad == 0:
-                    self.listbox_versions.itemconfig('end', bg="#55FF55")
+                    self.listbox_versions.itemconfig('end', bg="#99FF99")
                 else:
-                    self.listbox_versions.itemconfig('end', bg="#FF5555")
+                    self.listbox_versions.itemconfig('end', bg="#FF9999")
         return
 
     def change_status_versions(self, event):
@@ -224,30 +224,39 @@ class Gui(Frame):
 
 
     def fill_frame_modules(self, parent):
+        parent.grid_columnconfigure(0, weight=1)
+        parent.grid_rowconfigure([1], weight=1)
+        parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent, bg="#d0d0d0")
         lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
-        lable.pack(fill="x", expand=0)
+        lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
-        # ------- FRAME-3/1 GOOD -----------------
-        self.frame_modules_good = Frame(parent, bg="#55FF55")
-        self.frame_modules_good.pack(side='left', fill=BOTH, expand=1, padx=1, pady=1)
-        #self.frame_modules_good.pack_propagate(1)
+        self.listbox_modules = Listbox(parent, height=8, bg="#55FF55", font=('Courier', 9))
+        self.listbox_modules.grid(column=0, row=1, sticky="snew")
 
-        self.listbox_good = Listbox(self.frame_modules_good, height=8, bg="#55FF55", font=('Courier', 9))
-        self.listbox_good.grid(column=0, row=0, sticky="snew")
+        self.scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.listbox_modules.yview)
+        self.scrollbar.grid(column=1, row=1, sticky="sn")
 
-        self.scrollbar = ttk.Scrollbar(self.frame_modules_good, orient="vertical", command=self.listbox_good.yview)
-        self.scrollbar.grid(column=1, row=0, sticky="sn")
+        self.listbox_modules['yscrollcommand'] = self.scrollbar.set
 
-        self.listbox_good['yscrollcommand'] = self.scrollbar.set
+        self.status_modules = ttk.Label(parent, text="...SELECT item...", anchor="w")
+        self.status_modules.grid(column=0, columnspan=2, row=2, sticky="ew")
+        self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
 
-        status_modules_good = ttk.Label(self.frame_modules_good, text="...will not show anything...", anchor="w")
-        status_modules_good.grid(column=0, columnspan=2, row=1, sticky="ew")
+        # fill modulenames
+        for module in get_data.ranked_modules_dict:
+            #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
+            can_import, short_pathname, detected_installname = get_data.ranked_modules_dict[module]
+            bad_module_index = 0
+            if can_import:
+                self.listbox_modules.insert('end', "%-20s \t[%s]"%(module, short_pathname))
+            else:
+                self.listbox_modules.insert(bad_module_index, "%-20s \t[%s]"%(module, short_pathname))
+                self.listbox_modules.itemconfig(bad_module_index, bg = "#FF5555")
+                bad_module_index += 1
 
-        self.frame_modules_good.grid_columnconfigure(0, weight=1)
-        self.frame_modules_good.grid_rowconfigure(0, weight=1)
-
+        '''
         # ------- FRAME-3/2 TRY -----------------
         if get_data.count_found_modules_bad > 0:
             self.frame_modules_try_install = Frame(parent, bg="#FF5555")
@@ -258,19 +267,25 @@ class Gui(Frame):
                   text="if button is green - it will definitly be installed (with internet connection)",
                   bg="#FF5555").pack(fill="x", expand=0)
 
-        # fill modulenames in gui
-        for module in get_data.ranked_modules_dict:
-            #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
-            can_import, short_pathname, detected_installname = get_data.ranked_modules_dict[module]
-            if can_import:
-                self.listbox_good.insert('end', "%-20s \t[%s]"%(module, short_pathname))
-                #self.listbox_good.itemconfig(0, bg = "red")
-            else:
+
+
+
                 btn = Button(self.frame_modules_try_install, text=f"pip install [{module}]")
                 btn["bg"] = "#55FF55" if detected_installname else None
                 btn["command"] = self.start_install_module(module, get_data.ranked_modules_dict[module])
                 btn.pack()
+        '''
         return
+
+
+    def change_status_modules(self, event):
+        return
+        #print(self.listbox_files.curselection())
+        selected_list = (1,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
+        selected_filename = self.listbox_files.get(*selected_list)
+        self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
+        return
+
 
     def start_install_module(self, modulename, module_data):
         modulename_cmd = modulename if module_data[2] is None else module_data[2]
