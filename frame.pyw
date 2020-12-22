@@ -328,7 +328,7 @@ class Gui(Frame):
 
 
     def btn_module_action(self, mode):
-        if mode not in ("install", "delete", "upgrade"):
+        if mode not in ("install", "upgrade", "delete"):
             sys.stderr.write("WRONG PARAMETER MODE")
             return
         elif mode == "install":
