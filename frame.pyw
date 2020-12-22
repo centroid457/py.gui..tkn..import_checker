@@ -226,6 +226,7 @@ class Gui(Frame):
 
         self.status_files = ttk.Label(frame_status_files, text="...SELECT item...", anchor="w")
         self.status_files.pack(side="left")
+        self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
         # fill listbox
         files_dict = get_data.python_files_found_in_directory_dict
