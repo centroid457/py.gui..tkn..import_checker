@@ -8,7 +8,11 @@ from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog
 from tkinter import ttk
 
-filefullname_as_link_path_default = __file__
+# check start with file as link to analyze path
+if len(sys.argv) == 1:
+    filefullname_as_link_path_default = __file__
+elif len(sys.argv) == 2 and Path(sys.argv[1]).exists():
+    filefullname_as_link_path_default = sys.argv[1]
 
 
 def main(file_as_path=filefullname_as_link_path_default):
