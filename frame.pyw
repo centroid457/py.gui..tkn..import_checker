@@ -134,7 +134,7 @@ class Gui(Frame):
 
 
     def fill_frame_info(self, parent):
-        btn = Button(parent, text=f"miss\n checking\n modules")
+        btn = Button(parent, text=f"skip\n checking\n modules")
         btn["bg"] = "#aaaaFF"
         btn["command"] = self.root.destroy
         btn.pack(side="left")
@@ -147,7 +147,7 @@ class Gui(Frame):
             lable["bg"] = "#FF9999"
         else:
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
-            lable["bg"] = "#99FF99"
+            lable["bg"] = "#55FF55"
         return
 
 
@@ -188,7 +188,7 @@ class Gui(Frame):
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver])
             if ver.endswith("*"):
                 if get_data.count_found_modules_bad == 0:
-                    self.listbox_versions.itemconfig('end', bg="#99FF99")
+                    self.listbox_versions.itemconfig('end', bg="#55FF55")
                 else:
                     self.listbox_versions.itemconfig('end', bg="#FF9999")
         return
@@ -225,9 +225,14 @@ class Gui(Frame):
         frame_status_files = Frame(parent)
         frame_status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
 
-        btn = Button(frame_status_files, text=f"SECECT NEW PATH")
+        btn = Button(frame_status_files, text=f"NEW FileAsLINK")
         btn["bg"] = "#aaaaFF"
-        btn["command"] = self.change_path
+        btn["command"] = lambda: self.change_path(mode="file")
+        btn.pack(side="left")
+
+        btn = Button(frame_status_files, text=f"NEW PATH")
+        btn["bg"] = "#aaaaFF"
+        btn["command"] = lambda: self.change_path(mode="folder")
         btn.pack(side="left")
 
         self.status_files = ttk.Label(frame_status_files, text="...SELECT item...", anchor="w")
@@ -249,8 +254,12 @@ class Gui(Frame):
         self.status_files["text"] = get_data.python_files_found_in_directory_dict[Path(selected_filename)]
         return
 
-    def change_path(self):
-        path_new = filedialog.Open(self.root, filetypes=[('*.py* files', '.py*')]).show()
+    def change_path(self, mode):
+        if mode == "file":
+            path_new = filedialog.Open(self.root, filetypes=[('*.py* files', '.py*')]).show()
+        elif mode == "folder":
+            path_new = filedialog.askdirectory()
+
         if path_new == '':
             return
         self.program_restart(file=[path_new])
