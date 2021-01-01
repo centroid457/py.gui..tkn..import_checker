@@ -75,16 +75,6 @@ class Gui(Frame):
         self.root["borderwidth"] = 5
 
 
-    def wgt_parameters_apply(self, wgt, dict_pointer):
-        for key in dict_pointer:
-            try:
-                wgt[key] = dict_pointer[key]
-            except:
-                pass
-                print(f"The object have no attribute [self.root[{key}]]")
-        return
-
-
     def window_move_to_center(self):
         self.root.update_idletasks()
         window_width = self.root.winfo_width()
