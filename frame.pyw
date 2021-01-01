@@ -412,9 +412,22 @@ class Gui(Frame):
 
         python_exe = sys.executable
 
-        process = subprocess.run(f"{python_exe} -m pip {mode_cmd} {modulename_cmd}")
-        print(process.returncode)
-        #self.program_restart()
+        cmd = f"{python_exe} -m pip {mode_cmd} {modulename_cmd}"
+        my_process = subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, stdin=subprocess.PIPE)
+
+        if mode == "delete":
+            my_stdout, my_stderr = my_process.communicate(input="y")
+        else:
+            my_stdout = my_process.stdout.readlines()
+            my_stderr = my_process.stderr.readlines()
+            my_process.wait()
+
+        # print(my_stdout, my_stderr)
+        if my_stderr in ([], ""):
+            self.program_restart()
+        else:
+            # print(f"can't {mode.upper()} module")
+            pass
         return
 
 
