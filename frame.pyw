@@ -164,6 +164,24 @@ class Gui(Frame):
         return
 
 
+    def fill_frame_connection(self, parent):
+        #ability_to_install_modules
+        btn = Button(parent, text=f"reCHECK")
+        btn["bg"] = "#aaaaFF"
+        btn["command"] = ability_to_install_modules
+        btn.pack(side="left")
+
+        lable = Label(parent)
+        lable.pack(side="left", fill="x", expand=1)
+        if ability_to_install_modules:
+            lable["text"] = f"GOOD: installation is available!"
+            lable["bg"] = "#55FF55"
+        else:
+            lable["text"] = f"BAD: you can't install modules!!!"
+            lable["bg"] = "#FF9999"
+        return
+
+
     def fill_frame_versions(self, parent):
         parent.grid_columnconfigure(0, weight=1)
         parent.grid_rowconfigure([1], weight=1)
