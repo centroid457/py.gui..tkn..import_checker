@@ -292,9 +292,10 @@ class Gui(Frame):
         self.status_files.pack(side="left")
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
-        btn = Button(frame_status_files, text=f"TRY without overcout")
+        btn = Button(frame_status_files, text=f"TRY without overcount")
         btn["bg"] = "#aaaaFF"
-        #btn["command"] = lambda: self.change_path(mode="folder")
+        btn["state"] = "disabled"
+        #btn["command"] = lambda: get_data.count_found_files_overcount_limit = 0;
         btn.pack(side="right")
 
         # fill listbox
