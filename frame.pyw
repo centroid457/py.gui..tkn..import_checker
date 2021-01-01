@@ -146,7 +146,7 @@ class Gui(Frame):
         parent.grid_rowconfigure([1], weight=1)
         parent.grid_rowconfigure([0, 2], weight=0)
 
-        lable = Label(parent, bg="#d0d0d0")
+        lable = Label(parent)
         lable["text"] = f"FOUND python [{get_data.count_python_versions}]VERSIONS:\n" \
                         f"Active .exe=[{sys.executable}]"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
@@ -198,7 +198,7 @@ class Gui(Frame):
         parent.grid_rowconfigure([1], weight=1)
         parent.grid_rowconfigure([0, 2], weight=0)
 
-        lable = Label(parent, bg="#d0d0d0")
+        lable = Label(parent)
         lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:\n"\
                         f"Active link path=[{self.file_as_path}]"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
@@ -261,8 +261,8 @@ class Gui(Frame):
         parent.grid_rowconfigure([1], weight=10)
         parent.grid_rowconfigure([0, 2], weight=0)
 
-        lable = Label(parent, bg="#d0d0d0")
-        lable["text"] = f"FOUND importing [{get_data.count_found_modules}]modules:"
+        lable = Label(parent)
+        lable["text"] = f"FOUND importing [{get_data.count_found_modules}]MODULES:"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
         self.listbox_modules = Listbox(parent, height=8, bg="#55FF55", font=('Courier', 9))
