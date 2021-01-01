@@ -3,6 +3,7 @@ import subprocess
 import sys
 import os
 import re
+import ensurepip
 # import get_data       # SEE THE END OF FILE
 from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog
@@ -30,6 +31,28 @@ def update_data(file_as_path=filefullname_as_link_path_default):
     if get_data.count_found_modules == 0:
         get_data.main(file_as_path)
 
+
+def ability_to_install_modules():
+    if ensurepip.version() != None:
+        print(ensurepip.version())
+        is_pip_available = True
+    else:
+        return False
+
+    cmd = f"{sys.executable} -m pip install --upgrade pip"
+    my_sp = subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    line = None
+    while line != "":
+        line = my_sp.stderr.readline()
+        print(f"[{repr(line)}]")
+        if "Failed to establish a new connection" in line:
+            connection_available = False
+            break
+    else:
+        connection_available = True
+    print(f"[{connection_available}]")
+    return connection_available
 
 # #################################################
 # GUI
