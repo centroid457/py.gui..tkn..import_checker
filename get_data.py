@@ -80,6 +80,7 @@ modules_in_system_dict = {}
 
 # COUNTERS
 count_found_files_overcount = False
+count_found_files_overcount_limit = 20
 
 count_python_versions = 0
 count_found_files = 0
@@ -131,17 +132,17 @@ def find_python_interpreters():
 
 
 def find_all_python_files_generate(path=path_find_wo_slash):
-    global count_found_files
+    global count_found_files, count_found_files_overcount
     print("*"*10)
     for file_name in path.rglob(pattern="*.py*"):
         if (#file_name != os.path.basename(__file__) and
             os.path.splitext(file_name)[1] in (".py", ".pyw")
             #and file_name.name != "__init__.py"
         ):
-            print(file_name)
+            #print(file_name)
             count_found_files += 1
-            if count_found_files == 20:
-                print("TOO MANY FILES!!!")
+            if count_found_files == count_found_files_overcount_limit:
+                # print("TOO MANY FILES!!!")
                 count_found_files_overcount = True
                 break
             python_files_found_in_directory_dict.update({file_name: set()})
