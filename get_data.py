@@ -79,6 +79,8 @@ modules_found_infiles_bad = set()
 modules_in_system_dict = {}
 
 # COUNTERS
+count_found_files_overcount = False
+
 count_python_versions = 0
 count_found_files = 0
 count_found_modules = 0
@@ -129,11 +131,19 @@ def find_python_interpreters():
 
 
 def find_all_python_files_generate(path=path_find_wo_slash):
+    global count_found_files
+    print("*"*10)
     for file_name in path.rglob(pattern="*.py*"):
         if (#file_name != os.path.basename(__file__) and
             os.path.splitext(file_name)[1] in (".py", ".pyw")
             #and file_name.name != "__init__.py"
         ):
+            print(file_name)
+            count_found_files += 1
+            if count_found_files == 20:
+                print("TOO MANY FILES!!!")
+                count_found_files_overcount = True
+                break
             python_files_found_in_directory_dict.update({file_name: set()})
             if not access_this_module_as_import: print(file_name)
     return
@@ -260,7 +270,6 @@ def update_system_modules_dict():
 def update_counters():
     global count_python_versions, count_found_files, count_found_modules, count_found_modules_bad
     count_python_versions = len(python_versions_found)
-    count_found_files = len(python_files_found_in_directory_dict)
     count_found_modules = len(ranked_modules_dict)
     count_found_modules_bad = len(modules_found_infiles_bad)
     return
