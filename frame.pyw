@@ -166,19 +166,27 @@ class Gui(Frame):
 
     def fill_frame_connection(self, parent):
         #ability_to_install_modules
-        btn = Button(parent, text=f"reCHECK")
+        btn = Button(parent, text="reCHECK")
         btn["bg"] = "#aaaaFF"
-        btn["command"] = ability_to_install_modules
+        btn["command"] = lambda: self.btn_check_connection()
         btn.pack(side="left")
+        self.btn_connection = btn
 
-        lable = Label(parent)
-        lable.pack(side="left", fill="x", expand=1)
-        if ability_to_install_modules:
-            lable["text"] = f"GOOD: installation is available!"
-            lable["bg"] = "#55FF55"
+        lbl = Label(parent)
+        lbl.pack(side="left", fill="x", expand=1)
+        lbl["text"] = "... checking ..."
+        self.lbl_connection = lbl
+
+    def btn_check_connection(self):
+        lbl = self.lbl_connection
+        lbl["text"] = "... checking ..."
+        lbl["bg"] = "#ababab"
+        if ability_to_install_modules():
+            lbl["text"] = "GOOD: installation is available!"
+            lbl["bg"] = "#55FF55"
         else:
-            lable["text"] = f"BAD: you can't install modules!!!"
-            lable["bg"] = "#FF9999"
+            lbl["text"] = "BAD: you can't install modules!!!"
+            lbl["bg"] = "#FF9999"
         return
 
 
