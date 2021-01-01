@@ -133,7 +133,6 @@ def find_python_interpreters():
 
 def find_all_python_files_generate(path=path_find_wo_slash):
     global count_found_files, count_found_files_overcount
-    print("*"*10)
     for file_name in path.rglob(pattern="*.py*"):
         if (#file_name != os.path.basename(__file__) and
             os.path.splitext(file_name)[1] in (".py", ".pyw")
