@@ -255,8 +255,15 @@ class Gui(Frame):
         parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent)
-        lable["text"] = f"FOUND python [{get_data.count_found_files}]FILES:\n"\
-                        f"Active link path=[{self.file_as_path}]"
+        mark = "!!!DETECTED OVERCOUNT!!!"
+        gap = " "*20
+        line1 = f"FOUND python [{get_data.count_found_files}]FILES:"
+        line2 = f"Active link path=[{self.file_as_path}]"
+        if get_data.count_found_files_overcount:
+            line1 = mark + gap + line1 + gap + mark
+            lable["bg"] = "#FF9999"
+
+        lable["text"] = line1 + "\n" + line2
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
         self.listbox_files = Listbox(parent, height=6, bg="#55FF55", font=('Courier', 9))
@@ -284,6 +291,11 @@ class Gui(Frame):
         self.status_files = ttk.Label(frame_status_files, text="...SELECT item...", anchor="w")
         self.status_files.pack(side="left")
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
+
+        btn = Button(frame_status_files, text=f"TRY without overcout")
+        btn["bg"] = "#aaaaFF"
+        #btn["command"] = lambda: self.change_path(mode="folder")
+        btn.pack(side="right")
 
         # fill listbox
         files_dict = get_data.python_files_found_in_directory_dict
