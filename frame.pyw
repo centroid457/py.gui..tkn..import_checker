@@ -4,6 +4,7 @@ import sys
 import os
 import re
 import ensurepip
+import time
 # import get_data       # SEE THE END OF FILE
 from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog
@@ -34,7 +35,6 @@ def update_data(file_as_path=filefullname_as_link_path_default):
 
 def ability_to_install_modules():
     if ensurepip.version() != None:
-        print(ensurepip.version())
         is_pip_available = True
     else:
         return False
@@ -45,13 +45,12 @@ def ability_to_install_modules():
     line = None
     while line != "":
         line = my_sp.stderr.readline()
-        print(f"[{repr(line)}]")
+        #print(f"[{repr(line)}]")
         if "Failed to establish a new connection" in line:
             connection_available = False
             break
     else:
         connection_available = True
-    print(f"[{connection_available}]")
     return connection_available
 
 # #################################################
@@ -114,34 +113,40 @@ class Gui(Frame):
     # #################################################
     def create_gui_structure(self):
         self.parent_main.columnconfigure(0, weight=1)
-        self.parent_main.rowconfigure([0, ], weight=0)          # INFO
-        self.parent_main.rowconfigure([1, 2,], weight=1)        # VERSIONS, FILES
-        self.parent_main.rowconfigure([3, ], weight=10)         # MODULES
-        pad_external = 10
+        self.parent_main.rowconfigure([0, 1, ], weight=0)          # INFO, CONNECTION
+        self.parent_main.rowconfigure([2, 3, ], weight=1)        # VERSIONS, FILES
+        self.parent_main.rowconfigure([4, ], weight=10)         # MODULES
+        pad_external = 2
 
-        # ======= FRAME-1 (INFO) ====================
+        # ======= FRAME-0 (INFO) ====================
         self.frame_info = Frame(self.parent_main)
-        self.frame_info.grid(row=0, sticky="nsew", padx=pad_external, pady=pad_external)
+        self.frame_info.grid(row=0, sticky="nsew", padx=pad_external, pady=2)
 
         self.fill_frame_info(self.frame_info)
+
+        # ======= FRAME-1 (CONNECTION) ====================
+        self.frame_connection = Frame(self.parent_main)
+        self.frame_connection.grid(row=1, sticky="nsew", padx=pad_external, pady=1)
+
+        self.fill_frame_connection(self.frame_connection)
 
         # ======= FRAME-2 (VERSIONS) ====================
         self.frame_versions = Frame(self.parent_main)
         self.frame_versions.pack_propagate(0)
-        self.frame_versions.grid(row=1, sticky="snew", padx=pad_external, pady=2)
+        self.frame_versions.grid(row=2, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_versions(self.frame_versions)
 
         # ======= FRAME-3 (FILES) ====================
         self.frame_files = Frame(self.parent_main)
         self.frame_files.pack_propagate(1)
-        self.frame_files.grid(row=2, sticky="snew", padx=pad_external, pady=2)
+        self.frame_files.grid(row=3, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_files(self.frame_files)
 
         # ======= FRAME-4 (MODULES) ====================
         self.frame_modules = Frame(self.parent_main)
-        self.frame_modules.grid(row=3, sticky="snew", padx=pad_external, pady=2)
+        self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_modules(self.frame_modules)
 
@@ -165,10 +170,9 @@ class Gui(Frame):
 
 
     def fill_frame_connection(self, parent):
-        #ability_to_install_modules
         btn = Button(parent, text="reCHECK")
         btn["bg"] = "#aaaaFF"
-        btn["command"] = lambda: self.btn_check_connection()
+        btn["command"] = self.btn_check_connection
         btn.pack(side="left")
         self.btn_connection = btn
 
@@ -177,15 +181,17 @@ class Gui(Frame):
         lbl["text"] = "... checking ..."
         self.lbl_connection = lbl
 
+        self.btn_check_connection()
+
     def btn_check_connection(self):
         lbl = self.lbl_connection
-        lbl["text"] = "... checking ..."
-        lbl["bg"] = "#ababab"
+        lbl["text"] = "checking"    # NOT WORKING! only after all program will finish the text will be changed!
+        #lbl["bg"] = "#FF9999"      # NOT WORKING! the same!
         if ability_to_install_modules():
-            lbl["text"] = "GOOD: installation is available!"
+            lbl["text"] = "GOOD: CONNECTION is available! You can install modules!!!"
             lbl["bg"] = "#55FF55"
         else:
-            lbl["text"] = "BAD: you can't install modules!!!"
+            lbl["text"] = "BAD: connection is NOT available! You CAN'T install modules!!!"
             lbl["bg"] = "#FF9999"
         return
 
