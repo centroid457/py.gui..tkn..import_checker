@@ -80,7 +80,7 @@ modules_in_system_dict = {}
 
 # COUNTERS
 count_found_files_overcount = False
-count_found_files_overcount_limit = 20
+count_found_files_overcount_limit = 20      # if 0 - unlimited!
 
 count_python_versions = 0
 count_found_files = 0
