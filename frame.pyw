@@ -8,7 +8,7 @@ import time
 from threading import Thread
 # import get_data       # SEE THE END OF FILE
 from pathlib import Path
-from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog
+from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog, messagebox
 from tkinter import ttk
 
 # check start with file as link to analyze path
@@ -423,11 +423,16 @@ class Gui(Frame):
             my_process.wait()
 
         # print(my_stdout, my_stderr)
-        if my_stderr in ([], ""):
+        if my_stderr in ([], "") and my_process.poll() == 0:
             self.program_restart()
         else:
-            # print(f"can't {mode.upper()} module")
-            pass
+            txt = f"Can't {mode.upper()} module.\n"\
+                    + "Мay be it is already IN_TARGET position or have ERROR.\n"\
+                    + "*"*50 + "\n"\
+                    + f"stdout={my_stdout}\n\n"\
+                    + f"stderr={my_stderr}"
+            messagebox.showinfo(title='INFO', message=txt)
+
         return
 
 
