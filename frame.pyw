@@ -5,6 +5,7 @@ import os
 import re
 import ensurepip
 import time
+from threading import Thread
 # import get_data       # SEE THE END OF FILE
 from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog
@@ -172,7 +173,7 @@ class Gui(Frame):
     def fill_frame_connection(self, parent):
         btn = Button(parent, text="reCHECK")
         btn["bg"] = "#aaaaFF"
-        btn["command"] = self.btn_check_connection
+        btn["command"] = lambda: Thread(target=self.btn_check_connection).start()
         btn.pack(side="left")
         self.btn_connection = btn
 
@@ -185,8 +186,8 @@ class Gui(Frame):
 
     def btn_check_connection(self):
         lbl = self.lbl_connection
-        lbl["text"] = "checking"    # NOT WORKING! only after all program will finish the text will be changed!
-        #lbl["bg"] = "#FF9999"      # NOT WORKING! the same!
+        lbl["text"] = "... checking ..."
+        lbl["bg"] = "SystemButtonFace"
         if ability_to_install_modules():
             lbl["text"] = "GOOD: CONNECTION is available! You can install modules!!!"
             lbl["bg"] = "#55FF55"
