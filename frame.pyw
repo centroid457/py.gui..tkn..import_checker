@@ -355,10 +355,10 @@ class Gui(Frame):
         btn_module_install["command"] = lambda: self.btn_module_action("install")
         btn_module_install.pack(side="left")
 
-        btn_module_update = Button(frame_status_modules, text=f"upgrade")
-        btn_module_update["bg"] = "#aaaaFF"
-        btn_module_update["command"] = lambda: self.btn_module_action("upgrade")
-        btn_module_update.pack(side="left")
+        btn_module_upgrade = Button(frame_status_modules, text=f"upgrade")
+        btn_module_upgrade["bg"] = "#aaaaFF"
+        btn_module_upgrade["command"] = lambda: self.btn_module_action("upgrade")
+        btn_module_upgrade.pack(side="left")
 
         btn_module_delete = Button(frame_status_modules, text=f"DELETE")
         btn_module_delete["bg"] = "#aaaaFF"
