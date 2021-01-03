@@ -118,12 +118,11 @@ def main(file_as_path=filefullname_as_link_path):
 
 def find_python_interpreters():
     python_exe = sys.executable
-    py_versions_cmd = subprocess.run("py -0p", text=True, capture_output=True)
-    py_versions_raw = py_versions_cmd.stdout
-    py_versions_lines_list = py_versions_raw.splitlines()
+    py_versions_sp = subprocess.Popen("py -0p", text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    py_versions_lines_list = py_versions_sp.stdout.readlines()
 
     for line in py_versions_lines_list:
-        mask = r'\s(\S+)\s+(\S.+)'
+        mask = r'\s(\S+)\s+(\S.+)[\n]?'
         match = re.fullmatch(mask, line)
         if match:
             found_py_version = match[1] + (" *" if Path(match[2]).parent == Path(python_exe).parent else "")
