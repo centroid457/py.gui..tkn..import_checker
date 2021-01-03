@@ -231,7 +231,7 @@ class Gui(Frame):
         # fill listbox
         versions_dict = get_data.python_versions_found
         for ver in versions_dict:
-            self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver])
+            self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver][0].ljust(14, " ") + versions_dict[ver][1])
             if ver.endswith("*"):
                 if get_data.count_found_modules_bad == 0:
                     self.listbox_versions.itemconfig('end', bg="#55FF55")

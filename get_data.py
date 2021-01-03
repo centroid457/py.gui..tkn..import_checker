@@ -127,7 +127,12 @@ def find_python_interpreters():
         if match:
             found_py_version = match[1] + (" *" if Path(match[2]).parent == Path(python_exe).parent else "")
             found_py_exe_path = match[2]
-            python_versions_found.update({found_py_version: found_py_exe_path})
+
+            full_version_sp = subprocess.Popen([found_py_exe_path, "-VV"], text=True, stdout=subprocess.PIPE)
+            full_version_list = full_version_sp.communicate()[0].split(" ")
+            full_version = full_version_list[1] + "x" + full_version_list[-3]
+
+            python_versions_found.update({found_py_version: [full_version, found_py_exe_path]})
     return
 
 
