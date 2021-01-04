@@ -120,20 +120,31 @@ def find_python_interpreters():
     python_exe = sys.executable
     py_versions_sp = subprocess.Popen("py -0p", text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
     py_versions_lines_list = py_versions_sp.stdout.readlines()
+    active_exe_found = False
 
     for line in py_versions_lines_list:
         mask = r'\s(\S+)\s+(\S.+)[\n]?'
         match = re.fullmatch(mask, line)
         if match:
-            found_py_version = match[1] + (" *" if Path(match[2]).parent == Path(python_exe).parent else "")
+            check_acrive_exe = (Path(match[2]).parent == Path(python_exe).parent)
+            if check_acrive_exe:
+                active_exe_found = True
+            found_py_version = match[1] + (" *" if check_acrive_exe else "")
             found_py_exe_path = match[2]
 
-            full_version_sp = subprocess.Popen([found_py_exe_path, "-VV"], text=True, stdout=subprocess.PIPE)
-            full_version_list = full_version_sp.communicate()[0].split(" ")
-            full_version = full_version_list[1] + "x" + full_version_list[-3]
-
+            full_version = get_exe_version(found_py_exe_path)
             python_versions_found.update({found_py_version: [full_version, found_py_exe_path]})
+
+    if not active_exe_found:
+        python_versions_found.update({"None*": [get_exe_version(python_exe), python_exe]})
     return
+
+
+def get_exe_version(exe_path):
+    full_version_sp = subprocess.Popen([exe_path, "-VV"], text=True, stdout=subprocess.PIPE)
+    full_version_list = full_version_sp.communicate()[0].split(" ")
+    full_version = full_version_list[1] + "x" + full_version_list[-3]
+    return full_version
 
 
 def find_all_python_files_generate(path=path_find_wo_slash):
