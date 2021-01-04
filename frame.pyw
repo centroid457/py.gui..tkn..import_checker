@@ -365,6 +365,10 @@ class Gui(Frame):
         btn_module_delete["command"] = lambda: self.btn_module_action("delete")
         btn_module_delete.pack(side="left")
 
+        lbl = Label(frame_status_modules)
+        lbl["text"] = f"module: "
+        lbl.pack(side="left")
+
         self.status_modules = ttk.Label(frame_status_modules, text="...SELECT item...", anchor="w")
         self.status_modules.pack(side="left")
         self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
