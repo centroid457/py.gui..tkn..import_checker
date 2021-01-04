@@ -245,7 +245,7 @@ class Gui(Frame):
         selected_version = self.listbox_versions.get(selected_list)
         for ver in get_data.python_versions_found:
             if selected_version.startswith(ver):
-                self.status_versions["text"] = get_data.python_versions_found[ver]
+                self.status_versions["text"] = get_data.python_versions_found[ver][1]
         return
 
 
