@@ -136,7 +136,7 @@ def find_python_interpreters():
             python_versions_found.update({found_py_version: [full_version, found_py_exe_path]})
 
     if not active_exe_found:
-        python_versions_found.update({"None*": [get_exe_version(python_exe), python_exe]})
+        python_versions_found.update({"None *": [get_exe_version(python_exe), python_exe]})
     return
 
 
