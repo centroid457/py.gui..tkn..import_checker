@@ -17,7 +17,7 @@ if len(sys.argv) == 1:
 elif len(sys.argv) == 2 and Path(sys.argv[1]).exists():
     filefullname_as_link_path_default = sys.argv[1]
 else:
-    sys.stderr.write("accepted incorrect (NOT EXISTED) path - start by default!")
+    sys.stderr.write("too many arguments!!!")
 
 
 def main(file_as_path=filefullname_as_link_path_default):
