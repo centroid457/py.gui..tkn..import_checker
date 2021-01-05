@@ -1,4 +1,4 @@
-# print("file get_data.py")
+# print("file logic.py")
 """
 HOW TO USE:
 1. add in .gitignore line "__pycache__"
