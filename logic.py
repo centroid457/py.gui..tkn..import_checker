@@ -234,24 +234,21 @@ def rank_modules_dict_generate(module_set=modules_found_infiles):
     # generate dict like
     #       {modulename: [CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]}
     for module in module_set:
-        can_import = False
-        short_pathname = modules_in_system_dict.get(module, None)
-        detected_installname = MODULES_CAN_INSTALL.get(module, None)
-        if pkgutil.find_loader(module) is not None:
-            can_import = True
-        elif list(Path.cwd().rglob(pattern=f"{module}*")) != []:
-            can_import = True
-        else:   # if first IF-expression will be False - real Import command will not help!)
-            pass
-            #try :
-            #    exec(f'import {module}')
-            #    can_import = True
-            #except :
-            #    pass
-
-        ranked_modules_dict.update({module: [can_import, short_pathname, detected_installname]})
+        ranked_modules_dict.update({module: rank_module_name(module)})
     # print(modules_in_files_ranked_dict)
     return
+
+def rank_module_name(module_name):
+    can_import = False
+    short_pathname = modules_in_system_dict.get(module_name, None)
+    detected_installname = MODULES_CAN_INSTALL.get(module_name, None)
+    if pkgutil.find_loader(module_name) is not None:
+        can_import = True
+    elif list(Path.cwd().rglob(pattern=f"{module_name}*")) != []:
+        can_import = True
+
+    result = [can_import, short_pathname, detected_installname]
+    return result
 
 
 def sort_ranked_modules_dict():
