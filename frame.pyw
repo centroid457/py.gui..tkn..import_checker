@@ -82,7 +82,7 @@ class Gui(Frame):
         #self.root.maxsize(1000, 1000)
         self.root.minsize(300, 300)
         self.root.overrideredirect(False)
-        self.root.state('normal')     # normal/zoomed/iconic/withdrawn
+        self.root.state('zoomed')     # normal/zoomed/iconic/withdrawn
         # self.root.iconbitmap(r'ERROR.ico')    =ONLY FILENAME! NO fileobject
 
         # WM_ATTRIBUTES
@@ -153,7 +153,7 @@ class Gui(Frame):
         self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_modules(self.frame_modules)
-
+        return
 
     # #################################################
     # frame INFO
@@ -163,17 +163,21 @@ class Gui(Frame):
         btn["command"] = self.root.destroy
         btn.pack(side="left")
 
-        lable = Label(parent)
-        lable["font"] = ("", 15)
-        lable.pack(side="left", fill="x", expand=1)
-        if logic.count_found_modules_bad > 0:
-            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL some modules"
-            lable["bg"] = "#FF9999"
-        else:
-            lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
-            lable["bg"] = "#55FF55"
+        self.lable_frame_info = Label(parent)
+        self.lable_frame_info["font"] = ("", 15)
+        self.lable_frame_info.pack(side="left", fill="x", expand=1)
+        self._fill_lable_frame_info()
         return
 
+    def _fill_lable_frame_info(self):
+        lbl = self.lable_frame_info
+        if logic.count_found_modules_bad > 0:
+            lbl["text"] = f"BAD SITUATION:\nYOU NEED INSTALL some modules"
+            lbl["bg"] = "#FF9999"
+        else:
+            lbl["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
+            lbl["bg"] = "#55FF55"
+            return
 
     # #################################################
     # frame CONNECTION
@@ -188,7 +192,6 @@ class Gui(Frame):
         lbl.pack(side="left", fill="x", expand=1)
         lbl["text"] = "... checking ..."
         self.lbl_connection = lbl
-
         self.btn_check_connection()
 
     def btn_check_connection(self):
@@ -249,6 +252,7 @@ class Gui(Frame):
                     self.listbox_versions.itemconfig('end', bg="#55FF55")
                 else:
                     self.listbox_versions.itemconfig('end', bg="#FF9999")
+        return
 
     def change_status_versions(self, event):
         #print(self.listbox_versions.curselection())
@@ -267,17 +271,9 @@ class Gui(Frame):
         parent.grid_rowconfigure([1], weight=1)
         parent.grid_rowconfigure([0, 2], weight=0)
 
-        lable = Label(parent)
-        mark = "!!!DETECTED OVERCOUNT!!!"
-        gap = " "*20
-        line1 = f"FOUND python [{logic.count_found_files}]FILES:"
-        line2 = f"Active link path=[{self.file_as_path}]"
-        if logic.count_found_files_overcount:
-            line1 = mark + gap + line1 + gap + mark
-            lable["bg"] = "#FF9999"
-
-        lable["text"] = line1 + "\n" + line2
-        lable.grid(column=0, row=0, columnspan=2, sticky="snew")
+        self.lable_frame_files = Label(parent)
+        self.lable_frame_files.grid(column=0, row=0, columnspan=2, sticky="snew")
+        self._fill_lable_frame_files()
 
         self.listbox_files = Listbox(parent, height=6, bg="#55FF55", font=('Courier', 9))
         self.listbox_files.grid(column=0, row=1, sticky="snew")
@@ -314,6 +310,19 @@ class Gui(Frame):
         self.fill_listbox_files()
         return
 
+    def _fill_lable_frame_files(self):
+        lbl = self.lable_frame_files
+        mark = "!!!DETECTED OVERCOUNT!!!"
+        gap = " "*20
+        line1 = f"FOUND python [{logic.count_found_files}]FILES:"
+        line2 = f"Active link path=[{self.file_as_path}]"
+        if logic.count_found_files_overcount:
+            line1 = mark + gap + line1 + gap + mark
+            lbl["bg"] = "#FF9999"
+
+        lbl["text"] = line1 + "\n" + line2
+        return
+
     def fill_listbox_files(self):
         self.listbox_files.delete(0, self.listbox_files.size()-1)
         files_dict = logic.python_files_found_in_directory_dict
@@ -339,6 +348,7 @@ class Gui(Frame):
 
         if path_new == '':
             return
+
         self.program_restart(file=[path_new])
         return
 
@@ -350,10 +360,9 @@ class Gui(Frame):
         parent.grid_rowconfigure([1], weight=10)
         parent.grid_rowconfigure([0, 2], weight=0)
 
-        lable = Label(parent)
-        lable["text"] = f"FOUND importing [{logic.count_found_modules}]MODULES:\n"\
-            "(GREEN - Installed, RED - Not installed, LightRED - Definitely can be installed!)"
-        lable.grid(column=0, row=0, columnspan=2, sticky="snew")
+        self.lable_frame_modules = Label(parent)
+        self.lable_frame_modules.grid(column=0, row=0, columnspan=2, sticky="snew")
+        self._fill_lable_frame_modules()
 
         self.listbox_modules = Listbox(parent, height=8, bg="#55FF55", font=('Courier', 9))
         self.listbox_modules.grid(column=0, row=1, sticky="snew")
@@ -396,6 +405,11 @@ class Gui(Frame):
 
         self.fill_listbox_modules()
         self.change_status_modules(None)
+        return
+
+    def _fill_lable_frame_modules(self):
+        self.lable_frame_modules["text"] = f"FOUND importing [{logic.count_found_modules}]MODULES:\n"\
+            "(GREEN - Installed, RED - Not installed, LightRED - Definitely can be installed!)"
         return
 
     def fill_listbox_modules(self):
