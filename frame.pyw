@@ -152,6 +152,8 @@ class Gui(Frame):
         self.fill_frame_modules(self.frame_modules)
 
 
+    # #################################################
+    # frame INFO
     def fill_frame_info(self, parent):
         btn = Button(parent, text=f"skip\n checking\n modules")
         btn["bg"] = "#aaaaFF"
@@ -170,6 +172,8 @@ class Gui(Frame):
         return
 
 
+    # #################################################
+    # frame CONNECTION
     def fill_frame_connection(self, parent):
         btn = Button(parent, text="reCHECK Connection")
         btn["bg"] = "#aaaaFF"
@@ -197,6 +201,8 @@ class Gui(Frame):
         return
 
 
+    # #################################################
+    # frame VERSIONS
     def fill_frame_versions(self, parent):
         parent.grid_columnconfigure(0, weight=1)
         parent.grid_rowconfigure([1], weight=1)
@@ -251,6 +257,8 @@ class Gui(Frame):
         return
 
 
+    # #################################################
+    # frame FILES
     def fill_frame_files(self, parent):
         parent.grid_columnconfigure(0, weight=1)
         parent.grid_rowconfigure([1], weight=1)
@@ -330,6 +338,8 @@ class Gui(Frame):
         return
 
 
+    # #################################################
+    # frame MODULES
     def fill_frame_modules(self, parent):
         parent.grid_columnconfigure(0, weight=1)
         parent.grid_rowconfigure([1], weight=10)
@@ -450,10 +460,11 @@ class Gui(Frame):
                     f"stdout={my_stdout}\n\n"\
                     f"stderr={my_stderr}"
             messagebox.showinfo(title='INFO', message=txt)
-
         return
 
 
+    # #################################################
+    # rest
     def program_restart(self, python_exe=sys.executable, file=None):
         """Restarts the current program.
         Note: this function does not return. Any cleanup action (like
