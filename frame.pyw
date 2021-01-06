@@ -14,27 +14,23 @@ from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog, messagebox
 from tkinter import ttk
 
-# check start with file as link to analyze path
-if len(sys.argv) == 1:
-    filefullname_as_link_path_default = __file__
-elif len(sys.argv) == 2 and Path(sys.argv[1]).exists():
-    filefullname_as_link_path_default = sys.argv[1]
-else:
-    sys.stderr.write("too many arguments!!!")
 
+def main():
+    # check start with file as link to analyze path
+    if len(sys.argv) == 1:
+        filefullname_as_link_path_default = __file__
+    elif len(sys.argv) == 2 and Path(sys.argv[1]).exists():
+        filefullname_as_link_path_default = sys.argv[1]
+    else:
+        raise ValueError("too many arguments!!!")
 
-def main(file_as_path=filefullname_as_link_path_default):
-    update_logic_data(file_as_path)
+    path = filefullname_as_link_path_default
+
     root = Tk()
-    app = Gui(root=root, parent=root, file_as_path=file_as_path)
-    if access_this_module_as_import and logic.count_found_modules_bad == 0:
+    app = Gui(root=root, parent=root, path_link=path)
+    if access_this_module_as_import and sample.count_found_modules_bad == 0:
         root.after(1000, root.destroy)
     app.mainloop()
-
-
-def update_logic_data(file_as_path=filefullname_as_link_path_default, force=False):
-    if logic.count_found_modules == 0 or force == True:
-        logic.main(file_as_path)
 
 
 # #################################################
@@ -42,9 +38,10 @@ def update_logic_data(file_as_path=filefullname_as_link_path_default, force=Fals
 # #################################################
 class Gui(Frame):
     """ main GUI window """
-    def __init__(self, root=None, parent=None, file_as_path=filefullname_as_link_path_default):
-        self.file_as_path = file_as_path
-        update_logic_data(file_as_path)
+    def __init__(self, root=None, parent=None, path_link=None):
+        self.path_received = path_link
+        self.logic = logic.Logic(self.path_received)
+
         super().__init__(root)
         self.root = root
         self.parent_main = parent
@@ -72,7 +69,7 @@ class Gui(Frame):
         self.root.wm_attributes("-transparentcolor", None)
 
         # WGT_PARAMETERS
-        self.root["bg"] = "#009900" if logic.count_found_modules_bad == 0 else "#FF0000"
+        self.root["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
         self.root["fg"] = None
         self.root["width"] = None
         self.root["height"] = None
@@ -150,7 +147,7 @@ class Gui(Frame):
         return
 
     def _fill_lable_frame_info(self):
-        if logic.count_found_modules_bad > 0:
+        if self.logic.count_found_modules_bad > 0:
             self.lable_frame_info["text"] = f"BAD SITUATION:\nYOU NEED INSTALL some modules"
             self.lable_frame_info["bg"] = "#FF9999"
         else:
@@ -214,7 +211,7 @@ class Gui(Frame):
         parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent)
-        lable["text"] = f"FOUND python [{logic.count_python_versions}]VERSIONS:\n" \
+        lable["text"] = f"FOUND python [{self.logic.count_python_versions}]VERSIONS:\n" \
                         f"Active .exe=[{sys.executable}]"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
@@ -243,11 +240,11 @@ class Gui(Frame):
         return
 
     def fill_listbox_versions(self):
-        versions_dict = logic.python_versions_found
+        versions_dict = self.logic.python_versions_found
         for ver in versions_dict:
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver][0].ljust(14, " ") + versions_dict[ver][1])
             if ver.endswith("*"):
-                if logic.count_found_modules_bad == 0:
+                if self.logic.count_found_modules_bad == 0:
                     self.listbox_versions.itemconfig('end', bg="#55FF55")
                 else:
                     self.listbox_versions.itemconfig('end', bg="#FF9999")
@@ -257,9 +254,9 @@ class Gui(Frame):
         #print(self.listbox_versions.curselection())
         selected_list = (0,) if self.listbox_versions.curselection() == () else self.listbox_versions.curselection()
         selected_version = self.listbox_versions.get(selected_list)
-        for ver in logic.python_versions_found:
+        for ver in self.logic.python_versions_found:
             if selected_version.startswith(ver):
-                self.status_versions["text"] = logic.python_versions_found[ver][1]
+                self.status_versions["text"] = self.logic.python_versions_found[ver][1]
         return
 
 
@@ -303,7 +300,7 @@ class Gui(Frame):
         btn = Button(frame_status_files, text=f"TRY without overcount")
         btn["bg"] = "#aaaaFF"
         btn["state"] = "disabled"
-        #btn["command"] = lambda: logic.count_found_files_overcount_limit = 0;
+        #btn["command"] = lambda: self.logic.count_found_files_overcount_limit = 0;
         btn.pack(side="right")
 
         self.fill_listbox_files()
@@ -313,9 +310,9 @@ class Gui(Frame):
         lbl = self.lable_frame_files
         mark = "!!!DETECTED OVERCOUNT!!!"
         gap = " "*20
-        line1 = f"FOUND python [{logic.count_found_files}]FILES:"
-        line2 = f"Active link path=[{self.file_as_path}]"
-        if logic.count_found_files_overcount:
+        line1 = f"FOUND python [{self.logic.count_found_files}]FILES:"
+        line2 = f"Active link path=[{self.path_received}]"
+        if self.logic.count_found_files_overcount:
             line1 = mark + gap + line1 + gap + mark
             lbl["bg"] = "#FF9999"
 
@@ -324,11 +321,11 @@ class Gui(Frame):
 
     def fill_listbox_files(self):
         self.listbox_files.delete(0, self.listbox_files.size()-1)
-        files_dict = logic.python_files_found_in_directory_dict
+        files_dict = self.logic.python_files_found_dict
         for file in files_dict:
-            file_str = str(file) + "*" if Path(file) == Path(logic.fullpathname_applied) else file
+            file_str = str(file) + "*" if Path(file) == Path(self.logic.path_link_applied) else file
             self.listbox_files.insert('end', file_str)
-            if not files_dict[file].isdisjoint(logic.modules_found_infiles_bad):
+            if not files_dict[file].isdisjoint(self.logic.modules_found_infiles_bad):
                 self.listbox_files.itemconfig('end', bg="#FF9999")
         return
 
@@ -336,7 +333,7 @@ class Gui(Frame):
         #print(self.listbox_files.curselection())
         selected_list = (0,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
         selected_filename = self.listbox_files.get(*selected_list)
-        self.status_files["text"] = logic.python_files_found_in_directory_dict[Path(selected_filename.replace("*", ""))]
+        self.status_files["text"] = self.logic.python_files_found_dict[Path(selected_filename.replace("*", ""))]
         return
 
     def change_path(self, mode):
@@ -353,7 +350,7 @@ class Gui(Frame):
 
     def update_total_gui_data(self, path):
         # self.program_restart(file=[path_new])
-        update_logic_data(path, force=True)
+        self.logic = logic.Logic(path)
 
         self._fill_lable_frame_info()
         self._fill_lable_frame_files()
@@ -418,15 +415,15 @@ class Gui(Frame):
         return
 
     def _fill_lable_frame_modules(self):
-        self.lable_frame_modules["text"] = f"FOUND importing [{logic.count_found_modules}]MODULES:\n"\
+        self.lable_frame_modules["text"] = f"FOUND importing [{self.logic.count_found_modules}]MODULES:\n"\
             "(GREEN - Installed, RED - Not installed, LightRED - Definitely can be installed!)"
         return
 
     def fill_listbox_modules(self):
         self.listbox_modules.delete(0, self.listbox_modules.size()-1)
-        for module in logic.ranked_modules_dict:
+        for module in self.logic.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
-            can_import, short_pathname, detected_installname = logic.ranked_modules_dict[module]
+            can_import, short_pathname, detected_installname = self.logic.ranked_modules_dict[module]
             bad_module_index = 0
             if can_import:
                 self.listbox_modules.insert('end', "%-20s \t[%s]" % (module, short_pathname))
@@ -458,7 +455,7 @@ class Gui(Frame):
             mode_cmd = "uninstall"
 
         modulename = self.selected_module
-        module_data = logic.ranked_modules_dict[self.selected_module]
+        module_data = self.logic.ranked_modules_dict[self.selected_module]
         modulename_cmd = modulename if module_data[2] is None else module_data[2]
 
         python_exe = sys.executable
@@ -475,8 +472,8 @@ class Gui(Frame):
 
         # print(my_stdout, my_stderr)
         if my_stderr in ([], "") and my_process.poll() == 0:
-            logic.rank_modules_dict_generate()  # update data
-            logic.generate_modules_found_infiles_bad()
+            self.logic.rank_modules_dict()  # update data
+            self.logic.generate_modules_found_infiles_bad()
             self.fill_listbox_modules()
             self.fill_listbox_files()
             #self.program_restart()
@@ -511,5 +508,5 @@ if __name__ == '__main__':
     import logic
     main()
 else:
-    from . import logic  # main, python_files_found_in_directory_list, ranked_modules_dict
+    from . import logic  # main, python_files_found_dict, ranked_modules_dict
     access_this_module_as_import = True
