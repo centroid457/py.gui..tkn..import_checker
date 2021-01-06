@@ -140,10 +140,10 @@ def find_python_interpreters():
         mask = r'\s(\S+)\s+(\S.+)[\n]?'
         match = re.fullmatch(mask, line)
         if match:
-            check_acrive_exe = (Path(match[2]).parent == Path(python_exe).parent)
-            if check_acrive_exe:
+            check_active_exe = (Path(match[2]).parent == Path(python_exe).parent)
+            if check_active_exe:
                 active_exe_found = True
-            found_py_version = match[1] + (" *" if check_acrive_exe else "")
+            found_py_version = match[1] + (" *" if check_active_exe else "")
             found_py_exe_path = match[2]
 
             full_version = get_exe_version(found_py_exe_path)
