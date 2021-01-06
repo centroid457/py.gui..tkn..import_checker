@@ -5,6 +5,7 @@ HOW TO USE:
 2. add this script to your project directory
 3. add lines in your main script in place before first import line:
 *********************
+# todo: correct!!!
 import import_checker
 import_checker.main(file_as_path=__file__)
 *********************
