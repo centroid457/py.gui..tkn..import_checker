@@ -331,7 +331,8 @@ class Gui(Frame):
         parent.grid_rowconfigure([0, 2], weight=0)
 
         lable = Label(parent)
-        lable["text"] = f"FOUND importing [{logic.count_found_modules}]MODULES:"
+        lable["text"] = f"FOUND importing [{logic.count_found_modules}]MODULES:\n"\
+            "(GREEN - Installed, RED - Not installed, PINK - Definitely can be installed!)"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
         self.listbox_modules = Listbox(parent, height=8, bg="#55FF55", font=('Courier', 9))
@@ -379,10 +380,11 @@ class Gui(Frame):
             can_import, short_pathname, detected_installname = logic.ranked_modules_dict[module]
             bad_module_index = 0
             if can_import:
-                self.listbox_modules.insert('end', "%-20s \t[%s]"%(module, short_pathname))
+                self.listbox_modules.insert('end', "%-20s \t[%s]" % (module, short_pathname))
             else:
-                self.listbox_modules.insert(bad_module_index, "%-20s \t[%s]"%(module, short_pathname))
-                self.listbox_modules.itemconfig(bad_module_index, bg = "#FF9999")
+                self.listbox_modules.insert(bad_module_index, "%-20s \t[%s]" % (module, short_pathname))
+                color = "#FF9999" if detected_installname is None else "#FFcc99"
+                self.listbox_modules.itemconfig(bad_module_index, bg=color)
                 bad_module_index += 1
 
         self.change_status_modules(None)
