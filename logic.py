@@ -106,7 +106,7 @@ def main(file_as_path=filefullname_as_link_path):
 
     os.chdir(path_find_wo_slash)
     if not access_this_module_as_import: print("*"*80)
-    find_all_python_files_generate(path=path_find_wo_slash)
+    find_all_python_files(path=path_find_wo_slash)
     if not access_this_module_as_import: print("*"*80)
     find_all_importing_modules(python_files_found_in_directory_dict)
     rank_modules_dict_generate()
@@ -161,7 +161,7 @@ def get_exe_version(exe_path):
     return full_version
 
 
-def find_all_python_files_generate(path=path_find_wo_slash):
+def find_all_python_files(path=path_find_wo_slash):
     global count_found_files, count_found_files_overcount
     for file_name in path.rglob(pattern="*.py*"):
         if (#file_name != os.path.basename(__file__) and
