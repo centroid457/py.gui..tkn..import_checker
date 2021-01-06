@@ -228,7 +228,10 @@ class Gui(Frame):
         self.status_versions.pack(side="left")
         self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
 
-        # fill listbox
+        self.fill_listbox_versions()
+        return
+
+    def fill_listbox_versions(self):
         versions_dict = logic.python_versions_found
         for ver in versions_dict:
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver][0].ljust(14, " ") + versions_dict[ver][1])
@@ -237,7 +240,6 @@ class Gui(Frame):
                     self.listbox_versions.itemconfig('end', bg="#55FF55")
                 else:
                     self.listbox_versions.itemconfig('end', bg="#FF9999")
-        return
 
     def change_status_versions(self, event):
         #print(self.listbox_versions.curselection())
@@ -298,12 +300,15 @@ class Gui(Frame):
         #btn["command"] = lambda: logic.count_found_files_overcount_limit = 0;
         btn.pack(side="right")
 
-        # fill listbox
+        self.fill_listbox_files()
+        return
+
+    def fill_listbox_files(self):
         files_dict = logic.python_files_found_in_directory_dict
         for file in files_dict:
             self.listbox_files.insert('end', file.resolve())
             if not files_dict[file].isdisjoint(logic.modules_found_infiles_bad):
-                self.listbox_files.itemconfig('end', bg = "#FF9999")
+                self.listbox_files.itemconfig('end', bg="#FF9999")
         return
 
     def change_status_files(self, event):
@@ -374,7 +379,11 @@ class Gui(Frame):
         self.status_modules.pack(side="left")
         self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
 
-        # fill listbox
+        self.fill_listbox_modules()
+        self.change_status_modules(None)
+        return
+
+    def fill_listbox_modules(self):
         for module in logic.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
             can_import, short_pathname, detected_installname = logic.ranked_modules_dict[module]
@@ -386,10 +395,7 @@ class Gui(Frame):
                 color = "#FF9999" if detected_installname is None else "#FFcc99"
                 self.listbox_modules.itemconfig(bad_module_index, bg=color)
                 bad_module_index += 1
-
-        self.change_status_modules(None)
         return
-
 
     def change_status_modules(self, event):
         #print(self.listbox_modules.curselection())
