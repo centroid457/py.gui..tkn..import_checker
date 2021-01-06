@@ -24,7 +24,7 @@ else:
 
 
 def main(file_as_path=filefullname_as_link_path_default):
-    update_data(file_as_path)
+    update_logic_data(file_as_path)
     root = Tk()
     app = Gui(root=root, parent=root, file_as_path=file_as_path)
     if access_this_module_as_import and logic.count_found_modules_bad == 0:
@@ -32,7 +32,7 @@ def main(file_as_path=filefullname_as_link_path_default):
     app.mainloop()
 
 
-def update_data(file_as_path=filefullname_as_link_path_default, force=False):
+def update_logic_data(file_as_path=filefullname_as_link_path_default, force=False):
     if logic.count_found_modules == 0 or force == True:
         logic.main(file_as_path)
 
@@ -64,7 +64,7 @@ class Gui(Frame):
     """ main GUI window """
     def __init__(self, root=None, parent=None, file_as_path=filefullname_as_link_path_default):
         self.file_as_path = file_as_path
-        update_data(file_as_path)
+        update_logic_data(file_as_path)
         super().__init__(root)
         self.root = root
         self.parent_main = parent
@@ -170,13 +170,12 @@ class Gui(Frame):
         return
 
     def _fill_lable_frame_info(self):
-        lbl = self.lable_frame_info
         if logic.count_found_modules_bad > 0:
-            lbl["text"] = f"BAD SITUATION:\nYOU NEED INSTALL some modules"
-            lbl["bg"] = "#FF9999"
+            self.lable_frame_info["text"] = f"BAD SITUATION:\nYOU NEED INSTALL some modules"
+            self.lable_frame_info["bg"] = "#FF9999"
         else:
-            lbl["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
-            lbl["bg"] = "#55FF55"
+            self.lable_frame_info["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
+            self.lable_frame_info["bg"] = "#55FF55"
             return
 
     # #################################################
@@ -349,9 +348,20 @@ class Gui(Frame):
         if path_new == '':
             return
 
-        self.program_restart(file=[path_new])
+        self.update_total_gui_data(path_new)
         return
 
+    def update_total_gui_data(self, path):
+        # self.program_restart(file=[path_new])
+        update_logic_data(path, force=True)
+
+        self._fill_lable_frame_info()
+        self._fill_lable_frame_files()
+        self._fill_lable_frame_modules()
+
+        self.fill_listbox_files()
+        self.fill_listbox_modules()
+        return
 
     # #################################################
     # frame MODULES
