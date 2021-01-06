@@ -80,7 +80,7 @@ modules_in_system_dict = {}
 
 # COUNTERS
 count_found_files_overcount = False
-count_found_files_overcount_limit = 20      # if 0 - unlimited!
+count_found_files_overcount_limit = 40      # if 0 - unlimited!
                                         # wo limitation if you pass global path with many files the tool can silently stop!
 
 count_python_versions = 0
