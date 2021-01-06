@@ -328,7 +328,7 @@ class Gui(Frame):
         self.listbox_files.delete(0, self.listbox_files.size()-1)
         files_dict = self.logic.python_files_found_dict
         for file in files_dict:
-            file_str = str(file) + "*" if Path(file) == Path(self.logic.path_link_applied) else file
+            file_str = str(file) + " *" if file == Path(self.path_link_applied) else file
             self.listbox_files.insert('end', file_str)
             if not files_dict[file].isdisjoint(self.logic.modules_found_infiles_bad):
                 self.listbox_files.itemconfig('end', bg="#FF9999")
@@ -338,7 +338,7 @@ class Gui(Frame):
         #print(self.listbox_files.curselection())
         selected_list = (0,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
         selected_filename = self.listbox_files.get(*selected_list)
-        self.status_files["text"] = self.logic.python_files_found_dict[Path(selected_filename.replace("*", ""))]
+        self.status_files["text"] = self.logic.python_files_found_dict[Path(selected_filename.replace(" *", ""))]
         return
 
     def change_path(self, mode):
