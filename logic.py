@@ -112,13 +112,13 @@ class Logic:
             raise ValueError("Path not exists!!!")
         # by default find all modules in one level up (from current directory) with all subdirectories
         if path.is_dir():                             # if link was a directory
-            self.path_link_applied = Path(path)
+            self.path_dir_applied = Path(path)
         elif path.parent == Path(__file__).parent:    # if link is this file (direct start)
-            self.path_link_applied = Path(path).parent.parent
+            self.path_dir_applied = Path(path).parent.parent
         else:
-            self.path_link_applied = Path(path).parent
+            self.path_dir_applied = Path(path).parent
 
-        os.chdir(self.path_link_applied)
+        os.chdir(self.path_dir_applied)
         return
 
     def generate_modules_in_system_dict(self):
@@ -166,7 +166,7 @@ class Logic:
 
 
     def find_all_python_files(self):
-        path = self.path_link_applied
+        path = self.path_dir_applied
         for file_name in path.rglob(pattern="*.py*"):
             if (#file_name != os.path.basename(__file__) and
                 os.path.splitext(file_name)[1] in (".py", ".pyw")
@@ -202,51 +202,56 @@ class Logic:
     def _find_modulenames_set(self, line):
         # find line with import-statements
         # return modulenames set
-        line_wo_comments = line.split(sep="#")[0]
         modules_found_inline = set()
 
-        mask_import_as = r'\s*import\s+(.+?)(\s+as\s+.+)?[\t\r\n\f]*'
-        mask_from_import = r'\s*from\s+(.+)\s+import\s+.*[\t\r\n\f]*'
+        line_wo_comments = line.split(sep="#")[0]
+        found_modules_textgroup = self._find_modules_textgroup(line_wo_comments)
 
-        match1 = re.fullmatch(mask_import_as, line_wo_comments)
-        match2 = re.fullmatch(mask_from_import, line_wo_comments)
-
-        found_modulenames_group = match1[1] if match1 else match2[1] if match2 else None
-        if found_modulenames_group not in [None, ]:
-            modules_found_inline = self._split_module_names_set(found_modulenames_group)
+        if found_modules_textgroup not in [None, ]:
+            modules_found_inline = self._split_modulenames_set(found_modules_textgroup)
 
         return modules_found_inline
 
+    def _find_modules_textgroup(self, line):
+        mask_import_as = r'\s*import\s+(.+?)(\s+as\s+.+)?[\t\r\n\f]*'
+        mask_from_import = r'\s*from\s+(.+)\s+import\s+.*[\t\r\n\f]*'
 
-    def _split_module_names_set(self, raw_modulenames_data):
+        match1 = re.fullmatch(mask_import_as, line)
+        match2 = re.fullmatch(mask_from_import, line)
+
+        found = match1[1] if match1 else match2[1] if match2 else None
+        return found
+
+    def _split_modulenames_set(self, textgroup):
         # split text like "m1,m2" into {"m1", "m2"}
-        raw_modules_data_wo_spaces = re.sub(r'\s', '', raw_modulenames_data)
-        module_names_list_with_relative = raw_modules_data_wo_spaces.split(sep=",")
-        module_names_list_wo_relative = []
-        for module in module_names_list_with_relative:
-            module_name_wo_relative = module.split(sep=".")[0]
-            if module_name_wo_relative != "":
-                module_names_list_wo_relative.append(module_name_wo_relative)
-                if not access_this_module_as_import: print(module_name_wo_relative)
-        return set(module_names_list_wo_relative)
+        text_wo_spaces = re.sub(r'\s', '', textgroup)
+        modulenames_list_with_relative = text_wo_spaces.split(sep=",")
+        modulenames_list_wo_relative = []
+        for module in modulenames_list_with_relative:
+            modulename_wo_relative = module.split(sep=".")[0]
+            if modulename_wo_relative != "":
+                modulenames_list_wo_relative.append(modulename_wo_relative)
+                if not access_this_module_as_import: print(modulename_wo_relative)
+        return set(modulenames_list_wo_relative)
 
     # todo: make assertions!
     '''
     # test correct parsing
-    assert _split_module_names_set("m1,m2 ,m3,    m4,\tm5") == set([f"m{i}" for i in range(1, 6)])
-    assert _find_modulenames_set("import\tm1") == {"m1"}
-    assert _find_modulenames_set("#import\tm1") == set()
-    assert _find_modulenames_set(" import\t m1,m2") == {"m1", "m2"}
-    assert _find_modulenames_set(" import\t m1 as m2") == {"m1"}
-    assert _find_modulenames_set(" from m1 import m2 as m3") == {"m1"}
-    assert _find_modulenames_set("#from m1 import m2 as m3") == set()
-    assert _find_modulenames_set("import m1 #comment import m2") == {"m1"}
+    assert _split_module_names_set(None, "m1,m2 ,m3,    m4,\tm5") == set([f"m{i}" for i in range(1, 6)])
+
+    assert _find_modulenames_set(None, "import\tm1") == {"m1"}
+    assert _find_modulenames_set(None, "#import\tm1") == set()
+    assert _find_modulenames_set(None, " import\t m1,m2") == {"m1", "m2"}
+    assert _find_modulenames_set(None, " import\t m1 as m2") == {"m1"}
+    assert _find_modulenames_set(None, " from m1 import m2 as m3") == {"m1"}
+    assert _find_modulenames_set(None, "#from m1 import m2 as m3") == set()
+    assert _find_modulenames_set(None, "import m1 #comment import m2") == {"m1"}
     # relative import (in packages)
-    assert _find_modulenames_set(" from .. import m1 #comment import m2") == set()
-    assert _find_modulenames_set(" from ..m1 import m2 #comment import m3") == set()
-    assert _find_modulenames_set(" from . import m1 #comment import m2") == set()
-    assert _find_modulenames_set(" from .m1 import m2 #comment import m3") == set()
-    assert _find_modulenames_set(" from m1.m2 import m3 #comment import m4") == {"m1"}
+    assert _find_modulenames_set(None, " from .. import m1 #comment import m2") == set()
+    assert _find_modulenames_set(None, " from ..m1 import m2 #comment import m3") == set()
+    assert _find_modulenames_set(None, " from . import m1 #comment import m2") == set()
+    assert _find_modulenames_set(None, " from .m1 import m2 #comment import m3") == set()
+    assert _find_modulenames_set(None, " from m1.m2 import m3 #comment import m4") == {"m1"}
     '''
 
     def rank_modules_dict(self):
@@ -300,7 +305,7 @@ if __name__ == '__main__':
     print("*"*80)
     print(f"[{sample.count_python_versions}]FOUND VERSIONS={sample.python_versions_found}")
     print()
-    print(f"path=[{sample.path_link_applied}]")
+    print(f"path=[{sample.path_dir_applied}]")
     print()
     print(f"[{sample.count_found_files}]FOUND FILES={sample.python_files_found_dict}")
     print()
