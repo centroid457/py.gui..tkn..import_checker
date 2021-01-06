@@ -23,13 +23,14 @@ def main():
         filefullname_as_link_path_default = sys.argv[1]
     else:
         raise ValueError("too many arguments!!!")
-
     path = filefullname_as_link_path_default
 
     root = Tk()
     app = Gui(root=root, parent=root, path_link=path)
+
     if access_this_module_as_import and sample.count_found_modules_bad == 0:
         root.after(1000, root.destroy)
+
     app.mainloop()
 
 
@@ -39,8 +40,7 @@ def main():
 class Gui(Frame):
     """ main GUI window """
     def __init__(self, root=None, parent=None, path_link=None):
-        self.path_received = path_link
-        self.logic = logic.Logic(self.path_received)
+        self.apply_path(path_link)
 
         super().__init__(root)
         self.root = root
@@ -49,6 +49,11 @@ class Gui(Frame):
 
         self.create_gui_structure()
         self.window_move_to_center()
+
+
+    def apply_path(self, path_link):
+        self.path_link_applied = path_link
+        self.logic = logic.Logic(self.path_link_applied)
 
 
     def gui_root_configure(self):
@@ -311,7 +316,7 @@ class Gui(Frame):
         mark = "!!!DETECTED OVERCOUNT!!!"
         gap = " "*20
         line1 = f"FOUND python [{self.logic.count_found_files}]FILES:"
-        line2 = f"Active link path=[{self.path_received}]"
+        line2 = f"Active link path=[{self.path_link_applied}]"
         if self.logic.count_found_files_overcount:
             line1 = mark + gap + line1 + gap + mark
             lbl["bg"] = "#FF9999"
@@ -348,9 +353,8 @@ class Gui(Frame):
         self.update_total_gui_data(path_new)
         return
 
-    def update_total_gui_data(self, path):
-        # self.program_restart(file=[path_new])
-        self.logic = logic.Logic(path)
+    def update_total_gui_data(self, path_link):
+        self.apply_path(path_link)
 
         self._fill_lable_frame_info()
         self._fill_lable_frame_files()
