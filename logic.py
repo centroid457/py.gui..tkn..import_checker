@@ -42,7 +42,7 @@ access_this_module_as_import = True  # at first need true to correct assertions!
 class Logic:
     def __init__(self, path=filefullname_as_link_path_default):
         # INPUT
-        self.path_link_applied = Path(path)
+        self.path_link_received = Path(path)
 
         # SETTINGS
         self.MODULES_CAN_INSTALL = {
@@ -92,30 +92,34 @@ class Logic:
 
 
     def main(self):
-        # todo: check existance!
-        path = self.path_link_applied
+        self.apply_path()
         self.generate_modules_in_system_dict()
         self.find_python_interpreters()
+        if not access_this_module_as_import: print("*"*80)
+        self.find_all_python_files()
+        if not access_this_module_as_import: print("*"*80)
+        self.find_all_importing_modules()
+        self.rank_modules_dict()
+        self.sort_ranked_modules_dict()
+        self.generate_modules_found_infiles_bad()
+        self.generate_counters()
+        if not access_this_module_as_import: print("*"*80)
+        return
 
+    def apply_path(self):
+        path = self.path_link_received
+        if not path.exists():
+            raise ValueError("Path not exists!!!")
         # by default find all modules in one level up (from current directory) with all subdirectories
-        if Path(path).is_dir():                             # if link was a directory
+        if path.is_dir():                             # if link was a directory
             self.path_link_applied = Path(path)
-        elif Path(path).parent == Path(__file__).parent:    # if link is this file (direct start)
+        elif path.parent == Path(__file__).parent:    # if link is this file (direct start)
             self.path_link_applied = Path(path).parent.parent
         else:
             self.path_link_applied = Path(path).parent
 
         os.chdir(self.path_link_applied)
-        if not access_this_module_as_import: print("*"*80)
-        self.find_all_python_files()
-        if not access_this_module_as_import: print("*"*80)
-        self.find_all_importing_modules()
-        self.rank_modules_dict_generate()
-        self.sort_ranked_modules_dict()
-        self.generate_modules_found_infiles_bad()
-        self.generate_counters()
-        if not access_this_module_as_import: print("*"*80)
-
+        return
 
     def generate_modules_in_system_dict(self):
         self.modules_in_system_dict = {}
@@ -245,7 +249,7 @@ class Logic:
     assert _find_modulenames_set(" from m1.m2 import m3 #comment import m4") == {"m1"}
     '''
 
-    def rank_modules_dict_generate(self):
+    def rank_modules_dict(self):
         module_set = self.modules_found_infiles
         # detect module location if exist in system
         # generate dict like
