@@ -397,6 +397,11 @@ class Gui(Frame):
                 bad_module_index += 1
         return
 
+    def re_fill_listbox_modules(self):
+        self.listbox_modules.delete(0, self.listbox_modules.size()-1)
+        self.fill_listbox_modules()
+        return
+
     def change_status_modules(self, event):
         #print(self.listbox_modules.curselection())
         selected_list = (0,) if self.listbox_modules.curselection() == () else self.listbox_modules.curselection()
@@ -405,7 +410,6 @@ class Gui(Frame):
         self.selected_module = re.sub(r"\s", "", selected_module_w_spaces)
         self.status_modules["text"] = self.selected_module
         return
-
 
     def btn_module_action(self, mode):
         if mode not in ("install", "upgrade", "delete"):
@@ -436,7 +440,9 @@ class Gui(Frame):
 
         # print(my_stdout, my_stderr)
         if my_stderr in ([], "") and my_process.poll() == 0:
-            self.program_restart()
+            logic.rank_modules_dict_generate()
+            self.re_fill_listbox_modules()
+            #self.program_restart()
         else:
             txt = f"Can't {mode.upper()} module.\n"\
                     "Мay be it is already IN_TARGET position or have ERROR.\n"\
