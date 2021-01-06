@@ -38,7 +38,8 @@ from pathlib import Path
 # COMMON VARS & CONSTANTS
 # #################################################
 # INPUT
-filefullname_as_link_path = __file__    # default value
+filefullname_as_link_path_default = __file__
+fullpathname_applied = None
 
 # OUTPUT
 python_files_found_in_directory_dict = {}
@@ -91,8 +92,9 @@ count_found_modules_bad = 0
 # #################################################
 # FUNCTIONS
 # #################################################
-def main(file_as_path=filefullname_as_link_path):
-    global path_find_wo_slash
+def main(file_as_path=filefullname_as_link_path_default):
+    global path_find_wo_slash, fullpathname_applied
+    fullpathname_applied = file_as_path
     generate_modules_in_system_dict()
     find_python_interpreters()
 
