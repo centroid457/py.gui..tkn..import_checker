@@ -352,7 +352,7 @@ class Gui(Frame):
 
         lable = Label(parent)
         lable["text"] = f"FOUND importing [{logic.count_found_modules}]MODULES:\n"\
-            "(GREEN - Installed, RED - Not installed, PINK - Definitely can be installed!)"
+            "(GREEN - Installed, RED - Not installed, LightRED - Definitely can be installed!)"
         lable.grid(column=0, row=0, columnspan=2, sticky="snew")
 
         self.listbox_modules = Listbox(parent, height=8, bg="#55FF55", font=('Courier', 9))
