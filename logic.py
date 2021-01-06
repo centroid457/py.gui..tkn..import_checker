@@ -93,6 +93,7 @@ count_found_modules_bad = 0
 # #################################################
 def main(file_as_path=filefullname_as_link_path):
     global path_find_wo_slash
+    generate_modules_in_system_dict()
     find_python_interpreters()
 
     # by default find all modules in one level up (from current directory) with all subdirectories
@@ -104,7 +105,6 @@ def main(file_as_path=filefullname_as_link_path):
         path_find_wo_slash = Path(file_as_path).parent
 
     os.chdir(path_find_wo_slash)
-    update_system_modules_dict()
     if not access_this_module_as_import: print("*"*80)
     find_all_python_files_generate(path=path_find_wo_slash)
     if not access_this_module_as_import: print("*"*80)
@@ -112,8 +112,22 @@ def main(file_as_path=filefullname_as_link_path):
     rank_modules_dict_generate()
     sort_ranked_modules_dict()
     generate_modules_found_infiles_bad()
-    update_counters()
+    generate_counters()
     if not access_this_module_as_import: print("*"*80)
+
+
+def generate_modules_in_system_dict():
+    global modules_in_system_dict
+    modules_in_system_dict = {}
+    # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
+    # KEY=modulename:VALUE=location(CurDir|DLLs|lib|site-packages)
+    for module_in_system in pkgutil.iter_modules():
+        my_string = str(module_in_system.module_finder)
+        mask = r".*\('(.+)'\)$"
+        match = re.fullmatch(mask, my_string)[1]
+        path_name = Path(match).name
+        modules_in_system_dict.update({module_in_system.name:path_name})
+    return
 
 
 def find_python_interpreters():
@@ -268,21 +282,7 @@ def generate_modules_found_infiles_bad():
             modules_found_infiles_bad.update({m})
 
 
-def update_system_modules_dict():
-    # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
-    # KEY=modulename:VALUE=location(CurDir|DLLs|lib|site-packages)
-    for module_in_system in pkgutil.iter_modules():
-        my_string = str(module_in_system.module_finder)
-        mask = r".*\('(.+)'\)$"
-        match = re.fullmatch(mask, my_string)[1]
-        path_name = Path(match).name
-        modules_in_system_dict.update({module_in_system.name:path_name})
-
-    #print(modules_in_system_dict)
-    return
-
-
-def update_counters():
+def generate_counters():
     global count_python_versions, count_found_files, count_found_modules, count_found_modules_bad
     count_python_versions = len(python_versions_found)
     count_found_modules = len(ranked_modules_dict)
