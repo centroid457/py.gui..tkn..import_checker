@@ -37,26 +37,6 @@ def update_logic_data(file_as_path=filefullname_as_link_path_default, force=Fals
         logic.main(file_as_path)
 
 
-def ability_to_install_modules():
-    if ensurepip.version() != None:
-        is_pip_available = True
-    else:
-        return False
-
-    cmd = f"{sys.executable} -m pip install --upgrade pip"
-    my_sp = subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-
-    line = None
-    while line != "":
-        line = my_sp.stderr.readline()
-        #print(f"[{repr(line)}]")
-        if "Failed to establish a new connection" in line:
-            connection_available = False
-            break
-    else:
-        connection_available = True
-    return connection_available
-
 # #################################################
 # GUI
 # #################################################
@@ -197,13 +177,33 @@ class Gui(Frame):
         lbl = self.lbl_connection
         lbl["text"] = "... checking ..."
         lbl["bg"] = "SystemButtonFace"
-        if ability_to_install_modules():
+        if self.ability_to_install_modules():
             lbl["text"] = "GOOD: CONNECTION is available! You can install modules!!!"
             lbl["bg"] = "#55FF55"
         else:
             lbl["text"] = "BAD: connection is NOT available! You CAN'T install modules!!!"
             lbl["bg"] = "#FF9999"
         return
+
+    def ability_to_install_modules(self):
+        if ensurepip.version() != None:
+            is_pip_available = True
+        else:
+            return False
+
+        cmd = f"{sys.executable} -m pip install --upgrade pip"
+        my_sp = subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+        line = None
+        while line != "":
+            line = my_sp.stderr.readline()
+            # print(f"[{repr(line)}]")
+            if "Failed to establish a new connection" in line:
+                connection_available = False
+                break
+        else:
+            connection_available = True
+        return connection_available
 
 
     # #################################################
