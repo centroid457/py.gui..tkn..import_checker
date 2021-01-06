@@ -167,7 +167,7 @@ class Gui(Frame):
         lable["font"] = ("", 15)
         lable.pack(side="left", fill="x", expand=1)
         if logic.count_found_modules_bad > 0:
-            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL [{logic.count_found_modules_bad}] modules"
+            lable["text"] = f"BAD SITUATION:\nYOU NEED INSTALL some modules"
             lable["bg"] = "#FF9999"
         else:
             lable["text"] = f"GOOD:\nALL MODULES ARE PRESENT!"
