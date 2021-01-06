@@ -29,8 +29,8 @@ def main(file_as_path=filefullname_as_link_path_default):
     app.mainloop()
 
 
-def update_data(file_as_path=filefullname_as_link_path_default):
-    if logic.count_found_modules == 0:
+def update_data(file_as_path=filefullname_as_link_path_default, force=False):
+    if logic.count_found_modules == 0 or force == True:
         logic.main(file_as_path)
 
 
@@ -312,16 +312,12 @@ class Gui(Frame):
         return
 
     def fill_listbox_files(self):
+        self.listbox_files.delete(0, self.listbox_files.size()-1)
         files_dict = logic.python_files_found_in_directory_dict
         for file in files_dict:
             self.listbox_files.insert('end', file.resolve())
             if not files_dict[file].isdisjoint(logic.modules_found_infiles_bad):
                 self.listbox_files.itemconfig('end', bg="#FF9999")
-        return
-
-    def re_fill_listbox_files(self):
-        self.listbox_files.delete(0, self.listbox_files.size()-1)
-        self.fill_listbox_files()
         return
 
     def change_status_files(self, event):
@@ -399,6 +395,7 @@ class Gui(Frame):
         return
 
     def fill_listbox_modules(self):
+        self.listbox_modules.delete(0, self.listbox_modules.size()-1)
         for module in logic.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
             can_import, short_pathname, detected_installname = logic.ranked_modules_dict[module]
@@ -410,11 +407,6 @@ class Gui(Frame):
                 color = "#FF9999" if detected_installname is None else "#FFcc99"
                 self.listbox_modules.itemconfig(bad_module_index, bg=color)
                 bad_module_index += 1
-        return
-
-    def re_fill_listbox_modules(self):
-        self.listbox_modules.delete(0, self.listbox_modules.size()-1)
-        self.fill_listbox_modules()
         return
 
     def change_status_modules(self, event):
@@ -457,8 +449,8 @@ class Gui(Frame):
         if my_stderr in ([], "") and my_process.poll() == 0:
             logic.rank_modules_dict_generate()  # update data
             logic.generate_modules_found_infiles_bad()
-            self.re_fill_listbox_modules()
-            self.re_fill_listbox_files()
+            self.fill_listbox_modules()
+            self.fill_listbox_files()
             #self.program_restart()
         else:
             txt = f"Can't {mode.upper()} module.\n"\
