@@ -171,7 +171,7 @@ class Gui(Frame):
 
 
     def fill_frame_connection(self, parent):
-        btn = Button(parent, text="reCHECK")
+        btn = Button(parent, text="reCHECK Connection")
         btn["bg"] = "#aaaaFF"
         btn["command"] = lambda: Thread(target=self.btn_check_connection).start()
         btn.pack(side="left")
