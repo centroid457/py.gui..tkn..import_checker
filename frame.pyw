@@ -439,10 +439,10 @@ class Gui(Frame):
             self.program_restart()
         else:
             txt = f"Can't {mode.upper()} module.\n"\
-                    + "Мay be it is already IN_TARGET position or have ERROR.\n"\
+                    "Мay be it is already IN_TARGET position or have ERROR.\n"\
                     + "*"*50 + "\n"\
-                    + f"stdout={my_stdout}\n\n"\
-                    + f"stderr={my_stderr}"
+                    f"stdout={my_stdout}\n\n"\
+                    f"stderr={my_stderr}"
             messagebox.showinfo(title='INFO', message=txt)
 
         return
