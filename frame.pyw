@@ -28,8 +28,8 @@ def main():
     root = Tk()
     app = Gui(root=root, parent=root, path_link=path)
 
-    if access_this_module_as_import and sample.count_found_modules_bad == 0:
-        root.after(1000, root.destroy)
+    # if access_this_module_as_import and sample.count_found_modules_bad == 0:
+    #    root.after(1000, root.destroy)
 
     app.mainloop()
 
