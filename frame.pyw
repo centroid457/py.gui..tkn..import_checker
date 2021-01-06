@@ -1,4 +1,7 @@
 # print("file frame.pyw")
+'''
+import pystray  # only for testing!
+'''
 import subprocess
 import sys
 import os
