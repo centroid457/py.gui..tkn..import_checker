@@ -111,7 +111,7 @@ def main(file_as_path=filefullname_as_link_path):
     find_all_importing_modules(python_files_found_in_directory_dict)
     rank_modules_dict_generate()
     sort_ranked_modules_dict()
-    update_modules_found_infiles_bad()
+    generate_modules_found_infiles_bad()
     update_counters()
     if not access_this_module_as_import: print("*"*80)
 
@@ -260,7 +260,9 @@ def sort_ranked_modules_dict():
     return
 
 
-def update_modules_found_infiles_bad():
+def generate_modules_found_infiles_bad():
+    global modules_found_infiles_bad
+    modules_found_infiles_bad = set()
     for m in ranked_modules_dict:
         if ranked_modules_dict[m][0] == False:
             modules_found_infiles_bad.update({m})

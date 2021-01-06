@@ -319,6 +319,11 @@ class Gui(Frame):
                 self.listbox_files.itemconfig('end', bg="#FF9999")
         return
 
+    def re_fill_listbox_files(self):
+        self.listbox_files.delete(0, self.listbox_files.size()-1)
+        self.fill_listbox_files()
+        return
+
     def change_status_files(self, event):
         #print(self.listbox_files.curselection())
         selected_list = (0,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
@@ -450,8 +455,10 @@ class Gui(Frame):
 
         # print(my_stdout, my_stderr)
         if my_stderr in ([], "") and my_process.poll() == 0:
-            logic.rank_modules_dict_generate()
+            logic.rank_modules_dict_generate()  # update data
+            logic.generate_modules_found_infiles_bad()
             self.re_fill_listbox_modules()
+            self.re_fill_listbox_files()
             #self.program_restart()
         else:
             txt = f"Can't {mode.upper()} module.\n"\
