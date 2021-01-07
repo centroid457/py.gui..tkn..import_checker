@@ -37,17 +37,22 @@ def start_test(path_link=None):
 # GUI
 # #################################################
 class Gui(Frame):
-    """ main GUI window """
+    """ main GUI window
+    root - object to do smth with only parent mainROOT (close/minimize...)
+    parent - object in which you want to place this Execution
+    path_link - you know!
+    """
     def __init__(self, root=None, parent=None, path_link=None):
         self.apply_path(path_link)
 
         super().__init__(root)
         self.root = root
         self.parent_main = parent
-        self.gui_root_configure()
-
         self.create_gui_structure()
-        self.window_move_to_center()
+
+        if root == parent:
+            self.gui_root_configure()
+            self.window_move_to_center()
 
         if access_this_module_as_import and self.logic.count_found_modules_bad == 0:
             self.root.after(1000, self.root.destroy)
@@ -84,12 +89,6 @@ class Gui(Frame):
         self.root["relief"] = "raised"  # "flat"/"sunken"/"raised"/"groove"/"ridge"
         self.root["borderwidth"] = 5
 
-        self.color_bg_mainframe()
-
-
-    def color_bg_mainframe(self):
-        self.root["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
-
 
     def window_move_to_center(self):
         self.root.update_idletasks()
@@ -106,6 +105,7 @@ class Gui(Frame):
     # FRAMES
     # #################################################
     def create_gui_structure(self):
+        self.color_bg_mainframe()
         self.parent_main.columnconfigure(0, weight=1)
         self.parent_main.rowconfigure([0, 1, ], weight=0)          # INFO, CONNECTION
         self.parent_main.rowconfigure([2, 3, ], weight=1)        # VERSIONS, FILES
@@ -144,6 +144,9 @@ class Gui(Frame):
 
         self.fill_frame_modules(self.frame_modules)
         return
+
+    def color_bg_mainframe(self):
+        self.parent_main["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
 
     # #################################################
     # frame INFO
