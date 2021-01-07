@@ -70,6 +70,10 @@ class Logic:
             "tabulate": "tabulate",
         }
 
+        self.clear_data()
+        self.main()
+
+    def clear_data(self):
         # SETS/DICTS/LISTS
         self.modules_in_system_dict = {}
         self.python_versions_found = {}     # in system
@@ -86,9 +90,6 @@ class Logic:
                                                 # wo limitation if you pass global path with many files the tool can silently stop!
         self.count_found_modules = 0
         self.count_found_modules_bad = 0
-
-        # EXECUTE
-        self.main()
 
 
     def main(self):
