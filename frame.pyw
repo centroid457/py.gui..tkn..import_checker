@@ -74,13 +74,19 @@ class Gui(Frame):
         self.root.wm_attributes("-transparentcolor", None)
 
         # WGT_PARAMETERS
-        self.root["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
+        # self.root["bg"] = "#009900"
         self.root["fg"] = None
         self.root["width"] = None
         self.root["height"] = None
         self.root["bind"] = None
         self.root["relief"] = "raised"  # "flat"/"sunken"/"raised"/"groove"/"ridge"
         self.root["borderwidth"] = 5
+
+        self.color_bg_mainframe()
+
+
+    def color_bg_mainframe(self):
+        self.root["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
 
 
     def window_move_to_center(self):
@@ -245,6 +251,7 @@ class Gui(Frame):
         return
 
     def fill_listbox_versions(self):
+        self.listbox_versions.delete(0, self.listbox_versions.size()-1)
         versions_dict = self.logic.python_versions_found
         for ver in versions_dict:
             self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver][0].ljust(14, " ") + versions_dict[ver][1])
@@ -360,8 +367,11 @@ class Gui(Frame):
         self._fill_lable_frame_files()
         self._fill_lable_frame_modules()
 
+        self.fill_listbox_versions()
         self.fill_listbox_files()
         self.fill_listbox_modules()
+
+        self.color_bg_mainframe()
         return
 
     # #################################################
