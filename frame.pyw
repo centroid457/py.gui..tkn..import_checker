@@ -28,7 +28,7 @@ def start_test(path_link=None):
         path_link = path_link_default
 
     root = Tk()
-    app = Gui(root=root, parent=root, path_link=path_link)
+    app = Gui(parent=root, path_link=path_link)
 
     app.mainloop()
 
@@ -38,19 +38,18 @@ def start_test(path_link=None):
 # #################################################
 class Gui(Frame):
     """ main GUI window
-    root - object to do smth with only parent mainROOT (close/minimize...)
     parent - object in which you want to place this Execution
     path_link - you know!
     """
-    def __init__(self, root=None, parent=None, path_link=None):
+    def __init__(self, parent=None, path_link=None):
         self.apply_path(path_link)
 
-        super().__init__(root)
-        self.root = root
+        super().__init__()
+        self.root = parent.winfo_toplevel()
         self.parent = parent
         self.create_gui_structure()
 
-        if root == parent:      # if it is independent window (without insertion in outside project)
+        if self.root == self.parent:      # if it is independent window (without insertion in outside project)
             self.gui_root_configure()
             self.window_move_to_center()
 
