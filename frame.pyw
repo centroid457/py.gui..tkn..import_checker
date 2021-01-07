@@ -47,7 +47,7 @@ class Gui(Frame):
 
         super().__init__(root)
         self.root = root
-        self.parent_main = parent
+        self.parent = parent
         self.create_gui_structure()
 
         if root == parent:      # if it is independent window (without insertion in outside project)
@@ -106,47 +106,47 @@ class Gui(Frame):
     # #################################################
     def create_gui_structure(self):
         self.color_bg_mainframe()
-        self.parent_main.columnconfigure(0, weight=1)
-        self.parent_main.rowconfigure([0, 1, ], weight=0)          # INFO, CONNECTION
-        self.parent_main.rowconfigure([2, 3, ], weight=1)        # VERSIONS, FILES
-        self.parent_main.rowconfigure([4, ], weight=10)         # MODULES
+        self.parent.columnconfigure(0, weight=1)
+        self.parent.rowconfigure([0, 1, ], weight=0)          # INFO, CONNECTION
+        self.parent.rowconfigure([2, 3, ], weight=1)        # VERSIONS, FILES
+        self.parent.rowconfigure([4, ], weight=10)         # MODULES
         pad_external = 2
 
         # ======= FRAME-0 (INFO) ====================
-        self.frame_info = Frame(self.parent_main)
+        self.frame_info = Frame(self.parent)
         self.frame_info.grid(row=0, sticky="nsew", padx=pad_external, pady=2)
 
         self.fill_frame_info(self.frame_info)
 
         # ======= FRAME-1 (CONNECTION) ====================
-        self.frame_connection = Frame(self.parent_main)
+        self.frame_connection = Frame(self.parent)
         self.frame_connection.grid(row=1, sticky="nsew", padx=pad_external, pady=1)
 
         self.fill_frame_connection(self.frame_connection)
 
         # ======= FRAME-2 (VERSIONS) ====================
-        self.frame_versions = Frame(self.parent_main)
+        self.frame_versions = Frame(self.parent)
         self.frame_versions.pack_propagate(0)
         self.frame_versions.grid(row=2, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_versions(self.frame_versions)
 
         # ======= FRAME-3 (FILES) ====================
-        self.frame_files = Frame(self.parent_main)
+        self.frame_files = Frame(self.parent)
         self.frame_files.pack_propagate(1)
         self.frame_files.grid(row=3, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_files(self.frame_files)
 
         # ======= FRAME-4 (MODULES) ====================
-        self.frame_modules = Frame(self.parent_main)
+        self.frame_modules = Frame(self.parent)
         self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=2)
 
         self.fill_frame_modules(self.frame_modules)
         return
 
     def color_bg_mainframe(self):
-        self.parent_main["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
+        self.parent["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
 
     # #################################################
     # frame INFO
