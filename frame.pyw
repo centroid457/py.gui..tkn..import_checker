@@ -72,6 +72,7 @@ class Gui(Frame):
         self.root.overrideredirect(False)
         self.root.state('zoomed')     # normal/zoomed/iconic/withdrawn
         # self.root.iconbitmap(r'ERROR.ico')    =ONLY FILENAME! NO fileobject
+        #self.root.protocol('WM_DELETE_WINDOW', self.program_exit)  # intersept gui exit()
 
         # WM_ATTRIBUTES
         self.root.wm_attributes("-topmost", False)
