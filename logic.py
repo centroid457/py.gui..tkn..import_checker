@@ -102,7 +102,6 @@ class Logic:
         if not access_this_module_as_import: print("*"*80)
         self.find_all_importing_modules()
         self.rank_modules_dict()
-        self._sort_ranked_modules_dict()
         self.generate_modules_found_infiles_bad()
         if not access_this_module_as_import: print("*"*80)
         return
@@ -281,6 +280,7 @@ class Logic:
         for module in module_set:
             self.ranked_modules_dict.update({module: self._rank_module_name(module)})
         # print(modules_in_files_ranked_dict)
+        self._sort_ranked_modules_dict()
         return
 
     def _rank_module_name(self, module_name):
