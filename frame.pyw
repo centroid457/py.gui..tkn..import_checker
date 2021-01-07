@@ -14,22 +14,21 @@ from pathlib import Path
 from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog, messagebox
 from tkinter import ttk
 
+# check start with file as link to analyze path
+if len(sys.argv) == 1:
+    path_link_default = __file__
+elif len(sys.argv) == 2 and Path(sys.argv[1]).exists():
+    path_link_default = sys.argv[1]
+else:
+    raise ValueError("too many arguments!!!")
 
-def main():
-    # check start with file as link to analyze path
-    if len(sys.argv) == 1:
-        filefullname_as_link_path_default = __file__
-    elif len(sys.argv) == 2 and Path(sys.argv[1]).exists():
-        filefullname_as_link_path_default = sys.argv[1]
-    else:
-        raise ValueError("too many arguments!!!")
-    path = filefullname_as_link_path_default
+
+def start_test(path_link=None):
+    if path_link == None:
+        path_link = path_link_default
 
     root = Tk()
-    app = Gui(root=root, parent=root, path_link=path)
-
-    # if access_this_module_as_import and sample.count_found_modules_bad == 0:
-    #    root.after(1000, root.destroy)
+    app = Gui(root=root, parent=root, path_link=path_link)
 
     app.mainloop()
 
@@ -49,6 +48,9 @@ class Gui(Frame):
 
         self.create_gui_structure()
         self.window_move_to_center()
+
+        if access_this_module_as_import and self.logic.count_found_modules_bad == 0:
+            self.root.after(1000, self.root.destroy)
 
 
     def apply_path(self, path_link):
@@ -520,7 +522,7 @@ class Gui(Frame):
 if __name__ == '__main__':
     access_this_module_as_import = False
     import logic
-    main()
+    start_test()
 else:
-    from . import logic  # main, python_files_found_dict, ranked_modules_dict
+    from . import logic
     access_this_module_as_import = True
