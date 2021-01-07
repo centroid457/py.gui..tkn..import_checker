@@ -4,7 +4,7 @@ GENERAL USAGE
 1. place module directory to your project
 2. add code in your project without comment mark
 # import import_checker
-# import_checker.frame.main(__file__)
+# import_checker.frame.start_test(__file__)
 ===============
 WHAT IT WILL DO
 By importing it will execute all processes.
@@ -16,4 +16,4 @@ if not - stay red gui, offer installations.
 """
 
 from . import frame
-#frame.main()
+#frame.start_test(...)     # use it in source project!
