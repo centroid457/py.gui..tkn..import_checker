@@ -71,12 +71,12 @@ class Logic:
         }
 
         # SETS/DICTS/LISTS
+        self.modules_in_system_dict = {}
         self.python_versions_found = {}     # in system
         self.python_files_found_dict = {}
-        self.ranked_modules_dict = {}       #{modulename: [CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]}
         self.modules_found_infiles = set()
         self.modules_found_infiles_bad = set()
-        self.modules_in_system_dict = {}
+        self.ranked_modules_dict = {}       #{modulename: [CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]}
 
         # COUNTERS
         self.count_python_versions = 0
@@ -100,9 +100,8 @@ class Logic:
         if not access_this_module_as_import: print("*"*80)
         self.find_all_importing_modules()
         self.rank_modules_dict()
-        self.sort_ranked_modules_dict()
+        self._sort_ranked_modules_dict()
         self.generate_modules_found_infiles_bad()
-        self.generate_counters()
         if not access_this_module_as_import: print("*"*80)
         return
 
@@ -135,6 +134,7 @@ class Logic:
 
 
     def find_python_interpreters(self):
+        self.python_versions_found = {}
         python_exe = sys.executable
         py_versions_sp = subprocess.Popen("py -0p", text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         py_versions_lines_list = py_versions_sp.stdout.readlines()
@@ -155,6 +155,8 @@ class Logic:
 
         if not active_exe_found:
             self.python_versions_found.update({"None *": [self._get_exe_version(python_exe), python_exe]})
+
+        self.count_python_versions = len(self.python_versions_found)
         return
 
 
@@ -166,6 +168,7 @@ class Logic:
 
 
     def find_all_python_files(self):
+        self.python_files_found_dict = {}
         path = self.path_dir_applied
         for file_name in path.rglob(pattern="*.py*"):
             if (#file_name != os.path.basename(__file__) and
@@ -184,6 +187,7 @@ class Logic:
 
 
     def find_all_importing_modules(self):
+        self.modules_found_infiles = set()
         file_list = self.python_files_found_dict
         # 1. find all import strings in all files
         # 2. parse all module names in them
@@ -196,6 +200,8 @@ class Logic:
         for module_set in self.python_files_found_dict.values():
             self.modules_found_infiles.update(module_set)
         # print(modules_found_infiles)
+
+        self.count_found_modules = len(self.modules_found_infiles)
         return
 
 
@@ -255,6 +261,7 @@ class Logic:
     '''
 
     def rank_modules_dict(self):
+        self.ranked_modules_dict = {}
         module_set = self.modules_found_infiles
         # detect module location if exist in system
         # generate dict like
@@ -277,7 +284,7 @@ class Logic:
         return result
 
 
-    def sort_ranked_modules_dict(self):
+    def _sort_ranked_modules_dict(self):
         # sort dict with found modules
         sorted_dict_keys_list = sorted(self.ranked_modules_dict, key=lambda key: key.lower())
         self.ranked_modules_dict = dict(zip(sorted_dict_keys_list, [self.ranked_modules_dict[value] for value in sorted_dict_keys_list]))
@@ -290,11 +297,7 @@ class Logic:
         for m in self.ranked_modules_dict:
             if self.ranked_modules_dict[m][0] == False:
                 self.modules_found_infiles_bad.update({m})
-        return
 
-    def generate_counters(self):
-        self.count_python_versions = len(self.python_versions_found)
-        self.count_found_modules = len(self.ranked_modules_dict)
         self.count_found_modules_bad = len(self.modules_found_infiles_bad)
         return
 
