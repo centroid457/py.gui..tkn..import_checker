@@ -50,7 +50,7 @@ class Gui(Frame):
         self.parent_main = parent
         self.create_gui_structure()
 
-        if root == parent:
+        if root == parent:      # if it is independent window (without insertion in outside project)
             self.gui_root_configure()
             self.window_move_to_center()
 
