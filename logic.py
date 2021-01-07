@@ -109,8 +109,14 @@ class Logic:
         return
 
 
-    def apply_path(self):
-        path = self.path_link_received
+    def apply_path(self, path = self.path_link_received):
+        if path != self.path_link_received:
+            # if send path from outside, reload all data!
+            self.path_link_received = Path(path)
+            self.clear_data()
+            self.main()
+            return
+
         if not path.exists():
             raise ValueError("Path not exists!!!")
         # by default find all modules in one level up (from current directory) with all subdirectories
