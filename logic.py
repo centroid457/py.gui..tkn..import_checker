@@ -254,10 +254,10 @@ class Logic:
         return set(modulenames_list_wo_relative)
 
     # todo: make assertions!
-    '''
-    # test correct parsing
-    assert _split_module_names_set(None, "m1,m2 ,m3,    m4,\tm5") == set([f"m{i}" for i in range(1, 6)])
 
+    # test correct parsing
+    assert _split_modulenames_set(None, "m1,m2 ,m3,    m4,\tm5") == set([f"m{i}" for i in range(1, 6)])
+    '''
     assert _find_modulenames_set(None, "import\tm1") == {"m1"}
     assert _find_modulenames_set(None, "#import\tm1") == set()
     assert _find_modulenames_set(None, " import\t m1,m2") == {"m1", "m2"}
