@@ -70,6 +70,9 @@ class Logic:
             "tabulate": "tabulate",
         }
 
+        self.count_found_files_overcount_limit = 40      # if 0 - unlimited!
+                                                # wo limitation if you pass global path with many files the tool can silently stop!
+
         self.clear_data()
         self.main()
 
@@ -86,10 +89,9 @@ class Logic:
         self.count_python_versions = 0
         self.count_found_files = 0
         self.count_found_files_overcount = False
-        self.count_found_files_overcount_limit = 40      # if 0 - unlimited!
-                                                # wo limitation if you pass global path with many files the tool can silently stop!
         self.count_found_modules = 0
         self.count_found_modules_bad = 0
+        return
 
 
     def main(self):
@@ -106,6 +108,7 @@ class Logic:
         if not access_this_module_as_import: print("*"*80)
         return
 
+
     def apply_path(self):
         path = self.path_link_received
         if not path.exists():
@@ -120,6 +123,7 @@ class Logic:
 
         os.chdir(self.path_dir_applied)
         return
+
 
     def generate_modules_in_system_dict(self):
         self.modules_in_system_dict = {}
