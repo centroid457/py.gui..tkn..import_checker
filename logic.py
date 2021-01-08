@@ -251,25 +251,6 @@ class Logic:
                 if not access_this_module_as_import: print(modulename_wo_relative)
         return set(modulenames_list_wo_relative)
 
-    # todo: make assertions!
-
-    # test correct parsing
-    assert _split_modulenames_set(None, "m1,m2 ,m3,    m4,\tm5") == set([f"m{i}" for i in range(1, 6)])
-    '''
-    assert _find_modulenames_set(None, "import\tm1") == {"m1"}
-    assert _find_modulenames_set(None, "#import\tm1") == set()
-    assert _find_modulenames_set(None, " import\t m1,m2") == {"m1", "m2"}
-    assert _find_modulenames_set(None, " import\t m1 as m2") == {"m1"}
-    assert _find_modulenames_set(None, " from m1 import m2 as m3") == {"m1"}
-    assert _find_modulenames_set(None, "#from m1 import m2 as m3") == set()
-    assert _find_modulenames_set(None, "import m1 #comment import m2") == {"m1"}
-    # relative import (in packages)
-    assert _find_modulenames_set(None, " from .. import m1 #comment import m2") == set()
-    assert _find_modulenames_set(None, " from ..m1 import m2 #comment import m3") == set()
-    assert _find_modulenames_set(None, " from . import m1 #comment import m2") == set()
-    assert _find_modulenames_set(None, " from .m1 import m2 #comment import m3") == set()
-    assert _find_modulenames_set(None, " from m1.m2 import m3 #comment import m4") == {"m1"}
-    '''
 
     def rank_modules_dict(self):
         self.ranked_modules_dict = {}
@@ -317,6 +298,24 @@ class Logic:
 if __name__ == '__main__':
     access_this_module_as_import = False
     sample = Logic()
+
+    # test correct parsing
+    assert sample._split_modulenames_set("m1,m2 ,m3,    m4,\tm5") == set([f"m{i}" for i in range(1, 6)])
+
+    assert sample._find_modulenames_set("import\tm1") == {"m1"}
+    assert sample._find_modulenames_set("#import\tm1") == set()
+    assert sample._find_modulenames_set(" import\t m1,m2") == {"m1", "m2"}
+    assert sample._find_modulenames_set(" import\t m1 as m2") == {"m1"}
+    assert sample._find_modulenames_set(" from m1 import m2 as m3") == {"m1"}
+    assert sample._find_modulenames_set("#from m1 import m2 as m3") == set()
+    assert sample._find_modulenames_set("import m1 #comment import m2") == {"m1"}
+    # relative import (in packages)
+    assert sample._find_modulenames_set(" from .. import m1 #comment import m2") == set()
+    assert sample._find_modulenames_set(" from ..m1 import m2 #comment import m3") == set()
+    assert sample._find_modulenames_set(" from . import m1 #comment import m2") == set()
+    assert sample._find_modulenames_set(" from .m1 import m2 #comment import m3") == set()
+    assert sample._find_modulenames_set(" from m1.m2 import m3 #comment import m4") == {"m1"}
+
     print("*"*80)
     print(f"[{sample.count_python_versions}]FOUND VERSIONS={sample.python_versions_found}")
     print()
