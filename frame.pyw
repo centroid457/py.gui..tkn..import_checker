@@ -45,7 +45,7 @@ class Gui(Frame):
         self.apply_path(path_link)
 
         super().__init__()
-        self.root = parent.winfo_toplevel()
+        self.root = self.winfo_toplevel()
         self.parent = parent
         self.create_gui_structure()
 
