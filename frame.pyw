@@ -63,24 +63,31 @@ class Gui(Frame):
 
 
     def gui_root_configure(self):
-        # ROOT_METHODS
+        # ROOT_METHODS = many of them can named with WM! geometry=WM_geometry
         self.root.title("IMPORT CHECHER")
-        self.root.geometry("800x500+100+100")   #("WINXxWINY+ShiftX+ShiftY")
-        self.root.resizable(width=True, height=True)	# заблокировать возможность изменения размеров границ! В том числе на весь экран!!!
-        #self.root.maxsize(1000, 1000)
-        self.root.minsize(300, 300)
-        self.root.overrideredirect(False)
-        self.root.state('zoomed')     # normal/zoomed/iconic/withdrawn
         # self.root.iconbitmap(r'ERROR.ico')    =ONLY FILENAME! NO fileobject
-        #self.root.protocol('WM_DELETE_WINDOW', self.program_exit)  # intersept gui exit()
+        # self.root.protocol('WM_DELETE_WINDOW', self.program_exit)  # intersept gui exit()
 
-        # WM_ATTRIBUTES
+        self.root.geometry("800x500+100+100")           #("WINXxWINY+ShiftX+ShiftY")
+        # self.root.geometry("800x500")                 #("WINXxWINY")
+        # self.root.geometry("+100+100")                #("+ShiftX+ShiftY")
+        self.root.resizable(width=True, height=True)    # block resizable! even if fullscreen!!!
+        # self.root.maxsize(1000, 1000)
+        self.root.minsize(300, 300)
+
+        self.root.overrideredirect(False)   # borderless window, without standard OS header and boarders
+        self.root.state('zoomed')   # normal/zoomed/iconic/withdrawn
+        # self.root.iconify()       # ICONIFY/deiconify = hide down window, minimize
+        # self.root.withdraw()      # WITHDRAW/deiconify = hide out window, don't show anywhere
+        # self.root.deiconify()     # restore window
+
+        # WM_ATTRIBUTES = root.wm_attributes / root.attributes
         self.root.wm_attributes("-topmost", False)
-        self.root.wm_attributes("-disabled", False)
+        self.root.wm_attributes("-disabled", False)     # disable whole gui
         self.root.wm_attributes("-fullscreen", False)
         self.root.wm_attributes("-transparentcolor", None)
 
-        # WGT_PARAMETERS
+        # WGT_PARAMETERS = ROOT.CONFIG(bg="red") / ROOT["bg"]="red"
         # self.root["bg"] = "#009900"
         self.root["fg"] = None
         self.root["width"] = None
