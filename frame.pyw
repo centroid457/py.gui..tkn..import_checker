@@ -56,11 +56,9 @@ class Gui(Frame):
         if access_this_module_as_import and self.logic.count_found_modules_bad == 0:
             self.root.after(1000, self.root.destroy)
 
-
     def apply_path(self, path_link):
         self.path_link_applied = path_link
         self.logic = logic.Logic(self.path_link_applied)
-
 
     def gui_root_configure(self):
         # ROOT_METHODS = many of them can named with WM! geometry=WM_geometry
@@ -96,7 +94,6 @@ class Gui(Frame):
         self.root["relief"] = "raised"  # "flat"/"sunken"/"raised"/"groove"/"ridge"
         self.root["borderwidth"] = 5
 
-
     def window_move_to_center(self):
         self.root.update_idletasks()
         window_width = self.root.winfo_width()
@@ -106,7 +103,6 @@ class Gui(Frame):
         x = (screen_width - window_width) / 2
         y = (screen_height - window_height) / 2
         self.root.geometry('+%d+%d' % (x, y))
-
 
     # #################################################
     # FRAMES
@@ -225,7 +221,6 @@ class Gui(Frame):
             connection_available = True
         return connection_available
 
-
     # #################################################
     # frame VERSIONS
     def fill_frame_versions(self, parent):
@@ -282,7 +277,6 @@ class Gui(Frame):
             if selected_version.startswith(ver):
                 self.status_versions["text"] = self.logic.python_versions_found[ver][1]
         return
-
 
     # #################################################
     # frame FILES
@@ -511,7 +505,6 @@ class Gui(Frame):
                     f"stderr={my_stderr}"
             messagebox.showinfo(title='INFO', message=txt)
         return
-
 
     # #################################################
     # rest
