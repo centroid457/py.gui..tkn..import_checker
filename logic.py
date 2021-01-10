@@ -33,13 +33,12 @@ import subprocess
 from time import sleep
 from pathlib import Path
 
-
-filefullname_as_link_path_default = __file__
+path_link_default = __file__
 access_this_module_as_import = True  # at first need true to correct assertions!
 
 
 class Logic:
-    def __init__(self, path=filefullname_as_link_path_default):
+    def __init__(self, path=path_link_default):
         # INPUT
         self.path_link_received = Path(path)
 
