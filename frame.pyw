@@ -28,7 +28,7 @@ def start_gui(path_link=None):
         path_link = path_link_default
 
     root = Tk()
-    app = Gui(parent=root, path_link=path_link)
+    app = Gui(parent=root, path_link=path_link, close_if_ok_after=1)
 
     app.mainloop()
 
