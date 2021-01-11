@@ -53,7 +53,7 @@ class Gui(Frame):
         self.window_move_to_center()
 
         if access_this_module_as_import and self.logic.count_found_modules_bad == 0:
-            self.root.after(1000, self.root.destroy)
+            self.root.after(500, self.root.destroy)
         return
 
     def apply_path(self, path_link):
