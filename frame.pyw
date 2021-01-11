@@ -160,8 +160,7 @@ class Gui(Frame):
         return
 
     def color_bg_mainframe(self):
-        if self.root == self.parent:
-            self.parent["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
+        self.parent["bg"] = "#009900" if self.logic.count_found_modules_bad == 0 else "#FF0000"
 
     # #################################################
     # frame INFO
