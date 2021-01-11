@@ -41,7 +41,7 @@ class Gui(Frame):
     parent - object in which you want to place this Execution
     path_link - you know!
     """
-    def __init__(self, parent=None, path_link=None):
+    def __init__(self, parent=None, path_link=None, close_if_ok_after=0):
         self.apply_path(path_link)
 
         super().__init__()
@@ -52,8 +52,8 @@ class Gui(Frame):
         self.gui_root_configure()
         self.window_move_to_center()
 
-        if access_this_module_as_import and self.logic.count_found_modules_bad == 0:
-            self.root.after(500, self.root.destroy)
+        if close_if_ok_after > 0 and self.logic.count_found_modules_bad == 0:
+            self.root.after(close_if_ok_after*1000, self.root.destroy)
         return
 
     def apply_path(self, path_link):
