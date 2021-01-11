@@ -49,18 +49,22 @@ class Gui(Frame):
         self.parent = parent
         self.create_gui_structure()
 
-        if self.root == self.parent:      # if it is independent window (without insertion in outside project)
-            self.gui_root_configure()
-            self.window_move_to_center()
+        self.gui_root_configure()
+        self.window_move_to_center()
 
         if access_this_module_as_import and self.logic.count_found_modules_bad == 0:
             self.root.after(1000, self.root.destroy)
+        return
 
     def apply_path(self, path_link):
         self.path_link_applied = path_link
         self.logic = logic.Logic(self.path_link_applied)
+        return
 
     def gui_root_configure(self):
+        if self.root != self.parent:      # if it is independent window (without insertion in outside project)
+            return
+
         # IF YOU WANT TO DISABLE - CHANGE TO NONE or COMMENT OUT
         # ROOT_METHODS = many of them can named with WM! geometry=WM_geometry
         self.root.title("IMPORT CHECHER")
@@ -95,8 +99,12 @@ class Gui(Frame):
         self.root["relief"] = "raised"  # "flat"/"sunken"/"raised"/"groove"/"ridge"
         self.root["borderwidth"] = 5
         # self.root["cursor"] = None   # 'watch'=the best / "xterm" / "arrow"=standard
+        return
 
     def window_move_to_center(self):
+        if self.root != self.parent:      # if it is independent window (without insertion in outside project)
+            return
+
         self.root.update_idletasks()
         window_width = self.root.winfo_width()
         window_height = self.root.winfo_height()
@@ -105,6 +113,7 @@ class Gui(Frame):
         x = (screen_width - window_width) / 2
         y = (screen_height - window_height) / 2
         self.root.geometry('+%d+%d' % (x, y))
+        return
 
     # #################################################
     # FRAMES
@@ -112,8 +121,8 @@ class Gui(Frame):
     def create_gui_structure(self):
         self.color_bg_mainframe()
         self.parent.columnconfigure(0, weight=1)
-        self.parent.rowconfigure([0, 1, ], weight=0)          # INFO, CONNECTION
-        self.parent.rowconfigure([2, 3, ], weight=1)        # VERSIONS, FILES
+        self.parent.rowconfigure([0, 1, ], weight=0)       # INFO, CONNECTION
+        self.parent.rowconfigure([2, 3, ], weight=1)       # VERSIONS, FILES
         self.parent.rowconfigure([4, ], weight=10)         # MODULES
         pad_external = 2
 
