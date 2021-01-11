@@ -69,10 +69,10 @@ class Logic:
         }
 
         self.count_found_files_overcount_limit = 40      # if 0 - unlimited!
-                                                # wo limitation if you pass global path with many files the tool can silently stop!
+        # wo limitation if you pass global path with many files the tool can silently stop!
 
         self.clear_data()
-        self.main()
+        self.create_data()
 
     def clear_data(self):
         # SETS/DICTS/LISTS
@@ -81,7 +81,7 @@ class Logic:
         self.python_files_found_dict = {}
         self.modules_found_infiles = set()
         self.modules_found_infiles_bad = set()
-        self.ranked_modules_dict = {}       #{modulename: [CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]}
+        self.ranked_modules_dict = {}       # {modulename: [CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]}
 
         # COUNTERS
         self.count_python_versions = 0
@@ -91,8 +91,7 @@ class Logic:
         self.count_found_modules_bad = 0
         return
 
-
-    def main(self):
+    def create_data(self):
         self.apply_path()
         self.generate_modules_in_system_dict()
         self.find_python_interpreters()
@@ -105,13 +104,12 @@ class Logic:
         if not access_this_module_as_import: print("*"*80)
         return
 
-
     def apply_path(self, path=None):
-        if path != None:
+        if path is not None:
             # if send path from outside, reload all data!
             self.path_link_received = Path(path)
             self.clear_data()
-            self.main()
+            self.create_data()
             return
 
         path = self.path_link_received
@@ -129,7 +127,6 @@ class Logic:
         os.chdir(self.path_dir_applied)
         return
 
-
     def generate_modules_in_system_dict(self):
         self.modules_in_system_dict = {}
         # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
@@ -141,7 +138,6 @@ class Logic:
             path_name = Path(match).name
             self.modules_in_system_dict.update({module_in_system.name:path_name})
         return
-
 
     def find_python_interpreters(self):
         self.python_versions_found = {}
@@ -169,23 +165,18 @@ class Logic:
         self.count_python_versions = len(self.python_versions_found)
         return
 
-
     def _get_exe_version(self, exe_path):
         full_version_sp = subprocess.Popen([exe_path, "-VV"], text=True, stdout=subprocess.PIPE)
         full_version_list = full_version_sp.communicate()[0].split(" ")
         full_version = full_version_list[1] + "x" + full_version_list[-3]
         return full_version
 
-
     def find_all_python_files(self):
         self.python_files_found_dict = {}
         path = self.path_dir_applied
         for file_name in path.rglob(pattern="*.py*"):
-            if (#file_name != os.path.basename(__file__) and
-                os.path.splitext(file_name)[1] in (".py", ".pyw")
-                #and file_name.name != "__init__.py"
-            ):
-                #print(file_name)
+            if os.path.splitext(file_name)[1] in (".py", ".pyw"):
+                # print(file_name)
                 self.count_found_files += 1
                 if self.count_found_files == self.count_found_files_overcount_limit:
                     # print("TOO MANY FILES!!!")
@@ -194,7 +185,6 @@ class Logic:
                 self.python_files_found_dict.update({file_name: set()})
                 if not access_this_module_as_import: print(file_name)
         return
-
 
     def find_all_importing_modules(self):
         self.modules_found_infiles = set()
@@ -213,7 +203,6 @@ class Logic:
 
         self.count_found_modules = len(self.modules_found_infiles)
         return
-
 
     def _find_modulenames_set(self, line):
         # find line with import-statements
@@ -250,7 +239,6 @@ class Logic:
                 if not access_this_module_as_import: print(modulename_wo_relative)
         return set(modulenames_list_wo_relative)
 
-
     def rank_modules_dict(self):
         self.ranked_modules_dict = {}
         module_set = self.modules_found_infiles
@@ -275,19 +263,17 @@ class Logic:
         result = [can_import, short_pathname, detected_installname]
         return result
 
-
     def _sort_ranked_modules_dict(self):
         # sort dict with found modules
         sorted_dict_keys_list = sorted(self.ranked_modules_dict, key=lambda key: key.lower())
         self.ranked_modules_dict = dict(zip(sorted_dict_keys_list, [self.ranked_modules_dict[value] for value in sorted_dict_keys_list]))
-        #print(ranked_modules_dict)
+        # print(ranked_modules_dict)
         return
-
 
     def generate_modules_found_infiles_bad(self):
         self.modules_found_infiles_bad = set()
         for m in self.ranked_modules_dict:
-            if self.ranked_modules_dict[m][0] == False:
+            if not self.ranked_modules_dict[m][0]:
                 self.modules_found_infiles_bad.update({m})
 
         self.count_found_modules_bad = len(self.modules_found_infiles_bad)
