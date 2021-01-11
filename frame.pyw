@@ -168,6 +168,7 @@ class Gui(Frame):
         btn = Button(parent, text=f"skip\n checking\n modules")
         btn["bg"] = "#aaaaFF"
         btn["command"] = self.root.destroy
+        btn["state"] = None if self.root == self.parent else "disabled"
         btn.pack(side="left")
 
         self.lable_frame_info = Label(parent)
