@@ -23,7 +23,7 @@ else:
     raise ValueError("too many arguments!!!")
 
 
-def start_test(path_link=None):
+def start_gui(path_link=None):
     if path_link == None:
         path_link = path_link_default
 
@@ -536,7 +536,7 @@ class Gui(Frame):
 if __name__ == '__main__':
     access_this_module_as_import = False
     import logic
-    start_test()
+    start_gui()
 else:
     from . import logic
     access_this_module_as_import = True
