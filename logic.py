@@ -39,10 +39,9 @@ access_this_module_as_import = True  # at first need true to correct assertions!
 
 class Logic:
     def __init__(self, path=path_link_default):
-        # INPUT
-        self.path_link_received = Path(path)
-
         # SETTINGS
+        self.count_found_files_overcount_limit = 40      # if 0 - unlimited!
+        # wo limitation if you pass global path with many files the tool can silently stop!
         self.MODULES_CAN_INSTALL = {
             # this names will use as known modules (which need installation in system)
             # in not installed modules set you can see which of then can be definitely installed
@@ -68,11 +67,31 @@ class Logic:
             "tabulate": "tabulate",
         }
 
-        self.count_found_files_overcount_limit = 40      # if 0 - unlimited!
-        # wo limitation if you pass global path with many files the tool can silently stop!
+        self.apply_path(path=path)
+        return
 
-        self.clear_data()
-        self.create_data()
+    def apply_path(self, path=None):
+        if path is not None:
+            # if send path from outside, reload all data!
+            self.path_link_received = Path(path)
+            self.clear_data()
+            self.create_data()
+            return
+
+        path = self.path_link_received
+        if not path.exists():
+            raise ValueError("Path not exists!!!")
+
+        # by default find all modules in one level up (from current directory) with all subdirectories
+        if path.is_dir():                             # if link was a directory
+            self.path_dir_applied = Path(path)
+        elif path.parent == Path(__file__).parent:    # if link is this file (direct start)
+            self.path_dir_applied = Path(path).parent.parent
+        else:
+            self.path_dir_applied = Path(path).parent
+
+        os.chdir(self.path_dir_applied)
+        return
 
     def clear_data(self):
         # SETS/DICTS/LISTS
@@ -102,29 +121,6 @@ class Logic:
         self.rank_modules_dict()
         self.generate_modules_found_infiles_bad()
         if not access_this_module_as_import: print("*"*80)
-        return
-
-    def apply_path(self, path=None):
-        if path is not None:
-            # if send path from outside, reload all data!
-            self.path_link_received = Path(path)
-            self.clear_data()
-            self.create_data()
-            return
-
-        path = self.path_link_received
-        if not path.exists():
-            raise ValueError("Path not exists!!!")
-
-        # by default find all modules in one level up (from current directory) with all subdirectories
-        if path.is_dir():                             # if link was a directory
-            self.path_dir_applied = Path(path)
-        elif path.parent == Path(__file__).parent:    # if link is this file (direct start)
-            self.path_dir_applied = Path(path).parent.parent
-        else:
-            self.path_dir_applied = Path(path).parent
-
-        os.chdir(self.path_dir_applied)
         return
 
     def generate_modules_in_system_dict(self):
