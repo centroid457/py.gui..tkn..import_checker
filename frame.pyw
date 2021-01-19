@@ -272,8 +272,16 @@ class Gui(Frame):
     def fill_listbox_versions(self):
         self.listbox_versions.delete(0, self.listbox_versions.size()-1)
         versions_dict = self.logic.python_versions_found
+
+        ver_i = 0
         for ver in versions_dict:
-            self.listbox_versions.insert('end', ver.ljust(10, " ") + versions_dict[ver][0].ljust(14, " ") + versions_dict[ver][1])
+            ver_i += 1
+            self.listbox_versions.insert('end',
+                                         str(ver_i).ljust(3, " ") +
+                                         ver.ljust(10, " ") +
+                                         versions_dict[ver][0].ljust(14, " ") +
+                                         versions_dict[ver][1]
+                                         )
             if ver.endswith("*"):
                 if self.logic.count_found_modules_bad == 0:
                     self.listbox_versions.itemconfig('end', bg="#55FF55")
@@ -282,12 +290,13 @@ class Gui(Frame):
         return
 
     def change_status_versions(self, event):
-        #print(self.listbox_versions.curselection())
+        # print(self.listbox_versions.curselection())
         selected_list = (0,) if self.listbox_versions.curselection() == () else self.listbox_versions.curselection()
         selected_version = self.listbox_versions.get(selected_list)
         for ver in self.logic.python_versions_found:
-            if selected_version.startswith(ver):
+            if ver in selected_version:
                 self.status_versions["text"] = self.logic.python_versions_found[ver][1]
+                return
         return
 
     # #################################################
