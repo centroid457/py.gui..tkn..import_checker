@@ -277,7 +277,6 @@ class Gui(Frame):
         for ver in versions_dict:
             ver_i += 1
             self.listbox_versions.insert('end',
-                                         str(ver_i).ljust(3, " ") +
                                          ver.ljust(10, " ") +
                                          versions_dict[ver][0].ljust(14, " ") +
                                          versions_dict[ver][1]
