@@ -281,9 +281,7 @@ class Gui(Frame):
         self.listbox_versions.delete(0, self.listbox_versions.size()-1)
         versions_dict = self.logic.python_versions_found
 
-        ver_i = 0
         for ver in versions_dict:
-            ver_i += 1
             self.listbox_versions.insert('end',
                                          ver.ljust(10, " ") +
                                          versions_dict[ver][0].ljust(14, " ") +
