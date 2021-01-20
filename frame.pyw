@@ -120,42 +120,44 @@ class Gui(Frame):
     # FRAMES
     # #################################################
     def create_gui_structure(self):
+        self.COLOR_BUTTONS = "#aaaaFF"
+        PAD_EXTERNAL = 2
+
         self.color_bg_mainframe()
         self.parent.columnconfigure(0, weight=1)
         self.parent.rowconfigure([0, 1, ], weight=0)       # INFO, CONNECTION
         self.parent.rowconfigure([2, 3, ], weight=1)       # VERSIONS, FILES
         self.parent.rowconfigure([4, ], weight=10)         # MODULES
-        pad_external = 2
 
         # ======= FRAME-0 (INFO) ====================
         self.frame_info = Frame(self.parent)
-        self.frame_info.grid(row=0, sticky="nsew", padx=pad_external, pady=2)
+        self.frame_info.grid(row=0, sticky="nsew", padx=PAD_EXTERNAL, pady=2)
 
         self.fill_frame_info(self.frame_info)
 
         # ======= FRAME-1 (CONNECTION) ====================
         self.frame_connection = Frame(self.parent)
-        self.frame_connection.grid(row=1, sticky="nsew", padx=pad_external, pady=1)
+        self.frame_connection.grid(row=1, sticky="nsew", padx=PAD_EXTERNAL, pady=1)
 
         self.fill_frame_connection(self.frame_connection)
 
         # ======= FRAME-2 (VERSIONS) ====================
         self.frame_versions = Frame(self.parent)
         self.frame_versions.pack_propagate(0)
-        self.frame_versions.grid(row=2, sticky="snew", padx=pad_external, pady=2)
+        self.frame_versions.grid(row=2, sticky="snew", padx=PAD_EXTERNAL, pady=2)
 
         self.fill_frame_versions(self.frame_versions)
 
         # ======= FRAME-3 (FILES) ====================
         self.frame_files = Frame(self.parent)
         self.frame_files.pack_propagate(1)
-        self.frame_files.grid(row=3, sticky="snew", padx=pad_external, pady=2)
+        self.frame_files.grid(row=3, sticky="snew", padx=PAD_EXTERNAL, pady=2)
 
         self.fill_frame_files(self.frame_files)
 
         # ======= FRAME-4 (MODULES) ====================
         self.frame_modules = Frame(self.parent)
-        self.frame_modules.grid(row=4, sticky="snew", padx=pad_external, pady=2)
+        self.frame_modules.grid(row=4, sticky="snew", padx=PAD_EXTERNAL, pady=2)
 
         self.fill_frame_modules(self.frame_modules)
         return
@@ -167,7 +169,7 @@ class Gui(Frame):
     # frame INFO
     def fill_frame_info(self, parent):
         btn = Button(parent, text=f"skip\n checking\n modules")
-        btn["bg"] = "#aaaaFF"
+        btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = self.root.destroy
         btn["state"] = None if self.root == self.parent else "disabled"
         btn.pack(side="left")
@@ -191,7 +193,7 @@ class Gui(Frame):
     # frame CONNECTION
     def fill_frame_connection(self, parent):
         btn = Button(parent, text="reCHECK Connection")
-        btn["bg"] = "#aaaaFF"
+        btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = lambda: Thread(target=self.btn_check_connection).start()
         btn.pack(side="left")
         self.btn_connection = btn
@@ -259,7 +261,7 @@ class Gui(Frame):
         frame_status_version.grid(column=0, columnspan=2, row=2, sticky="ew")
 
         btn = Button(frame_status_version, text=f"RESTART by selected")
-        btn["bg"] = "#aaaaFF"
+        btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
         btn.pack(side="left")
 
@@ -323,12 +325,12 @@ class Gui(Frame):
         frame_status_files.grid(column=0, columnspan=2, row=2, sticky="ew")
 
         btn = Button(frame_status_files, text=f"NEW FileAsLINK")
-        btn["bg"] = "#aaaaFF"
+        btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = lambda: self.change_path(mode="file")
         btn.pack(side="left")
 
         btn = Button(frame_status_files, text=f"NEW PATH")
-        btn["bg"] = "#aaaaFF"
+        btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = lambda: self.change_path(mode="folder")
         btn.pack(side="left")
 
@@ -337,7 +339,7 @@ class Gui(Frame):
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
         btn = Button(frame_status_files, text=f"TRY without overcount")
-        btn["bg"] = "#aaaaFF"
+        btn["bg"] = self.COLOR_BUTTONS
         btn["state"] = "disabled"
         #btn["command"] = lambda: self.logic.count_found_files_overcount_limit = 0;
         btn.pack(side="right")
@@ -429,17 +431,17 @@ class Gui(Frame):
         lbl.pack(side="left")
 
         btn_module_install = Button(frame_status_modules, text=f"INSTALL")
-        btn_module_install["bg"] = "#aaaaFF"
+        btn_module_install["bg"] = self.COLOR_BUTTONS
         btn_module_install["command"] = lambda: self.btn_module_action("install")
         btn_module_install.pack(side="left")
 
         btn_module_upgrade = Button(frame_status_modules, text=f"upgrade")
-        btn_module_upgrade["bg"] = "#aaaaFF"
+        btn_module_upgrade["bg"] = self.COLOR_BUTTONS
         btn_module_upgrade["command"] = lambda: self.btn_module_action("upgrade")
         btn_module_upgrade.pack(side="left")
 
         btn_module_delete = Button(frame_status_modules, text=f"DELETE")
-        btn_module_delete["bg"] = "#aaaaFF"
+        btn_module_delete["bg"] = self.COLOR_BUTTONS
         btn_module_delete["command"] = lambda: self.btn_module_action("delete")
         btn_module_delete.pack(side="left")
 
