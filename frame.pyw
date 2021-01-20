@@ -47,6 +47,7 @@ class Gui(Frame):
         super().__init__()
         self.root = self.winfo_toplevel()
         self.parent = parent
+
         self.create_gui_structure()
 
         self.gui_root_configure()
