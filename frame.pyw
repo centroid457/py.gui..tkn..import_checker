@@ -296,13 +296,13 @@ class Gui(Frame):
         return
 
     def change_status_versions(self, event):
-        # print(self.listbox_versions.curselection())
-        selected_list = (0,) if self.listbox_versions.curselection() == () else self.listbox_versions.curselection()
-        selected_item = self.listbox_versions.get(selected_list)
-        for ver in self.logic.python_versions_found:
-            if ver in selected_item:
-                self.status_versions["text"] = self.logic.python_versions_found[ver][1]
-                return
+        if self.listbox_versions.curselection() != ():
+            selected_list = self.listbox_versions.curselection()
+            selected_item = self.listbox_versions.get(selected_list)
+            for ver in self.logic.python_versions_found:
+                if ver in selected_item:
+                    self.status_versions["text"] = self.logic.python_versions_found[ver][1]
+                    return
         return
 
     # #################################################
@@ -383,10 +383,10 @@ class Gui(Frame):
         return
 
     def change_status_files(self, event):
-        #print(self.listbox_files.curselection())
-        selected_list = (0,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
-        selected_item = self.listbox_files.get(*selected_list)
-        self.status_files["text"] = self.logic.python_files_found_dict[Path(selected_item.replace(" *", ""))]
+        if self.listbox_files.curselection() != ():
+            selected_list = self.listbox_files.curselection()
+            selected_item = self.listbox_files.get(*selected_list)
+            self.status_files["text"] = self.logic.python_files_found_dict[Path(selected_item.replace(" *", ""))]
         return
 
     def change_path(self, mode):
@@ -498,12 +498,12 @@ class Gui(Frame):
         return
 
     def change_status_modules(self, event):
-        #print(self.listbox_modules.curselection())
-        selected_list = (0,) if self.listbox_modules.curselection() == () else self.listbox_modules.curselection()
-        selected_data = self.listbox_modules.get(*selected_list)
-        selected_module_w_spaces = selected_data.split("\t")[0]
-        self.selected_module = re.sub(r"\s", "", selected_module_w_spaces)
-        self.status_modules["text"] = self.selected_module
+        if self.listbox_modules.curselection() != ():
+            selected_list = self.listbox_modules.curselection()
+            selected_data = self.listbox_modules.get(*selected_list)
+            selected_module_w_spaces = selected_data.split("\t")[0]
+            self.selected_module = re.sub(r"\s", "", selected_module_w_spaces)
+            self.status_modules["text"] = self.selected_module
         return
 
     def btn_module_action(self, mode):
