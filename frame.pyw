@@ -480,9 +480,10 @@ class Gui(Frame):
     def fill_listbox_modules(self):
         self.listbox_clear(self.listbox_modules)
 
-        for module in self.logic.ranked_modules_dict:
+        the_dict = self.logic.ranked_modules_dict
+        for module in the_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
-            can_import, short_pathname, detected_installname = self.logic.ranked_modules_dict[module]
+            can_import, short_pathname, detected_installname = the_dict[module]
             bad_module_index = 0
             if can_import:
                 self.listbox_modules.insert('end', "%-20s \t[%s]" % (module, short_pathname))
