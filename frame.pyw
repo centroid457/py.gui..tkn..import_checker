@@ -278,14 +278,14 @@ class Gui(Frame):
         return
 
     def fill_listbox_versions(self):
-        self.listbox_versions.delete(0, self.listbox_versions.size()-1)
-        versions_dict = self.logic.python_versions_found
+        self.listbox_clear(self.listbox_versions)
 
-        for ver in versions_dict:
+        the_dict = self.logic.python_versions_found
+        for ver in the_dict:
             self.listbox_versions.insert('end',
                                          ver.ljust(10, " ") +
-                                         versions_dict[ver][0].ljust(14, " ") +
-                                         versions_dict[ver][1]
+                                         the_dict[ver][0].ljust(14, " ") +
+                                         the_dict[ver][1]
                                          )
             if ver.endswith("*"):
                 if self.logic.count_found_modules_bad == 0:
@@ -370,12 +370,13 @@ class Gui(Frame):
         return
 
     def fill_listbox_files(self):
-        self.listbox_files.delete(0, self.listbox_files.size()-1)
-        files_dict = self.logic.python_files_found_dict
-        for file in files_dict:
+        self.listbox_clear(self.listbox_files)
+
+        the_dict = self.logic.python_files_found_dict
+        for file in the_dict:
             file_str = str(file) + " *" if file == Path(self.path_link_applied) else file
             self.listbox_files.insert('end', file_str)
-            if not files_dict[file].isdisjoint(self.logic.modules_found_infiles_bad):
+            if not the_dict[file].isdisjoint(self.logic.modules_found_infiles_bad):
                 self.listbox_files.itemconfig('end', bg="#FF9999")
         return
 
@@ -477,7 +478,8 @@ class Gui(Frame):
         return
 
     def fill_listbox_modules(self):
-        self.listbox_modules.delete(0, self.listbox_modules.size()-1)
+        self.listbox_clear(self.listbox_modules)
+
         for module in self.logic.ranked_modules_dict:
             #[CanImport=True/False, Placement=ShortPathName, InstallNameIfDetected]
             can_import, short_pathname, detected_installname = self.logic.ranked_modules_dict[module]
@@ -545,6 +547,10 @@ class Gui(Frame):
 
     # #################################################
     # rest
+    def listbox_clear(self, listbox):
+        listbox.delete(0, listbox.size()-1)
+        return
+
     def program_restart(self, python_exe=sys.executable, file=None):
         """Restarts the current program.
         Note: this function does not return. Any cleanup action (like
