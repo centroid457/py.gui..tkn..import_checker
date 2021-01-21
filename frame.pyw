@@ -297,9 +297,9 @@ class Gui(Frame):
     def change_status_versions(self, event):
         # print(self.listbox_versions.curselection())
         selected_list = (0,) if self.listbox_versions.curselection() == () else self.listbox_versions.curselection()
-        selected_version = self.listbox_versions.get(selected_list)
+        selected_item = self.listbox_versions.get(selected_list)
         for ver in self.logic.python_versions_found:
-            if ver in selected_version:
+            if ver in selected_item:
                 self.status_versions["text"] = self.logic.python_versions_found[ver][1]
                 return
         return
@@ -382,8 +382,8 @@ class Gui(Frame):
     def change_status_files(self, event):
         #print(self.listbox_files.curselection())
         selected_list = (0,) if self.listbox_files.curselection() == () else self.listbox_files.curselection()
-        selected_filename = self.listbox_files.get(*selected_list)
-        self.status_files["text"] = self.logic.python_files_found_dict[Path(selected_filename.replace(" *", ""))]
+        selected_item = self.listbox_files.get(*selected_list)
+        self.status_files["text"] = self.logic.python_files_found_dict[Path(selected_item.replace(" *", ""))]
         return
 
     def change_path(self, mode):
