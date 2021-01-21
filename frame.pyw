@@ -278,20 +278,21 @@ class Gui(Frame):
         return
 
     def fill_listbox_versions(self):
-        self.listbox_clear(self.listbox_versions)
+        the_listbox = self.listbox_versions
+        self.listbox_clear(the_listbox)
 
         the_dict = self.logic.python_versions_found
         for ver in the_dict:
-            self.listbox_versions.insert('end',
+            the_listbox.insert('end',
                                          ver.ljust(10, " ") +
                                          the_dict[ver][0].ljust(14, " ") +
                                          the_dict[ver][1]
                                          )
             if ver.endswith("*"):
                 if self.logic.count_found_modules_bad == 0:
-                    self.listbox_versions.itemconfig('end', bg="#55FF55")
+                    the_listbox.itemconfig('end', bg="#55FF55")
                 else:
-                    self.listbox_versions.itemconfig('end', bg="#FF9999")
+                    the_listbox.itemconfig('end', bg="#FF9999")
         return
 
     def change_status_versions(self, event):
@@ -370,14 +371,15 @@ class Gui(Frame):
         return
 
     def fill_listbox_files(self):
-        self.listbox_clear(self.listbox_files)
+        the_listbox = self.listbox_files
+        self.listbox_clear(the_listbox)
 
         the_dict = self.logic.python_files_found_dict
         for file in the_dict:
             file_str = str(file) + " *" if file == Path(self.path_link_applied) else file
-            self.listbox_files.insert('end', file_str)
+            the_listbox.insert('end', file_str)
             if not the_dict[file].isdisjoint(self.logic.modules_found_infiles_bad):
-                self.listbox_files.itemconfig('end', bg="#FF9999")
+                the_listbox.itemconfig('end', bg="#FF9999")
         return
 
     def change_status_files(self, event):
@@ -478,7 +480,8 @@ class Gui(Frame):
         return
 
     def fill_listbox_modules(self):
-        self.listbox_clear(self.listbox_modules)
+        the_listbox = self.listbox_modules
+        self.listbox_clear(the_listbox)
 
         the_dict = self.logic.ranked_modules_dict
         for module in the_dict:
@@ -486,11 +489,11 @@ class Gui(Frame):
             can_import, short_pathname, detected_installname = the_dict[module]
             bad_module_index = 0
             if can_import:
-                self.listbox_modules.insert('end', "%-20s \t[%s]" % (module, short_pathname))
+                the_listbox.insert('end', "%-20s \t[%s]" % (module, short_pathname))
             else:
-                self.listbox_modules.insert(bad_module_index, "%-20s \t[%s]" % (module, short_pathname))
+                the_listbox.insert(bad_module_index, "%-20s \t[%s]" % (module, short_pathname))
                 color = "#FF9999" if detected_installname is None else "#FFcc99"
-                self.listbox_modules.itemconfig(bad_module_index, bg=color)
+                the_listbox.itemconfig(bad_module_index, bg=color)
                 bad_module_index += 1
         return
 
