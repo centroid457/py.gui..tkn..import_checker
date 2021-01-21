@@ -252,7 +252,7 @@ class Gui(Frame):
                         f"Active .exe=[{sys.executable}]"
         lable.pack()
 
-        # BOADY --------------------------------------------------------------
+        # BODY --------------------------------------------------------------
         self.listbox_versions = Listbox(parent, height=4, bg=None, font=('Courier', 9))
         self.listbox_versions.grid(column=0, row=1, sticky="snew")
 
