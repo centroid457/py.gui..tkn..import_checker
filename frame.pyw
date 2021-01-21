@@ -262,15 +262,15 @@ class Gui(Frame):
         self.listbox_versions['yscrollcommand'] = self.scrollbar.set
 
         # STATUS -------------------------------------------------------------
-        frame_status_version = Frame(parent)
-        frame_status_version.grid(column=0, row=2, sticky="ew")
+        frame_status = Frame(parent)
+        frame_status.grid(column=0, row=2, sticky="ew")
 
-        btn = Button(frame_status_version, text=f"RESTART by selected")
+        btn = Button(frame_status, text=f"RESTART by selected")
         btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
         btn.pack(side="left")
 
-        self.status_versions = ttk.Label(frame_status_version, text="...SELECT item...", anchor="w")
+        self.status_versions = ttk.Label(frame_status, text="...SELECT item...", anchor="w")
         self.status_versions.pack(side="left")
         self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
 
@@ -330,24 +330,24 @@ class Gui(Frame):
         self.listbox_files['yscrollcommand'] = self.scrollbar.set
 
         # STATUS --------------------------------------------------------------
-        frame_status_files = Frame(parent)
-        frame_status_files.grid(column=0, row=2, sticky="ew")
+        frame_status = Frame(parent)
+        frame_status.grid(column=0, row=2, sticky="ew")
 
-        btn = Button(frame_status_files, text=f"NEW FileAsLINK")
+        btn = Button(frame_status, text=f"NEW FileAsLINK")
         btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = lambda: self.change_path(mode="file")
         btn.pack(side="left")
 
-        btn = Button(frame_status_files, text=f"NEW PATH")
+        btn = Button(frame_status, text=f"NEW PATH")
         btn["bg"] = self.COLOR_BUTTONS
         btn["command"] = lambda: self.change_path(mode="folder")
         btn.pack(side="left")
 
-        self.status_files = ttk.Label(frame_status_files, text="...SELECT item...", anchor="w")
+        self.status_files = ttk.Label(frame_status, text="...SELECT item...", anchor="w")
         self.status_files.pack(side="left")
         self.listbox_files.bind("<<ListboxSelect>>", self.change_status_files)
 
-        btn = Button(frame_status_files, text=f"TRY without overcount")
+        btn = Button(frame_status, text=f"TRY without overcount")
         btn["bg"] = self.COLOR_BUTTONS
         btn["state"] = "disabled"
         #btn["command"] = lambda: self.logic.count_found_files_overcount_limit = 0;
@@ -437,33 +437,33 @@ class Gui(Frame):
         self.listbox_modules['yscrollcommand'] = self.scrollbar.set
 
         # STATUS -------------------------------------------------------------
-        frame_status_modules = Frame(parent)
-        frame_status_modules.grid(column=0, columnspan=2, row=2, sticky="ew")
+        frame_status = Frame(parent)
+        frame_status.grid(column=0, columnspan=2, row=2, sticky="ew")
 
-        lbl = Label(frame_status_modules)
+        lbl = Label(frame_status)
         lbl["text"] = f"In ACTIVE python version"
         lbl.pack(side="left")
 
-        btn_module_install = Button(frame_status_modules, text=f"INSTALL")
+        btn_module_install = Button(frame_status, text=f"INSTALL")
         btn_module_install["bg"] = self.COLOR_BUTTONS
         btn_module_install["command"] = lambda: self.btn_module_action("install")
         btn_module_install.pack(side="left")
 
-        btn_module_upgrade = Button(frame_status_modules, text=f"upgrade")
+        btn_module_upgrade = Button(frame_status, text=f"upgrade")
         btn_module_upgrade["bg"] = self.COLOR_BUTTONS
         btn_module_upgrade["command"] = lambda: self.btn_module_action("upgrade")
         btn_module_upgrade.pack(side="left")
 
-        btn_module_delete = Button(frame_status_modules, text=f"DELETE")
+        btn_module_delete = Button(frame_status, text=f"DELETE")
         btn_module_delete["bg"] = self.COLOR_BUTTONS
         btn_module_delete["command"] = lambda: self.btn_module_action("delete")
         btn_module_delete.pack(side="left")
 
-        lbl = Label(frame_status_modules)
+        lbl = Label(frame_status)
         lbl["text"] = f"module: "
         lbl.pack(side="left")
 
-        self.status_modules = ttk.Label(frame_status_modules, text="...SELECT item...", anchor="w")
+        self.status_modules = ttk.Label(frame_status, text="...SELECT item...", anchor="w")
         self.status_modules.pack(side="left")
         self.listbox_modules.bind("<<ListboxSelect>>", self.change_status_modules)
 
