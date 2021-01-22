@@ -240,12 +240,12 @@ class Gui(Frame):
     # frame VERSIONS
     def fill_frame_versions(self, parent):
         parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure([0, 2], weight=0)  # HEADER + STATUS
-        parent.grid_rowconfigure([1], weight=1)     # BODY
+        parent.grid_rowconfigure([0, 1], weight=0)  # HEADER + STATUS
+        parent.grid_rowconfigure([2], weight=1)     # BODY
 
         # HEADER -------------------------------------------------------------
-        frame_header = Frame(parent)
-        frame_header.grid(column=0, row=0, sticky="ew")
+        frame_header = Frame(parent, relief="groove", borderwidth=4)
+        frame_header.grid(column=0, row=0, columnspan=2, sticky="ew")
 
         lable = Label(frame_header)
         lable["text"] = f"FOUND python [{self.logic.count_python_versions}]VERSIONS:\n" \
@@ -254,16 +254,16 @@ class Gui(Frame):
 
         # BODY --------------------------------------------------------------
         self.listbox_versions = Listbox(parent, height=4, bg=None, font=('Courier', 9))
-        self.listbox_versions.grid(column=0, row=1, sticky="snew")
+        self.listbox_versions.grid(column=0, row=2, sticky="snew")
 
         self.scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.listbox_versions.yview)
-        self.scrollbar.grid(column=1, row=1, sticky="sn")
+        self.scrollbar.grid(column=1, row=2, sticky="sn")
 
         self.listbox_versions['yscrollcommand'] = self.scrollbar.set
 
         # STATUS -------------------------------------------------------------
         frame_status = Frame(parent)
-        frame_status.grid(column=0, row=2, sticky="ew")
+        frame_status.grid(column=0, row=1, columnspan=2, sticky="ew")
 
         btn = Button(frame_status, text=f"RESTART by selected")
         btn["bg"] = self.COLOR_BUTTONS
@@ -309,12 +309,12 @@ class Gui(Frame):
     # frame FILES
     def fill_frame_files(self, parent):
         parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure([0, 2], weight=0)  # HEADER + STATUS
-        parent.grid_rowconfigure([1], weight=1)     # BODY
+        parent.grid_rowconfigure([0, 1], weight=0)  # HEADER + STATUS
+        parent.grid_rowconfigure([2], weight=1)     # BODY
 
         # HEADER --------------------------------------------------------------
-        frame_header = Frame(parent)
-        frame_header.grid(column=0, row=0, sticky="ew")
+        frame_header = Frame(parent, relief="groove", borderwidth=4)
+        frame_header.grid(column=0, row=0, columnspan=2, sticky="ew")
 
         self.lable_frame_files = Label(frame_header)
         self.lable_frame_files.pack()
@@ -323,16 +323,16 @@ class Gui(Frame):
 
         # BODY --------------------------------------------------------------
         self.listbox_files = Listbox(parent, height=6, bg="#55FF55", font=('Courier', 9))
-        self.listbox_files.grid(column=0, row=1, sticky="snew")
+        self.listbox_files.grid(column=0, row=2, sticky="snew")
 
         self.scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.listbox_files.yview)
-        self.scrollbar.grid(column=1, row=1, sticky="sn")
+        self.scrollbar.grid(column=1, row=2, sticky="sn")
 
         self.listbox_files['yscrollcommand'] = self.scrollbar.set
 
         # STATUS --------------------------------------------------------------
         frame_status = Frame(parent)
-        frame_status.grid(column=0, row=2, sticky="ew")
+        frame_status.grid(column=0, row=1, columnspan=2, sticky="ew")
 
         btn = Button(frame_status, text=f"NEW FileAsLINK")
         btn["bg"] = self.COLOR_BUTTONS
@@ -419,12 +419,12 @@ class Gui(Frame):
     # frame MODULES
     def fill_frame_modules(self, parent):
         parent.grid_columnconfigure(0, weight=1)
-        parent.grid_rowconfigure([0, 2], weight=0)  # HEADER + STATUS
-        parent.grid_rowconfigure([1], weight=1)     # BODY
+        parent.grid_rowconfigure([0, 1], weight=0)  # HEADER + STATUS
+        parent.grid_rowconfigure([2], weight=1)     # BODY
 
         # HEADER -------------------------------------------------------------
-        frame_header = Frame(parent)
-        frame_header.grid(column=0, row=0, sticky="ew")
+        frame_header = Frame(parent, relief="groove", borderwidth=4)
+        frame_header.grid(column=0, row=0, columnspan=2, sticky="ew")
 
         self.lable_frame_modules = Label(frame_header)
         self.lable_frame_modules.pack()
@@ -432,16 +432,16 @@ class Gui(Frame):
 
         # BODY ---------------------------------------------------------------
         self.listbox_modules = Listbox(parent, height=8, bg="#55FF55", font=('Courier', 9))
-        self.listbox_modules.grid(column=0, row=1, sticky="snew")
+        self.listbox_modules.grid(column=0, row=2, sticky="snew")
 
         self.scrollbar = ttk.Scrollbar(parent, orient="vertical", command=self.listbox_modules.yview)
-        self.scrollbar.grid(column=1, row=1, sticky="sn")
+        self.scrollbar.grid(column=1, row=2, sticky="sn")
 
         self.listbox_modules['yscrollcommand'] = self.scrollbar.set
 
         # STATUS -------------------------------------------------------------
         frame_status = Frame(parent)
-        frame_status.grid(column=0, row=2, sticky="ew")
+        frame_status.grid(column=0, row=1, columnspan=2, sticky="ew")
 
         lbl = Label(frame_status)
         lbl["text"] = f"In ACTIVE python version"
