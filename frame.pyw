@@ -441,7 +441,7 @@ class Gui(Frame):
 
         # STATUS -------------------------------------------------------------
         frame_status = Frame(parent)
-        frame_status.grid(column=0, columnspan=2, row=2, sticky="ew")
+        frame_status.grid(column=0, row=2, sticky="ew")
 
         lbl = Label(frame_status)
         lbl["text"] = f"In ACTIVE python version"
