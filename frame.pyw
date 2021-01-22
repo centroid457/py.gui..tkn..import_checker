@@ -97,8 +97,8 @@ class Gui(Frame):
         # self.root["width"] = None
         # self.root["height"] = None
         # self.root["bind"] = None
-        self.root["relief"] = "raised"  # "flat"/"sunken"/"raised"/"groove"/"ridge"
-        self.root["borderwidth"] = 5
+        # self.root["relief"] = "raised"  # "flat"/"sunken"/"raised"/"groove"/"ridge"
+        # self.root["borderwidth"] = 5
         # self.root["cursor"] = None   # 'watch'=the best / "xterm" / "arrow"=standard
         return
 
