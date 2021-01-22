@@ -279,7 +279,7 @@ class Gui(Frame):
 
     def fill_listbox_versions(self):
         the_listbox = self.listbox_versions
-        self.listbox_clear(the_listbox)
+        self._listbox_clear(the_listbox)
 
         the_dict = self.logic.python_versions_found
         for ver in the_dict:
@@ -372,7 +372,7 @@ class Gui(Frame):
 
     def fill_listbox_files(self):
         the_listbox = self.listbox_files
-        self.listbox_clear(the_listbox)
+        self._listbox_clear(the_listbox)
 
         the_dict = self.logic.python_files_found_dict
         for file in the_dict:
@@ -481,7 +481,7 @@ class Gui(Frame):
 
     def fill_listbox_modules(self):
         the_listbox = self.listbox_modules
-        self.listbox_clear(the_listbox)
+        self._listbox_clear(the_listbox)
 
         the_dict = self.logic.ranked_modules_dict
         for module in the_dict:
@@ -551,7 +551,7 @@ class Gui(Frame):
 
     # #################################################
     # rest
-    def listbox_clear(self, listbox):
+    def _listbox_clear(self, listbox):
         listbox.delete(0, listbox.size()-1)
         return
 
