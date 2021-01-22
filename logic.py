@@ -50,6 +50,7 @@ class Logic:
             "contracts": "PyContracts",
             "PIL": "pillow",
             "wx": "wxPython",
+            "nmap": "python-nmap",
 
             # similar names
             "TEST_MODULE_1": "TEST_MODULE_1",
