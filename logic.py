@@ -139,7 +139,7 @@ class Logic:
     def find_python_interpreters(self):
         self.python_versions_found = {}
         python_exe = sys.executable
-        py_versions_sp = subprocess.Popen("py -0p", text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        py_versions_sp = subprocess.Popen("py -0p", text=True, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         py_versions_lines_list = py_versions_sp.stdout.readlines()
         active_exe_found = False
 
@@ -163,7 +163,7 @@ class Logic:
         return
 
     def _get_exe_version(self, exe_path):
-        full_version_sp = subprocess.Popen([exe_path, "-VV"], text=True, stdout=subprocess.PIPE)
+        full_version_sp = subprocess.Popen([exe_path, "-VV"], text=True, shell=True, stdout=subprocess.PIPE)
         full_version_list = full_version_sp.communicate()[0].split(" ")
         full_version = full_version_list[1] + "x" + full_version_list[-3]
         return full_version
