@@ -279,7 +279,7 @@ class Gui(Frame):
 
         self.fill_listbox_versions()
 
-        # CMD block
+        # CMD entry block
         self.entry_version_cmd = Entry(frame_status, width=30)
         self.entry_version_cmd.insert(0, "pip install ")
 
