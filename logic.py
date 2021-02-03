@@ -30,6 +30,7 @@ import sys
 import pkgutil
 import fileinput
 import subprocess
+import threading
 from time import sleep
 from pathlib import Path
 
@@ -94,6 +95,8 @@ class Logic:
         os.chdir(self.path_dir_applied)
         return
 
+    # -------------------------------------------------------------
+    # DATA
     def clear_data(self):
         # SETS/DICTS/LISTS
         self.modules_in_system_dict = {}
@@ -112,14 +115,17 @@ class Logic:
         return
 
     def create_data(self):
-        self.apply_path()
-        self.generate_modules_in_system_dict()
-        self.find_python_interpreters()
+        threading.Thread(target=self.generate_modules_in_system_dict).start()
+        threading.Thread(target=self.find_python_interpreters).start()
         if not access_this_module_as_import: print("*"*80)
+
+        self.apply_path()
         self.find_all_python_files()
         if not access_this_module_as_import: print("*"*80)
+
         self.find_all_importing_modules()
         self.rank_modules_dict()
+        self._sort_ranked_modules_dict()
         self.generate_modules_found_infiles_bad()
         if not access_this_module_as_import: print("*"*80)
         return
@@ -199,10 +205,7 @@ class Logic:
             # print(f"[descriptor={fileinput.fileno():2}]\tfile=[{fileinput.filename()}]\tline=[{fileinput.filelineno()}]\t[{line}]")
             modules_found_inline = self._find_modulenames_set(line)
             self.python_files_found_dict[fileinput.filename()].update(modules_found_inline)
-
-        for module_set in self.python_files_found_dict.values():
-            self.modules_found_infiles.update(module_set)
-        # print(modules_found_infiles)
+            self.modules_found_infiles.update(modules_found_inline)
 
         self.count_found_modules = len(self.modules_found_infiles)
         return
@@ -251,7 +254,6 @@ class Logic:
         for module in module_set:
             self.ranked_modules_dict.update({module: self._rank_module_name(module)})
         # print(modules_in_files_ranked_dict)
-        self._sort_ranked_modules_dict()
         return
 
     def _rank_module_name(self, module_name):
