@@ -13,7 +13,7 @@ import time
 from threading import Thread
 # import logic       # SEE THE END OF FILE
 from pathlib import Path
-from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog, messagebox
+from tkinter import Tk, Frame, Button, Label, BOTH, Listbox, Scrollbar, filedialog, messagebox, Entry
 from tkinter import ttk
 
 # check start with file as link to analyze path
@@ -278,7 +278,24 @@ class Gui(Frame):
         self.listbox_versions.bind("<<ListboxSelect>>", self.change_status_versions)
 
         self.fill_listbox_versions()
+
+        # CMD block
+        self.entry_version_cmd = Entry(frame_status, width=30)
+        self.entry_version_cmd.insert(0, "pip install ")
+
+        btn_copy_all = Button(frame_status, bg=self.COLOR_BUTTONS, text=f"copy exe+cmd")
+        btn_copy_all["command"] = lambda: clipboard.copy(self.get_exe_cmd_text())
+        btn_copy_all.pack(side="right")
+
+        btn_execute_cmd = Button(frame_status, bg=self.COLOR_BUTTONS, text=f"EXEcute cmd")
+        btn_execute_cmd["command"] = lambda: clipboard.copy(self.status_versions["text"])
+        btn_execute_cmd.pack(side="right")
+
+        self.entry_version_cmd.pack(side="right")
         return
+
+    def get_exe_cmd_text(self):
+        return self.status_versions["text"] + " " + self.entry_version_cmd.get()
 
     def fill_listbox_versions(self):
         the_listbox = self.listbox_versions
