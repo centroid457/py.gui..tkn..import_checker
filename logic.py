@@ -124,18 +124,8 @@ class Logic:
         if not access_this_module_as_import: print("*"*80)
         return
 
-    def generate_modules_in_system_dict(self):
-        self.modules_in_system_dict = {}
-        # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
-        # KEY=modulename:VALUE=location(CurDir|DLLs|lib|site-packages)
-        for module_in_system in pkgutil.iter_modules():
-            my_string = str(module_in_system.module_finder)
-            mask = r".*\('(.+)'\)$"
-            match = re.fullmatch(mask, my_string)[1]
-            path_name = Path(match).name
-            self.modules_in_system_dict.update({module_in_system.name:path_name})
-        return
-
+    # -------------------------------------------------------------
+    # VERSIONS
     def find_python_interpreters(self):
         self.python_versions_found = {}
         python_exe = sys.executable
@@ -168,6 +158,8 @@ class Logic:
         full_version = full_version_list[1] + "x" + full_version_list[-3]
         return full_version
 
+    # -------------------------------------------------------------
+    # FILES
     def find_all_python_files(self):
         self.python_files_found_dict = {}
         path = self.path_dir_applied
@@ -181,6 +173,20 @@ class Logic:
                     break
                 self.python_files_found_dict.update({file_name: set()})
                 if not access_this_module_as_import: print(file_name)
+        return
+
+    # -------------------------------------------------------------
+    # MODULES
+    def generate_modules_in_system_dict(self):
+        self.modules_in_system_dict = {}
+        # produce dict - all modules detecting in system! in all available paths. (Build-in, Installed, located in current directory)
+        # KEY=modulename:VALUE=location(CurDir|DLLs|lib|site-packages)
+        for module_in_system in pkgutil.iter_modules():
+            my_string = str(module_in_system.module_finder)
+            mask = r".*\('(.+)'\)$"
+            match = re.fullmatch(mask, my_string)[1]
+            path_name = Path(match).name
+            self.modules_in_system_dict.update({module_in_system.name:path_name})
         return
 
     def find_all_importing_modules(self):
