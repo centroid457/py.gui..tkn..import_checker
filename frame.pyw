@@ -247,10 +247,10 @@ class Gui(Frame):
         frame_header = Frame(parent, relief="groove", borderwidth=4)
         frame_header.grid(column=0, row=0, columnspan=2, sticky="ew")
 
-        lable = Label(frame_header)
-        lable["text"] = f"FOUND python [{self.logic.count_python_versions}]VERSIONS:\n" \
+        lbl = Label(frame_header)
+        lbl["text"] = f"FOUND python [{self.logic.count_python_versions}]VERSIONS:\n" \
                         f"Active .exe=[{sys.executable}]"
-        lable.pack()
+        lbl.pack()
 
         # BODY --------------------------------------------------------------
         self.listbox_versions = Listbox(parent, height=4, bg=None, font=('Courier', 9))
@@ -288,14 +288,16 @@ class Gui(Frame):
         btn_copy_all.pack(side="right")
 
         btn_execute_cmd = Button(frame_status, bg=self.COLOR_BUTTONS, text=f"EXEcute cmd")
-        btn_execute_cmd["command"] = lambda: clipboard.copy(self.status_versions["text"])
+        btn_execute_cmd["command"] = lambda: subprocess.Popen(self.get_exe_cmd_text())
         btn_execute_cmd.pack(side="right")
 
         self.entry_version_cmd.pack(side="right")
+
+        Label(frame_status, text=" -m ").pack(side="right")
         return
 
     def get_exe_cmd_text(self):
-        return self.status_versions["text"] + " " + self.entry_version_cmd.get()
+        return f"{self.status_versions['text']} -m {self.entry_version_cmd.get()}"
 
     def fill_listbox_versions(self):
         the_listbox = self.listbox_versions
