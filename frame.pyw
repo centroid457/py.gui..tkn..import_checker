@@ -2,6 +2,8 @@
 '''
 import pystray  # only for testing!
 '''
+
+import clipboard
 import subprocess
 import sys
 import os
@@ -265,6 +267,10 @@ class Gui(Frame):
 
         btn = Button(frame_status, bg=self.COLOR_BUTTONS, text=f"RESTART by selected")
         btn["command"] = lambda: self.program_restart(python_exe=self.status_versions["text"]) if self.listbox_versions.curselection() != () else None
+        btn.pack(side="left")
+
+        btn = Button(frame_status, bg=self.COLOR_BUTTONS, text=f"COPY to Clipboard")
+        btn["command"] = lambda: clipboard.copy(self.status_versions["text"])
         btn.pack(side="left")
 
         self.status_versions = ttk.Label(frame_status, text="...SELECT item...", anchor="w")
