@@ -152,6 +152,9 @@ class Logic:
                 full_version = self._get_exe_version(found_py_exe_path)
                 self.python_versions_found.update({found_py_version: [full_version, found_py_exe_path]})
 
+                cmd = f"{found_py_exe_path} -m pip install --upgrade pip"
+                my_sp = subprocess.Popen(cmd, text=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
         if not active_exe_found:
             self.python_versions_found.update({"None *": [self._get_exe_version(python_exe), python_exe]})
 
